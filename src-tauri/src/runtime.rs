@@ -549,6 +549,7 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
     let mut rate = None;
     let mut channels = None;
     let mut format = None;
+    let mut analysis_file = false;
     for line in text.lines() {
         let Some((label, raw)) = line.split_once(':') else {
             continue;
@@ -557,10 +558,10 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
         // extra separator while keeping the parser label-driven.
         let value = raw.trim().trim_start_matches(':').trim();
         match label.trim().to_ascii_lowercase().as_str() {
-            "duration" | "duration seconds" => {
+            "duration" | "duration seconds" | "duration (secs)" => {
                 duration = value.split_whitespace().next().and_then(|v| v.parse().ok())
             }
-            "sample rate" | "samplerate" => {
+            "sample rate" | "samplerate" | "orig rate" => {
                 rate = value.split_whitespace().next().and_then(|v| v.parse().ok())
             }
             "channels" | "channel count" => {
@@ -569,8 +570,20 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
             "sample format" | "sampleformat" | "sample type" if !value.is_empty() => {
                 format = Some(value.to_string())
             }
+            "file type" if value.to_ascii_lowercase().contains("analysis file") => {
+                analysis_file = true;
+                format.get_or_insert_with(|| value.to_string());
+            }
+            "channel format" if analysis_file && !value.is_empty() => {
+                format = Some(value.to_string())
+            }
             _ => {}
         }
+    }
+    // Legacy `.ana` files are created from mono sources and sfprops reports
+    // spectral-bin count rather than an audio channel count for them.
+    if analysis_file && channels.is_none() {
+        channels = Some(1);
     }
     let duration = duration
         .filter(|v: &f64| v.is_finite() && *v >= 0.0)
@@ -1339,6 +1352,19 @@ mod tests {
         .unwrap();
         assert_eq!(props.sample_format, "16-bit");
         assert_eq!(props.sample_rate, 48_000);
+    }
+
+    #[test]
+    fn sfprops_parser_accepts_pvoc_analysis_metadata() {
+        let props = parse_sfprops(
+            b"File type: CDP pvoc analysis file.\nChannel Format: Amplitude,Frequency\nOrig rate: 48000\nAnalysis Window Size: 1024\nAnalysis channels: 513\nAnalysis rate: 375.0000\nFrame count: 1415\nDuration (secs): 3.773\n",
+            true,
+        )
+        .unwrap();
+        assert_eq!(props.duration_seconds, 3.773);
+        assert_eq!(props.sample_rate, 48_000);
+        assert_eq!(props.channels, 1);
+        assert_eq!(props.sample_format, "Amplitude,Frequency");
     }
 
     #[test]
