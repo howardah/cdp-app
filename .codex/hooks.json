@@ -1,0 +1,26 @@
+{
+  "description": "Testing and linting hooks",
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run compile:check",
+            "statusMessage": "Checking for compile errors…"
+          },
+          {
+            "type": "command",
+            "command": "bun run lint:fix",
+            "statusMessage": "Checking for linting errors…"
+          },
+          {
+            "type": "command",
+            "command": "bun run fmt",
+            "statusMessage": "Formatting codebase…"
+          }
+        ]
+      }
+    ]
+  }
+}
