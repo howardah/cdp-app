@@ -1,5 +1,20 @@
 # Tauri + Vue 3 + TypeScript
 
+## CDP Desktop application plan
+
+The implementation plan for turning this starter into a Composers' Desktop
+Project application is split into four documents. Read them in this order:
+
+1. [Product roadmap](docs/app/00-product-roadmap.md)
+2. [Experience and visual design](docs/app/01-experience-and-visual-design.md)
+3. [Process catalog contract](docs/app/02-process-catalog-contract.md)
+4. [Desktop runtime and delivery](docs/app/03-desktop-runtime-and-delivery.md)
+
+The first release described by these documents is an Intel macOS vertical
+slice. Its application and catalog contracts are intentionally platform-neutral
+so that Apple Silicon, Windows, Linux, and broader CDP process coverage can be
+added without redesigning the UI or IPC boundary.
+
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 ## Recommended IDE Setup
