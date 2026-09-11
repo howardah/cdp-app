@@ -1,52 +1,33 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/Greet.vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+type Process = { id:string; category:string; title:string; outcome:string; description:string; tags:string[]; inputs:string[]; outputs:string[]; modes:string[]; cdp:string; accent:string };
+const categories = [{name:"All processes",count:6,icon:"◈"},{name:"Time domain",count:3,icon:"⌁"},{name:"Spectral",count:2,icon:"∿"},{name:"Edit and mix",count:1,icon:"⊞"},{name:"Utilities",count:0,icon:"⌘"}];
+const processes:Process[] = [
+ {id:"speed",category:"Time domain",title:"Modify Speed",outcome:"Change pitch and duration together.",description:"Stretch a soundfile or shift its pitch for a new musical gesture.",tags:["speed","pitch","transpose"],inputs:["Soundfile"],outputs:["Soundfile"],modes:["Speed ratio","Semitones","Acceleration"],cdp:"modify speed · modes 1, 2, 5, 6",accent:"teal"},
+ {id:"loudness",category:"Time domain",title:"Modify Loudness",outcome:"Shape the level of a sound over time.",description:"Make a sound sit in a mix, fade it, or draw a changing amplitude contour.",tags:["gain","fade","amplitude"],inputs:["Soundfile","Breakpoint"],outputs:["Soundfile"],modes:["Attenuate","Balance","Fade in / out"],cdp:"modify loudness · modes 1–8",accent:"amber"},
+ {id:"join",category:"Edit and mix",title:"SFEdit Join",outcome:"Join sounds into one continuous file.",description:"Assemble takes, sections, or stems in a precise ordered sequence.",tags:["join","splice","assemble"],inputs:["Soundfiles"],outputs:["Soundfile"],modes:["Ordered join"],cdp:"sfedit join",accent:"blue"},
+ {id:"analyze",category:"Spectral",title:"PVOC Analyze",outcome:"Convert a soundfile into spectral data.",description:"Prepare a mono sound for spectral processing and resynthesis.",tags:["pvoc","analysis","spectral"],inputs:["Mono soundfile"],outputs:["Analysis data"],modes:["Standard analysis"],cdp:"pvoc anal · mode 1",accent:"violet"},
+ {id:"synth",category:"Spectral",title:"PVOC Synthesize",outcome:"Turn spectral data back into sound.",description:"Render an analysis file as a listenable soundfile.",tags:["pvoc","synthesis","render"],inputs:["Analysis data"],outputs:["Soundfile"],modes:["Synthesis"],cdp:"pvoc synth",accent:"violet"},
+ {id:"isolate",category:"Time domain",title:"Isolate",outcome:"Extract a region or feature into new files.",description:"Pull out useful sections from a sound or analysis file for further work.",tags:["extract","region","split"],inputs:["Soundfile","Data file"],outputs:["Soundfiles"],modes:["By time","By event","By region"],cdp:"isolate · modes 1–5",accent:"teal"}
+];
+const selectedCategory=ref("All processes"), query=ref(""), selectedId=ref("speed"), searchInput=ref<HTMLInputElement|null>(null), theme=ref<"light"|"dark">("dark"), queueOpen=ref(false);
+const visibleProcesses=computed(()=>processes.filter(p=>(selectedCategory.value==="All processes"||p.category===selectedCategory.value)&&`${p.title} ${p.outcome} ${p.description} ${p.tags.join(" ")} ${p.cdp}`.toLowerCase().includes(query.value.toLowerCase().trim())));
+const selected=computed(()=>processes.find(p=>p.id===selectedId.value)||visibleProcesses.value[0]||processes[0]);
+const selectedIndex=computed(()=>processes.findIndex(p=>p.id===selected.value.id)+1);
+function selectProcess(p:Process){selectedId.value=p.id}
+function onListKeydown(e:KeyboardEvent){if(!visibleProcesses.value.length)return;const i=visibleProcesses.value.findIndex((p:Process)=>p.id===selected.value.id);if(e.key==="ArrowDown"){e.preventDefault();selectProcess(visibleProcesses.value[(i+1)%visibleProcesses.value.length])}if(e.key==="ArrowUp"){e.preventDefault();selectProcess(visibleProcesses.value[(i-1+visibleProcesses.value.length)%visibleProcesses.value.length])}if(e.key==="Enter"){e.preventDefault();document.getElementById("open-process")?.focus()}}
+function onShortcut(e:KeyboardEvent){if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();searchInput.value?.focus()}}
+onMounted(()=>window.addEventListener("keydown",onShortcut));onUnmounted(()=>window.removeEventListener("keydown",onShortcut));
 </script>
-
 <template>
-  <div class="container">
-    <h1>Welcome to Tauri!</h1>
-
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
-    </div>
-
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <p>
-      Recommended IDE setup:
-      <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-      +
-      <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-      +
-      <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank"
-        >Tauri</a
-      >
-      +
-      <a href="https://github.com/rust-lang/rust-analyzer" target="_blank"
-        >rust-analyzer</a
-      >
-    </p>
-
-    <Greet />
-  </div>
+ <main class="app-shell" :data-theme="theme">
+  <header class="topbar"><div class="brand-lockup"><span class="brand-mark" aria-hidden="true">⌁</span><span><strong>CDP</strong><small>DESKTOP STUDIO</small></span></div><div class="topbar-actions"><span class="status-dot"></span><span class="ready-label">Runtime ready</span><button class="icon-button" :aria-label="`Switch to ${theme==='dark'?'light':'dark'} theme`" @click="theme=theme==='dark'?'light':'dark'">{{theme==='dark'?'☼':'☾'}}</button><button class="avatar" aria-label="Open profile">IS</button></div></header>
+  <section class="workspace">
+   <aside class="category-panel" aria-label="Process categories"><div class="panel-kicker">CATALOG <span>R8 · 06</span></div><nav class="category-nav"><button v-for="c in categories" :key="c.name" class="category-item" :class="{active:selectedCategory===c.name}" @click="selectedCategory=c.name"><span class="category-icon">{{c.icon}}</span><span>{{c.name}}</span><span class="category-count">{{c.count||'—'}}</span></button></nav><div class="category-foot"><div class="legend-title">FLOW STATUS</div><div><i class="legend-dot valid"></i> Ready to configure</div><div><i class="legend-dot waiting"></i> Queued or waiting</div><div><i class="legend-dot idle"></i> Not selected</div></div></aside>
+   <section class="process-panel" aria-label="Processes"><div class="panel-heading"><div><div class="eyebrow">EXPLORE PROCESSES</div><h1>Find your next sound.</h1></div><button class="shortcut" @click="searchInput?.focus()"><kbd>⌘</kbd><kbd>K</kbd></button></div><label class="search-box"><span aria-hidden="true">⌕</span><input ref="searchInput" v-model="query" type="search" placeholder="Search by name, outcome, or CDP term…" aria-label="Search processes"><kbd>⌘ K</kbd></label><div class="result-meta"><span>{{visibleProcesses.length}} processes</span><span v-if="query||selectedCategory!=='All processes'">Filtered catalog</span></div><div class="process-list" tabindex="0" role="listbox" :aria-label="`${visibleProcesses.length} processes`" @keydown="onListKeydown"><button v-for="p in visibleProcesses" :key="p.id" class="process-row" :class="{selected:selected.id===p.id}" role="option" :aria-selected="selected.id===p.id" @click="selectProcess(p)"><span class="process-signal" :class="p.accent"></span><span class="process-copy"><strong>{{p.title}}</strong><span>{{p.outcome}}</span></span><span class="type-badges"><em v-for="input in p.inputs" :key="input">{{input}}</em></span><span class="row-arrow">→</span></button><div v-if="!visibleProcesses.length" class="empty-state"><span>∅</span><strong>No matching processes</strong><p>Try another term or clear the active filters.</p><button class="text-button" @click="query='';selectedCategory='All processes'">Clear filters</button></div></div></section>
+   <article class="detail-panel" aria-live="polite"><div class="detail-top"><span class="detail-category">{{selected.category}} / PROCESS {{String(selectedIndex).padStart(2,'0')}}</span><button class="reference-link">Reference ↗</button></div><div class="detail-title"><span class="detail-mark" :class="selected.accent"></span><div><h2>{{selected.title}}</h2><p>{{selected.cdp}}</p></div></div><div class="outcome-block"><span class="eyebrow">WHAT IT DOES</span><p>{{selected.description}}</p></div><div class="detail-section"><span class="eyebrow">SIGNAL CONTRACT</span><div class="contract-row"><div><small>INPUT</small><strong v-for="i in selected.inputs" :key="i">{{i}}</strong></div><span class="contract-arrow">→</span><div><small>OUTPUT</small><strong v-for="o in selected.outputs" :key="o">{{o}}</strong></div></div></div><div class="detail-section"><span class="eyebrow">AVAILABLE MODES</span><div class="mode-list"><span v-for="(m,i) in selected.modes" :key="m"><i>{{String(i+1).padStart(2,'0')}}</i>{{m}}</span></div></div><div class="detail-note"><span>i</span><p>Advanced controls and the generated command are available inside the process window.</p></div><button id="open-process" class="primary-button" @click="queueOpen=true">Open process <span>↗</span></button></article>
+  </section>
+  <footer class="queue-bar"><div class="signal-rail" aria-label="Process flow"><span class="rail-node done">✓<small>INPUT</small></span><span class="rail-line done"></span><span class="rail-node active">Ⅱ<small>MODE</small></span><span class="rail-line"></span><span class="rail-node"><small>PARAMETERS</small></span><span class="rail-line"></span><span class="rail-node"><small>OUTPUT</small></span><span class="rail-line"></span><span class="rail-node"><small>RUN</small></span></div><button class="queue-toggle" @click="queueOpen=!queueOpen"><span class="queue-pulse"></span><span><strong>Queue</strong><small>1 running · 2 waiting</small></span><span class="chevron">{{queueOpen?'⌄':'⌃'}}</span></button></footer>
+  <div v-if="queueOpen" class="queue-popover" role="dialog" aria-label="Processing queue"><div class="popover-head"><strong>Processing queue</strong><button class="close-button" aria-label="Close queue" @click="queueOpen=false">×</button></div><div class="job running"><span class="job-spinner"></span><div><strong>Modify Loudness</strong><small>Running · 00:14 elapsed</small></div><button class="cancel-button">Cancel</button></div><div class="job"><span class="job-number">02</span><div><strong>PVOC Analyze</strong><small>Waiting · follows current job</small></div></div><div class="job"><span class="job-number">03</span><div><strong>SFEdit Join</strong><small>Waiting</small></div></div></div>
+ </main>
 </template>
-
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
-}
-</style>
