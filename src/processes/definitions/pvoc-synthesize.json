@@ -7,7 +7,7 @@
   "description": "Turn a PVOC analysis file into audio for listening or further editing.",
   "useCases": ["Audition spectral edits", "Render analysis results"],
   "tags": ["pvoc", "synthesize", "render", "ana"],
-  "identity": { "executable": "pvoc", "operation": "synthesize" },
+  "identity": { "executable": "pvoc", "operation": "synth" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cpvocman.htm",
     "anchor": "USAGESYNTH",
@@ -39,7 +39,7 @@
         "nameSuffix": "-rendered"
       },
       "argumentOrder": [
-        { "kind": "literal", "value": "synthesize" },
+        { "kind": "literal", "value": "synth" },
         { "kind": "input", "inputId": "analysis" },
         { "kind": "output" }
       ],

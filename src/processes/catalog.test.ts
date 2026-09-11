@@ -51,6 +51,14 @@ describe("process catalog", () => {
       min: 0,
       max: 20,
     });
+    const analyze = findMode(findProcess("pvoc-analyze")!, "analyze")!;
+    expect(analyze.argumentOrder[0]).toEqual({ kind: "literal", value: "anal" });
+    expect(analyze.parameters.map((parameter) => parameter.cli)).toEqual([
+      { kind: "option", flag: "-c", join: "concatenated" },
+      { kind: "option", flag: "-o", join: "concatenated" },
+    ]);
+    const synthesize = findMode(findProcess("pvoc-synthesize")!, "synthesize")!;
+    expect(synthesize.argumentOrder[0]).toEqual({ kind: "literal", value: "synth" });
   });
 
   it("returns defaults and file compatibility from a mode", () => {

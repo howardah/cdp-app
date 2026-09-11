@@ -7,7 +7,7 @@
   "description": "Prepare a sound for spectral transformation and resynthesis.",
   "useCases": ["Prepare material for PVOC processing", "Inspect spectral evolution"],
   "tags": ["pvoc", "analysis", "spectrum", "ana"],
-  "identity": { "executable": "pvoc", "operation": "analyze" },
+  "identity": { "executable": "pvoc", "operation": "anal" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cpvocman.htm",
     "anchor": "USAGEANAL",
@@ -40,7 +40,7 @@
           "required": true,
           "advanced": false,
           "unit": "points",
-          "cli": { "kind": "option", "flag": "-N", "join": "separate" },
+          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
           "kind": "integer",
           "default": 1024,
           "min": 2,
@@ -54,7 +54,7 @@
           "required": true,
           "advanced": false,
           "unit": "×",
-          "cli": { "kind": "option", "flag": "-L", "join": "separate" },
+          "cli": { "kind": "option", "flag": "-o", "join": "concatenated" },
           "kind": "integer",
           "default": 3,
           "min": 1,
@@ -69,7 +69,7 @@
         "nameSuffix": "-analysis"
       },
       "argumentOrder": [
-        { "kind": "literal", "value": "analyze" },
+        { "kind": "literal", "value": "anal" },
         { "kind": "mode" },
         { "kind": "input", "inputId": "source" },
         { "kind": "output" },

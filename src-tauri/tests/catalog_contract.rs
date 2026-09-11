@@ -4,6 +4,9 @@
 //! they catch schema/serde drift before a manifest can reach the navigator.
 
 use composers_desktop_application::catalog::load_catalog;
+use composers_desktop_application::runtime::{compile_request, ParameterValue, RunProcessRequest};
+use std::collections::HashMap;
+use std::ffi::OsString;
 
 const MANIFESTS: &[&str] = &[
     include_str!("../../src/processes/definitions/modify-speed.json"),
@@ -41,4 +44,52 @@ fn catalog_rejects_unsupported_schema_versions() {
     let manifest = serde_json::to_string(&value).unwrap();
     let error = load_catalog(&[&manifest]).expect_err("schema version drift must be rejected");
     assert!(error.contains("unsupported catalog schema"));
+}
+
+#[test]
+fn pvoc_recipe_steps_compile_the_release_8_command_tokens() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let analysis_path = directory.path().join("source-analysis.ana");
+    let analyze = RunProcessRequest {
+        process_id: "pvoc-analyze".into(),
+        mode_id: "analyze".into(),
+        inputs: HashMap::from([("source".into(), vec!["source.wav".into()])]),
+        parameters: HashMap::from([
+            ("points".into(), ParameterValue::Number { value: 1024.0 }),
+            ("overlap".into(), ParameterValue::Number { value: 3.0 }),
+        ]),
+        output_path: Some(analysis_path.to_string_lossy().into_owned()),
+    };
+    let (command, _) = compile_request(&catalog, &analyze, "pvoc".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("anal"),
+            OsString::from("1"),
+            OsString::from("source.wav"),
+            analysis_path.clone().into_os_string(),
+            OsString::from("-c1024"),
+            OsString::from("-o3"),
+        ]
+    );
+
+    let synthesize = RunProcessRequest {
+        process_id: "pvoc-synthesize".into(),
+        mode_id: "synthesize".into(),
+        inputs: HashMap::from([(
+            "analysis".into(),
+            vec![analysis_path.to_string_lossy().into_owned()],
+        )]),
+        parameters: HashMap::new(),
+        output_path: Some(
+            directory
+                .path()
+                .join("rendered.wav")
+                .to_string_lossy()
+                .into_owned(),
+        ),
+    };
+    let (command, _) = compile_request(&catalog, &synthesize, "pvoc".into()).unwrap();
+    assert_eq!(command.args[0], OsString::from("synth"));
 }
