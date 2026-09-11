@@ -47,6 +47,39 @@ Default size: 1180 × 760 px. Minimum size: 820 × 600 px.
   a separate mobile design.
 - An empty search result names the active filters and offers **Clear filters**.
 
+### Guided recipes
+
+**Processes** and **Recipes** are peer destinations in the main-window header.
+Recipes are curated signal paths, not automated chains: they explain why the
+steps belong together, select a specific mode when opened, and rely on the
+existing result-reuse flow for handing files between process windows.
+
+```text
+┌ Recipes ─────────────────┬ Pitch, then polish ──────────────────────────┐
+│ Pitch, then polish       │ A pitch-shifted gesture at a controlled level │
+│ Cut, reorder, reconnect  │                                               │
+│ Equalise and assemble    │  1  Modify Speed · Semitone transposition     │
+│ Spectral round trip      │  │  Choose an interval                  [Open]│
+│                          │  ↓                                            │
+│                          │  2  Modify Loudness · Normalise          [Open]│
+└──────────────────────────┴───────────────────────────────────────────────┘
+```
+
+- The left pane provides a searchable, keyboard-navigable recipe index. The
+  right pane explains the outcome, suitable source material, ordered steps,
+  handoff instructions, and cautions.
+- A patch-cord rail is the section's signature. Its numbered nodes encode real
+  execution order; teal-to-amber cable color distinguishes handoff from the
+  process form's live status rail without introducing a new palette.
+- **Open process** validates the recipe's process and mode, then opens that mode
+  with its safe catalog defaults. Recipe prose may suggest adjustments but does
+  not silently prefill parameters.
+- Recipe progress is not persisted, outputs are not transferred automatically,
+  and closing a recipe does not affect queued or running work.
+- The queue footer remains available in the Recipes section. At the 820 px
+  minimum, the two panes contract while step actions remain visible and usable
+  by keyboard.
+
 ### Native process windows
 
 Default size: 760 × 820 px. Minimum size: 640 × 560 px. Each launch receives a

@@ -2,13 +2,15 @@
 
 ## CDP Desktop application plan
 
-The implementation plan for turning this starter into a Composers' Desktop
-Project application is split into four documents. Read them in this order:
+The product and contributor documentation for the Composers' Desktop Project
+application is split into six documents. Read them in this order:
 
 1. [Product roadmap](docs/app/00-product-roadmap.md)
 2. [Experience and visual design](docs/app/01-experience-and-visual-design.md)
 3. [Process catalog contract](docs/app/02-process-catalog-contract.md)
 4. [Desktop runtime and delivery](docs/app/03-desktop-runtime-and-delivery.md)
+5. [Adding processes](docs/app/04-adding-processes.md)
+6. [Cross-platform builds](docs/app/05-cross-platform-builds.md)
 
 The first release described by these documents is an Intel macOS vertical
 slice. Its application and catalog contracts are intentionally platform-neutral

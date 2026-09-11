@@ -16,9 +16,9 @@ export interface RunAccepted {
   queuePosition: number;
 }
 const desktop = () => typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
-export async function openProcessWindow(processId: string): Promise<boolean> {
+export async function openProcessWindow(processId: string, modeId?: string): Promise<boolean> {
   if (!desktop()) return false;
-  await invoke("open_process_window", { processId });
+  await invoke("open_process_window", { processId, modeId });
   return true;
 }
 export async function enqueueProcess(request: RunProcessRequest): Promise<RunAccepted | null> {

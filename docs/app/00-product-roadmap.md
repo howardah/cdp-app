@@ -135,12 +135,15 @@ acceptance checks on the supported Intel macOS baseline.
 ## Later phases
 
 - Supply native Apple Silicon, Windows, and Linux binary sets through the same
-  binary resolver and staging manifest.
+  binary resolver and staging manifest by following the
+  [cross-platform build guide](05-cross-platform-builds.md).
 - Expand the catalog by complete operation/mode definitions, not by blindly
-  exposing executables.
-- Add saved presets, persistent run history, batch processing, process chains,
-  waveform visualization, and editable breakpoint curves only after the core
-  contracts have proven stable.
+  exposing executables; use the [process authoring guide](04-adding-processes.md)
+  for every addition.
+- Guided recipes may recommend compatible process sequences and open a chosen
+  process mode. Automated chains, saved presets, persistent run history, batch
+  processing, waveform visualization, and editable breakpoint curves remain
+  deferred until the core contracts have proven stable.
 
 ## Definition of done
 

@@ -88,9 +88,14 @@ function resetMode(id: string) {
   preview.value = null;
 }
 watch(
-  process,
-  (next) => {
-    if (next) resetMode(next.modes[0]?.id ?? "");
+  [process, () => route.query.mode],
+  ([next, requestedMode]) => {
+    if (!next) return;
+    const requested =
+      typeof requestedMode === "string" && findMode(next, requestedMode)
+        ? requestedMode
+        : (next.modes[0]?.id ?? "");
+    resetMode(requested);
   },
   { immediate: true },
 );
@@ -245,7 +250,8 @@ async function togglePreview() {
     parameters: values,
     outputPath: outputPath.value || null,
   });
-  if (!preview.value) runtimeMessage.value = "The desktop runtime could not create a command preview.";
+  if (!preview.value)
+    runtimeMessage.value = "The desktop runtime could not create a command preview.";
 }
 async function suggestOutput() {
   const first = Object.values(inputs).flat().find(Boolean);

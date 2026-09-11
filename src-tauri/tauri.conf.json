@@ -2,16 +2,45 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Composers' Desktop Project",
   "version": "0.0.0",
-  "identifier": "com.composersdesktop.project",
-  "build": { "beforeDevCommand": "bun run dev", "beforeBuildCommand": "bun run build", "devUrl": "http://localhost:1420", "frontendDist": "../dist" },
+  "identifier": "com.howardah.cpd",
+  "build": {
+    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "bun run build",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
+  },
   "app": {
-    "windows": [{ "label": "main", "title": "Composers' Desktop Project", "width": 1180, "height": 760, "minWidth": 820, "minHeight": 600 }],
-    "security": { "csp": "default-src 'self'; img-src 'self' asset:; media-src 'self' asset:; style-src 'self' 'unsafe-inline'; script-src 'self'", "assetProtocol": { "enable": true, "scope": [] } }
+    "windows": [
+      {
+        "label": "main",
+        "title": "Composers' Desktop Project",
+        "width": 1180,
+        "height": 760,
+        "minWidth": 820,
+        "minHeight": 600
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset:; media-src 'self' asset:; style-src 'self' 'unsafe-inline'; script-src 'self'",
+      "assetProtocol": { "enable": true, "scope": [] }
+    }
   },
   "bundle": {
     "active": true,
     "targets": "all",
-    "externalBin": ["binaries/modify", "binaries/sfedit", "binaries/pvoc", "binaries/isolate", "binaries/sfprops"],
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+    "externalBin": [
+      "binaries/modify",
+      "binaries/sfedit",
+      "binaries/pvoc",
+      "binaries/isolate",
+      "binaries/sfprops"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
   }
 }

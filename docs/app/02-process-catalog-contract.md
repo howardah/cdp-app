@@ -333,6 +333,10 @@ Paths are never quoted manually and the runner never invokes a shell.
 
 ## Authoring checklist
 
+The operational, file-by-file procedure is maintained in
+[Adding processes to CDP Desktop](04-adding-processes.md). The checklist below
+summarizes the evidence required for every process or mode.
+
 For every new process or mode:
 
 1. Locate its user-facing entry in `cdpr8/docs/html/ccdpndex.htm` and its detailed

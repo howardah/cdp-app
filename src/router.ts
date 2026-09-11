@@ -6,6 +6,7 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: "/", name: "navigator", component: routePlaceholder },
+    { path: "/recipes", name: "recipes", component: routePlaceholder },
     { path: "/process/:processId", name: "process", component: routePlaceholder, props: true },
   ],
 });

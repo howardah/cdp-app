@@ -275,6 +275,10 @@ implementing:
 
 ## Release gates and portability
 
+See [Extending CDP Desktop to new platforms](05-cross-platform-builds.md) for
+the target matrix, native CDP build procedure, staging names, runtime changes,
+packaging commands, and promotion criteria.
+
 - Confirm licensing and redistribution rights for CDP binaries and bundled docs.
 - Determine whether unsigned upstream binaries can be re-signed inside the app
   bundle and notarized; document the exact signing order.

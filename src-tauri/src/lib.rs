@@ -38,25 +38,15 @@ fn open_process_window(
     app: tauri::AppHandle,
     window: tauri::WebviewWindow,
     process_id: String,
+    mode_id: Option<String>,
 ) -> Result<String, String> {
     if window.label() != "main" {
         return Err("only the navigator can open process windows".into());
     }
-    if !process_id
-        .chars()
-        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
-    {
-        return Err("invalid process id".into());
-    }
-    if !catalog::bundled_catalog()?
-        .iter()
-        .any(|p| p.id == process_id)
-    {
-        return Err("unknown process".into());
-    }
+    let catalog = catalog::bundled_catalog()?;
     let instance = Uuid::new_v4();
     let label = format!("process-{instance}");
-    let url = format!("/#/process/{process_id}?instance={instance}");
+    let url = process_window_url(&catalog, &process_id, mode_id.as_deref(), instance)?;
     tauri::WebviewWindowBuilder::new(&app, &label, tauri::WebviewUrl::App(url.into()))
         .title("CDP Process")
         .inner_size(760.0, 820.0)
@@ -64,6 +54,41 @@ fn open_process_window(
         .build()
         .map_err(|error| error.to_string())?;
     Ok(label)
+}
+
+fn process_window_url(
+    catalog: &[catalog::types::ProcessDefinition],
+    process_id: &str,
+    mode_id: Option<&str>,
+    instance: Uuid,
+) -> Result<String, String> {
+    let safe_id = |id: &str| {
+        !id.is_empty()
+            && id
+                .chars()
+                .all(|character| character.is_ascii_alphanumeric() || character == '-')
+    };
+    if !safe_id(process_id) {
+        return Err("invalid process id".into());
+    }
+    let process = catalog
+        .iter()
+        .find(|process| process.id == process_id)
+        .ok_or("unknown process")?;
+    if let Some(mode_id) = mode_id {
+        if !safe_id(mode_id) {
+            return Err("invalid mode id".into());
+        }
+        if !process.modes.iter().any(|mode| mode.id == mode_id) {
+            return Err("unknown mode for process".into());
+        }
+    }
+    let mode_query = mode_id
+        .map(|mode| format!("&mode={mode}"))
+        .unwrap_or_default();
+    Ok(format!(
+        "/#/process/{process_id}?instance={instance}{mode_query}"
+    ))
 }
 
 #[tauri::command]
@@ -379,4 +404,29 @@ pub fn run() {
                 }
             }
         });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn process_window_url_accepts_a_mode_from_the_process() {
+        let catalog = catalog::bundled_catalog().expect("catalog should load");
+        let instance = Uuid::nil();
+        let url = process_window_url(&catalog, "modify-speed", Some("semitones"), instance)
+            .expect("recipe mode should be valid");
+        assert_eq!(
+            url,
+            format!("/#/process/modify-speed?instance={instance}&mode=semitones")
+        );
+    }
+
+    #[test]
+    fn process_window_url_rejects_a_mode_from_another_process() {
+        let catalog = catalog::bundled_catalog().expect("catalog should load");
+        let error = process_window_url(&catalog, "modify-speed", Some("normalise"), Uuid::nil())
+            .expect_err("a mismatched mode must be rejected");
+        assert_eq!(error, "unknown mode for process");
+    }
 }
