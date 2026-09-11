@@ -15,12 +15,16 @@ describe("process catalog", () => {
     const ids = processCatalog.map((process) => process.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(searchCatalog("transpose").map((process) => process.id)).toContain("modify-speed");
-    expect(searchCatalog("spectral", "spectral").every((process) => process.category === "spectral")).toBe(true);
+    expect(
+      searchCatalog("spectral", "spectral").every((process) => process.category === "spectral"),
+    ).toBe(true);
   });
 
   it("exposes the documented MVP mode coverage", () => {
     expect(findProcess("modify-speed")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 5, 6]);
-    expect(findProcess("modify-loudness")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(findProcess("modify-loudness")!.modes.map((mode) => mode.cliMode)).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8,
+    ]);
     expect(findProcess("isolate")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 3, 4, 5]);
     expect(findProcess("sfedit-join")!.modes).toHaveLength(1);
     expect(findProcess("pvoc-analyze")!.modes).toHaveLength(1);
@@ -30,8 +34,10 @@ describe("process catalog", () => {
   it("keeps documented argument order and output behavior", () => {
     const speed = findMode(findProcess("modify-speed")!, "accelerate")!;
     expect(speed.argumentOrder).toEqual([
-      { kind: "literal", value: "speed" }, { kind: "mode" },
-      { kind: "input", inputId: "source" }, { kind: "output" },
+      { kind: "literal", value: "speed" },
+      { kind: "mode" },
+      { kind: "input", inputId: "source" },
+      { kind: "output" },
       { kind: "parameter", parameterId: "acceleration" },
       { kind: "parameter", parameterId: "goalTime" },
       { kind: "parameter", parameterId: "startTime" },
@@ -40,7 +46,11 @@ describe("process catalog", () => {
     expect(report.output).toEqual({ kind: "stdoutReport" });
     expect(report.inputs[0].minItems).toBe(2);
     const isolate = findMode(findProcess("isolate")!, "dovetail")!;
-    expect(isolate.parameters.find((parameter) => parameter.id === "dovetailMs")).toMatchObject({ default: 5, min: 0, max: 20 });
+    expect(isolate.parameters.find((parameter) => parameter.id === "dovetailMs")).toMatchObject({
+      default: 5,
+      min: 0,
+      max: 20,
+    });
   });
 
   it("returns defaults and file compatibility from a mode", () => {
@@ -63,7 +73,10 @@ describe("process catalog", () => {
       parameters: { ratio: { kind: "number", value: 1 } },
       outputPath: null,
     };
-    expect(validateRequest(process, mode, request).map((issue) => issue.field)).toEqual(["input.source", "output"]);
+    expect(validateRequest(process, mode, request).map((issue) => issue.field)).toEqual([
+      "input.source",
+      "output",
+    ]);
   });
 
   it("enforces numeric bounds, integer constraints, and cross-field constraints", () => {
@@ -73,7 +86,9 @@ describe("process catalog", () => {
       processId: process.id,
       modeId: mode.id,
       inputs: Object.fromEntries(mode.inputs.map((input) => [input.id, ["source.wav"]])),
-      parameters: Object.fromEntries(mode.parameters.map((parameter) => [parameter.id, { kind: "number", value: 999.5 }])),
+      parameters: Object.fromEntries(
+        mode.parameters.map((parameter) => [parameter.id, { kind: "number", value: 999.5 }]),
+      ),
       outputPath: "/tmp/result.wav",
     } as RunProcessRequest;
     const issues = validateRequest(process, mode, request);

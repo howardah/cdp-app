@@ -1,7 +1,499 @@
-{"schemaVersion":1,"id":"isolate","title":"Isolate","category":"edit-and-mix","summary":"Extract disjunct portions into separate files.","description":"Cut soundfile segments by cuts, thresholds, or slice times while preserving their original positions.","useCases":["Extract snippets","Separate speech syllables","Process disjunct segments"],"tags":["isolate","cuts","slice","segments","extract"],"identity":{"executable":"isolate"},"documentation":{"localPath":"cdpr8/docs/html/cgroedit.htm","anchor":"ISOLATE","helpCommand":["isolate","isolate"],"verifiedWithVersion":"CDP Release 8"},"modes":[
-{"id":"single-segments","cliMode":1,"title":"One segment per output","summary":"Create an output for each cuts-file segment.","inputs":[{"id":"source","label":"Soundfile","description":"Source soundfile.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]},{"id":"cuts","label":"Cuts data","description":"Start/end time pairs in increasing order.","fileTypes":["cuts-data"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"spliceMs","label":"Splice length","description":"Length of segment splice.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"concatenated"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"padEnd","label":"Pad to source length","description":"Add silence so segment files match source length.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-x"},"kind":"flag","default":false},{"id":"reverse","label":"Reverse segments","description":"Reverse cut segments, leaving remnant unchanged.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-r"},"kind":"flag","default":false}],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-isolated","discovery":{"prefixStyle":"root-number","mayProduceRemnant":true}},"argumentOrder":[{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"input","inputId":"cuts"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"padEnd"},{"kind":"parameter","parameterId":"reverse"}],"constraints":[]},
-{"id":"grouped-segments","cliMode":2,"title":"Grouped segments","summary":"Create outputs containing grouped cuts-file segments.","inputs":[{"id":"source","label":"Soundfile","description":"Source soundfile.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]},{"id":"cuts","label":"Cuts data","description":"Start/end time pairs in increasing order.","fileTypes":["cuts-data"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"spliceMs","label":"Splice length","description":"Length of segment splice.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"concatenated"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"padEnd","label":"Pad to source length","description":"Add silence so segment files match source length.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-x"},"kind":"flag","default":false},{"id":"reverse","label":"Reverse segments","description":"Reverse cut segments, leaving remnant unchanged.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-r"},"kind":"flag","default":false}],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-isolated","discovery":{"prefixStyle":"root-number","mayProduceRemnant":true}},"argumentOrder":[{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"input","inputId":"cuts"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"padEnd"},{"kind":"parameter","parameterId":"reverse"}],"constraints":[]},
-{"id":"threshold","cliMode":3,"title":"Level threshold","summary":"Extract portions selected by dB on/off thresholds.","inputs":[{"id":"source","label":"Soundfile","description":"Source soundfile.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"dBon","label":"Threshold on","description":"dB level at which a segment starts.","required":true,"advanced":false,"unit":"dB","cli":{"kind":"positional"},"kind":"number","default":-40,"min":-96,"max":0,"step":1},{"id":"dBoff","label":"Threshold off","description":"dB level at which a segment ends.","required":true,"advanced":false,"unit":"dB","cli":{"kind":"positional"},"kind":"number","default":-50,"min":-96,"max":0,"step":1},{"id":"spliceMs","label":"Splice length","description":"Length of segment splice.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"concatenated"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"minMs","label":"Minimum segment duration","description":"Minimum accepted segment duration; must exceed twice splice length.","required":false,"advanced":true,"unit":"ms","cli":{"kind":"option","flag":"-m","join":"concatenated"},"kind":"number","default":31,"min":0,"step":1},{"id":"lengthMs","label":"Kept segment duration","description":"Duration of the beginning portion to keep.","required":false,"advanced":true,"unit":"ms","cli":{"kind":"option","flag":"-l","join":"concatenated"},"kind":"number","default":0,"min":0,"step":1},{"id":"padEnd","label":"Pad to source length","description":"Add silence so segment files match source length.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-x"},"kind":"flag","default":false},{"id":"reverse","label":"Reverse segments","description":"Reverse cut segments, leaving remnant unchanged.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-r"},"kind":"flag","default":false}],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-isolated","discovery":{"prefixStyle":"root-number","mayProduceRemnant":true}},"argumentOrder":[{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"parameter","parameterId":"dBon"},{"kind":"parameter","parameterId":"dBoff"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"minMs"},{"kind":"parameter","parameterId":"lengthMs"},{"kind":"parameter","parameterId":"padEnd"},{"kind":"parameter","parameterId":"reverse"}],"constraints":[{"kind":"lessThan","left":{"source":"parameter","id":"dBoff"},"right":{"source":"parameter","id":"dBon"},"message":"Threshold off must be below threshold on."},{"kind":"greaterThan","left":{"source":"parameter","id":"minMs"},"right":{"source":"literal","value":0},"message":"Minimum segment duration must be positive."}]},
-{"id":"slice","cliMode":4,"title":"Slice file","summary":"Cut the entire soundfile at slice times.","inputs":[{"id":"source","label":"Soundfile","description":"Source soundfile.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]},{"id":"slices","label":"Slice data","description":"Increasing cut times.","fileTypes":["slice-data"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"spliceMs","label":"Splice length","description":"Length of segment splice.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"concatenated"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"padEnd","label":"Pad to source length","description":"Add silence so segment files match source length.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-x"},"kind":"flag","default":false},{"id":"reverse","label":"Reverse segments","description":"Reverse cut segments, leaving remnant unchanged.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-r"},"kind":"flag","default":false}],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-isolated","discovery":{"prefixStyle":"root-number","mayProduceRemnant":false}},"argumentOrder":[{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"input","inputId":"slices"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"padEnd"},{"kind":"parameter","parameterId":"reverse"}],"constraints":[]},
-{"id":"dovetail","cliMode":5,"title":"Dovetail slices","summary":"Cut slices with slight overlap between segments.","inputs":[{"id":"source","label":"Soundfile","description":"Source soundfile.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]},{"id":"slices","label":"Slice data","description":"Increasing cut times designed for overlap.","fileTypes":["slice-data"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"spliceMs","label":"Splice length","description":"Length of segment splice.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"concatenated"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"dovetailMs","label":"Dovetail overlap","description":"Overlap of cut segments.","required":false,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-d","join":"concatenated"},"kind":"number","default":5,"min":0,"max":20,"step":1},{"id":"padEnd","label":"Pad to source length","description":"Add silence so segment files match source length.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-x"},"kind":"flag","default":false},{"id":"reverse","label":"Reverse segments","description":"Reverse cut segments, leaving remnant unchanged.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-r"},"kind":"flag","default":false}],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-isolated","discovery":{"prefixStyle":"root-number","mayProduceRemnant":false}},"argumentOrder":[{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"input","inputId":"slices"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"dovetailMs"},{"kind":"parameter","parameterId":"padEnd"},{"kind":"parameter","parameterId":"reverse"}],"constraints":[]}
-]}
+{
+  "schemaVersion": 1,
+  "id": "isolate",
+  "title": "Isolate",
+  "category": "edit-and-mix",
+  "summary": "Extract disjunct portions into separate files.",
+  "description": "Cut soundfile segments by cuts, thresholds, or slice times while preserving their original positions.",
+  "useCases": ["Extract snippets", "Separate speech syllables", "Process disjunct segments"],
+  "tags": ["isolate", "cuts", "slice", "segments", "extract"],
+  "identity": { "executable": "isolate" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "ISOLATE",
+    "helpCommand": ["isolate", "isolate"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "single-segments",
+      "cliMode": 1,
+      "title": "One segment per output",
+      "summary": "Create an output for each cuts-file segment.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Start/end time pairs in increasing order.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Length of segment splice.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "padEnd",
+          "label": "Pad to source length",
+          "description": "Add silence so segment files match source length.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "reverse",
+          "label": "Reverse segments",
+          "description": "Reverse cut segments, leaving remnant unchanged.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-r" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-isolated",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": true }
+      },
+      "argumentOrder": [
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "cuts" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "padEnd" },
+        { "kind": "parameter", "parameterId": "reverse" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-segments",
+      "cliMode": 2,
+      "title": "Grouped segments",
+      "summary": "Create outputs containing grouped cuts-file segments.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Start/end time pairs in increasing order.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Length of segment splice.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "padEnd",
+          "label": "Pad to source length",
+          "description": "Add silence so segment files match source length.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "reverse",
+          "label": "Reverse segments",
+          "description": "Reverse cut segments, leaving remnant unchanged.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-r" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-isolated",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": true }
+      },
+      "argumentOrder": [
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "cuts" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "padEnd" },
+        { "kind": "parameter", "parameterId": "reverse" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "threshold",
+      "cliMode": 3,
+      "title": "Level threshold",
+      "summary": "Extract portions selected by dB on/off thresholds.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "dBon",
+          "label": "Threshold on",
+          "description": "dB level at which a segment starts.",
+          "required": true,
+          "advanced": false,
+          "unit": "dB",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": -40,
+          "min": -96,
+          "max": 0,
+          "step": 1
+        },
+        {
+          "id": "dBoff",
+          "label": "Threshold off",
+          "description": "dB level at which a segment ends.",
+          "required": true,
+          "advanced": false,
+          "unit": "dB",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": -50,
+          "min": -96,
+          "max": 0,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Length of segment splice.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "minMs",
+          "label": "Minimum segment duration",
+          "description": "Minimum accepted segment duration; must exceed twice splice length.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-m", "join": "concatenated" },
+          "kind": "number",
+          "default": 31,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "lengthMs",
+          "label": "Kept segment duration",
+          "description": "Duration of the beginning portion to keep.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-l", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "padEnd",
+          "label": "Pad to source length",
+          "description": "Add silence so segment files match source length.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "reverse",
+          "label": "Reverse segments",
+          "description": "Reverse cut segments, leaving remnant unchanged.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-r" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-isolated",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": true }
+      },
+      "argumentOrder": [
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "dBon" },
+        { "kind": "parameter", "parameterId": "dBoff" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "minMs" },
+        { "kind": "parameter", "parameterId": "lengthMs" },
+        { "kind": "parameter", "parameterId": "padEnd" },
+        { "kind": "parameter", "parameterId": "reverse" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "dBoff" },
+          "right": { "source": "parameter", "id": "dBon" },
+          "message": "Threshold off must be below threshold on."
+        },
+        {
+          "kind": "greaterThan",
+          "left": { "source": "parameter", "id": "minMs" },
+          "right": { "source": "literal", "value": 0 },
+          "message": "Minimum segment duration must be positive."
+        }
+      ]
+    },
+    {
+      "id": "slice",
+      "cliMode": 4,
+      "title": "Slice file",
+      "summary": "Cut the entire soundfile at slice times.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "slices",
+          "label": "Slice data",
+          "description": "Increasing cut times.",
+          "fileTypes": ["slice-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Length of segment splice.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "padEnd",
+          "label": "Pad to source length",
+          "description": "Add silence so segment files match source length.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "reverse",
+          "label": "Reverse segments",
+          "description": "Reverse cut segments, leaving remnant unchanged.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-r" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-isolated",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "slices" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "padEnd" },
+        { "kind": "parameter", "parameterId": "reverse" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "dovetail",
+      "cliMode": 5,
+      "title": "Dovetail slices",
+      "summary": "Cut slices with slight overlap between segments.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "slices",
+          "label": "Slice data",
+          "description": "Increasing cut times designed for overlap.",
+          "fileTypes": ["slice-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Length of segment splice.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "dovetailMs",
+          "label": "Dovetail overlap",
+          "description": "Overlap of cut segments.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-d", "join": "concatenated" },
+          "kind": "number",
+          "default": 5,
+          "min": 0,
+          "max": 20,
+          "step": 1
+        },
+        {
+          "id": "padEnd",
+          "label": "Pad to source length",
+          "description": "Add silence so segment files match source length.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "reverse",
+          "label": "Reverse segments",
+          "description": "Reverse cut segments, leaving remnant unchanged.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-r" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-isolated",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "slices" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "dovetailMs" },
+        { "kind": "parameter", "parameterId": "padEnd" },
+        { "kind": "parameter", "parameterId": "reverse" }
+      ],
+      "constraints": []
+    }
+  ]
+}

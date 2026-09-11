@@ -3,46 +3,401 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import ProcessView from "./components/ProcessView.vue";
 import { categories, processCatalog, searchCatalog } from "./processes";
 import { useRoute, useRouter } from "vue-router";
-import { cancelRun, listRuns, openProcessWindow, revealArtifact, type RunSnapshot } from "./services/runtime";
-const route = useRoute(); const router = useRouter();
-const query = ref(""); const category = ref<string | undefined>(); const selectedId = ref(processCatalog[0]?.id ?? ""); const search = ref<HTMLInputElement | null>(null);
-const runs = ref<RunSnapshot[]>([]); const queueOpen = ref(false); const queueError = ref(""); let runsTimer: number | undefined;
-const reuseType = computed(() => typeof route.query.reuseType === "string" ? route.query.reuseType : "");
-const theme = ref<"light" | "dark">((localStorage.getItem("cdp-theme") as "light" | "dark") || "dark");
-const visible = computed(() => searchCatalog(query.value, category.value as typeof categories[number] | undefined).filter((p) => !reuseType.value || p.modes.some((mode) => mode.inputs.some((input) => input.fileTypes.includes(reuseType.value as never)))));
-const selected = computed(() => processCatalog.find((item) => item.id === selectedId.value) ?? visible.value[0] ?? processCatalog[0]);
-const currentProcessId = computed(() => typeof route.params.processId === "string" ? route.params.processId : "");
-const categoryCounts = computed(() => Object.fromEntries(categories.map((item) => [item, processCatalog.filter((p) => p.category === item).length])));
-function select(id: string) { selectedId.value = id; } function toggleTheme() { theme.value = theme.value === "dark" ? "light" : "dark"; localStorage.setItem("cdp-theme", theme.value); }
-async function openSelected(id: string) { try { if (await openProcessWindow(id)) return; } catch { /* browser preview has no native windows */ } await router.push({ name: "process", params: { processId: id } }); }
-function onShortcut(event: KeyboardEvent) { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); search.value?.focus(); } }
-function onListKey(event: KeyboardEvent) { if (!visible.value.length) return; const index = visible.value.findIndex((p) => p.id === selected.value?.id); if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); const next = event.key === "ArrowDown" ? (index + 1) % visible.value.length : (index - 1 + visible.value.length) % visible.value.length; select(visible.value[next].id); } if (event.key === "Enter" && selected.value) void openSelected(selected.value.id); }
-async function refreshRuns() { try { runs.value = await listRuns(); queueError.value = ""; } catch (error) { queueError.value = error instanceof Error ? error.message : String(error); } }
-function runTitle(run: RunSnapshot) { const process = run.processId ? processCatalog.find((item) => item.id === run.processId) : undefined; return process?.title ?? `Run ${run.runId.slice(0, 8)}`; }
-function runState(run: RunSnapshot) { if (run.status === "queued") return run.queuePosition === undefined ? "Waiting" : `Waiting · #${run.queuePosition + 1}`; if (run.status === "running") return "Active · processing"; if (run.status === "completed") return "Completed"; if (run.status === "failed") return "Failed"; return run.status; }
-async function cancelQueued(run: RunSnapshot) { try { await cancelRun(run.runId); await refreshRuns(); } catch (error) { queueError.value = error instanceof Error ? error.message : String(error); } }
-async function reveal(run: RunSnapshot, index: number) { try { await revealArtifact(run.runId, index); } catch (error) { queueError.value = error instanceof Error ? error.message : String(error); } }
-onMounted(() => { window.addEventListener("keydown", onShortcut); void refreshRuns(); runsTimer = window.setInterval(() => void refreshRuns(), 1000); });
-onUnmounted(() => { window.removeEventListener("keydown", onShortcut); if (runsTimer) window.clearInterval(runsTimer); });
+import {
+  cancelRun,
+  listRuns,
+  openProcessWindow,
+  revealArtifact,
+  type RunSnapshot,
+} from "./services/runtime";
+const route = useRoute();
+const router = useRouter();
+const query = ref("");
+const category = ref<string | undefined>();
+const selectedId = ref(processCatalog[0]?.id ?? "");
+const search = ref<HTMLInputElement | null>(null);
+const runs = ref<RunSnapshot[]>([]);
+const queueOpen = ref(false);
+const queueError = ref("");
+let runsTimer: number | undefined;
+const reuseType = computed(() =>
+  typeof route.query.reuseType === "string" ? route.query.reuseType : "",
+);
+const theme = ref<"light" | "dark">(
+  (localStorage.getItem("cdp-theme") as "light" | "dark") || "dark",
+);
+const visible = computed(() =>
+  searchCatalog(query.value, category.value as (typeof categories)[number] | undefined).filter(
+    (p) =>
+      !reuseType.value ||
+      p.modes.some((mode) =>
+        mode.inputs.some((input) => input.fileTypes.includes(reuseType.value as never)),
+      ),
+  ),
+);
+const selected = computed(
+  () =>
+    processCatalog.find((item) => item.id === selectedId.value) ??
+    visible.value[0] ??
+    processCatalog[0],
+);
+const currentProcessId = computed(() =>
+  typeof route.params.processId === "string" ? route.params.processId : "",
+);
+const categoryCounts = computed(() =>
+  Object.fromEntries(
+    categories.map((item) => [item, processCatalog.filter((p) => p.category === item).length]),
+  ),
+);
+function select(id: string) {
+  selectedId.value = id;
+}
+function toggleTheme() {
+  theme.value = theme.value === "dark" ? "light" : "dark";
+  localStorage.setItem("cdp-theme", theme.value);
+}
+async function openSelected(id: string) {
+  try {
+    if (await openProcessWindow(id)) return;
+  } catch {
+    /* browser preview has no native windows */
+  }
+  await router.push({ name: "process", params: { processId: id } });
+}
+function onShortcut(event: KeyboardEvent) {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    search.value?.focus();
+  }
+}
+function onListKey(event: KeyboardEvent) {
+  if (!visible.value.length) return;
+  const index = visible.value.findIndex((p) => p.id === selected.value?.id);
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    event.preventDefault();
+    const next =
+      event.key === "ArrowDown"
+        ? (index + 1) % visible.value.length
+        : (index - 1 + visible.value.length) % visible.value.length;
+    select(visible.value[next].id);
+  }
+  if (event.key === "Enter" && selected.value) void openSelected(selected.value.id);
+}
+async function refreshRuns() {
+  try {
+    runs.value = await listRuns();
+    queueError.value = "";
+  } catch (error) {
+    queueError.value = error instanceof Error ? error.message : String(error);
+  }
+}
+function runTitle(run: RunSnapshot) {
+  const process = run.processId
+    ? processCatalog.find((item) => item.id === run.processId)
+    : undefined;
+  return process?.title ?? `Run ${run.runId.slice(0, 8)}`;
+}
+function runState(run: RunSnapshot) {
+  if (run.status === "queued")
+    return run.queuePosition === undefined ? "Waiting" : `Waiting · #${run.queuePosition + 1}`;
+  if (run.status === "running") return "Active · processing";
+  if (run.status === "completed") return "Completed";
+  if (run.status === "failed") return "Failed";
+  return run.status;
+}
+async function cancelQueued(run: RunSnapshot) {
+  try {
+    await cancelRun(run.runId);
+    await refreshRuns();
+  } catch (error) {
+    queueError.value = error instanceof Error ? error.message : String(error);
+  }
+}
+async function reveal(run: RunSnapshot, index: number) {
+  try {
+    await revealArtifact(run.runId, index);
+  } catch (error) {
+    queueError.value = error instanceof Error ? error.message : String(error);
+  }
+}
+onMounted(() => {
+  window.addEventListener("keydown", onShortcut);
+  void refreshRuns();
+  runsTimer = window.setInterval(() => void refreshRuns(), 1000);
+});
+onUnmounted(() => {
+  window.removeEventListener("keydown", onShortcut);
+  if (runsTimer) window.clearInterval(runsTimer);
+});
 </script>
 <template>
- <main class="app-shell" :data-theme="theme">
-  <ProcessView v-if="route.name === 'process'" :process-id="currentProcessId" />
-  <template v-else>
-   <header class="topbar"><div class="brand-lockup"><span class="brand-mark" aria-hidden="true">⌁</span><span><strong>CDP</strong><small>DESKTOP STUDIO</small></span></div><div class="topbar-actions"><span class="status-dot"></span><span class="ready-label">Runtime ready</span><button class="icon-button" :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`" @click="toggleTheme">{{ theme === 'dark' ? '☼' : '☾' }}</button></div></header>
-   <label class="mobile-filter">
-    <span>Process category</span>
-    <select v-model="category">
-     <option :value="undefined">All processes</option>
-     <option v-for="item in categories" :key="item" :value="item">{{ item.replaceAll('-', ' ') }} ({{ categoryCounts[item] }})</option>
-    </select>
-   </label>
-   <section class="workspace">
-    <aside class="category-panel" aria-label="Process categories"><div class="panel-kicker">CATALOG <span>R8 · {{ String(processCatalog.length).padStart(2, '0') }}</span></div><nav class="category-nav"><button class="category-item" :class="{ active: !category }" @click="category = undefined"><span class="category-icon">◈</span><span>All processes</span><span class="category-count">{{ processCatalog.length }}</span></button><button v-for="item in categories" :key="item" class="category-item" :class="{ active: category === item }" @click="category = item"><span class="category-icon">{{ item === 'spectral' ? '∿' : item === 'edit-and-mix' ? '⊞' : item === 'utilities' ? '⌘' : '⌁' }}</span><span>{{ item.replaceAll('-', ' ') }}</span><span class="category-count">{{ categoryCounts[item] || '—' }}</span></button></nav><div class="category-foot"><div class="legend-title">FLOW STATUS</div><div><i class="legend-dot valid"></i> Ready to configure</div><div><i class="legend-dot idle"></i> Not selected</div></div></aside>
-    <section class="process-panel" aria-label="Processes"><div class="panel-heading"><div><div class="eyebrow">EXPLORE PROCESSES</div><h1>Find your next sound.</h1></div><button class="shortcut" @click="search?.focus()"><kbd>⌘</kbd><kbd>K</kbd></button></div><label class="search-box"><span aria-hidden="true">⌕</span><input ref="search" v-model="query" type="search" placeholder="Search by name, outcome, or CDP term…" aria-label="Search processes"><kbd>⌘ K</kbd></label><div class="result-meta"><span>{{ visible.length }} processes</span><span v-if="query || category">Filtered catalog</span></div><div class="process-list" tabindex="0" role="listbox" :aria-label="`${visible.length} processes`" @keydown="onListKey"><button v-for="item in visible" :key="item.id" class="process-row" :class="{ selected: selected?.id === item.id }" role="option" :aria-selected="selected?.id === item.id" @click="select(item.id)"><span class="process-signal"></span><span class="process-copy"><strong>{{ item.title }}</strong><span>{{ item.summary }}</span></span><span class="type-badges"><em v-for="type in [...new Set(item.modes.flatMap((m) => m.inputs.flatMap((i) => i.fileTypes)))]" :key="type">{{ type }}</em></span><span class="row-arrow">→</span></button><div v-if="!visible.length" class="empty-state"><span>∅</span><strong>No matching processes</strong><p>Try another term or clear the active filters.</p><button class="text-button" @click="query = ''; category = undefined">Clear filters</button></div></div></section>
-    <article v-if="selected" class="detail-panel" aria-live="polite"><div class="detail-top"><span class="detail-category">{{ selected.category.replaceAll('-', ' ') }} / PROCESS {{ String(processCatalog.findIndex((p) => p.id === selected?.id) + 1).padStart(2, '0') }}</span></div><div class="detail-title"><span class="detail-mark"></span><div><h2>{{ selected.title }}</h2><p>{{ selected.identity.executable }}<span v-if="selected.identity.operation"> · {{ selected.identity.operation }}</span></p></div></div><div class="outcome-block"><span class="eyebrow">WHAT IT DOES</span><p>{{ selected.description }}</p></div><div class="detail-section"><span class="eyebrow">SIGNAL CONTRACT</span><div class="contract-row"><div><small>INPUT</small><strong>{{ [...new Set(selected.modes.flatMap((m) => m.inputs.flatMap((i) => i.fileTypes)))].join(', ') }}</strong></div><span class="contract-arrow">→</span><div><small>OUTPUT</small><strong>{{ [...new Set(selected.modes.map((m) => m.output.kind))].join(', ') }}</strong></div></div></div><div class="detail-section"><span class="eyebrow">AVAILABLE MODES</span><div class="mode-list"><span v-for="mode in selected.modes" :key="mode.id"><i>{{ mode.cliMode ?? '—' }}</i>{{ mode.title }}</span></div></div><div class="detail-note"><span>i</span><p>{{ selected.useCases.join(' · ') }}</p></div><button id="open-process" class="primary-button" @click="openSelected(selected.id)">Open process <span>↗</span></button></article>
-   </section>
-   <footer class="queue-bar"><div class="signal-rail" aria-label="Process flow"><span class="rail-node active">1<small>INPUT</small></span><span class="rail-line"></span><span class="rail-node">2<small>MODE</small></span><span class="rail-line"></span><span class="rail-node">3<small>PARAMETERS</small></span><span class="rail-line"></span><span class="rail-node">4<small>OUTPUT</small></span><span class="rail-line"></span><span class="rail-node">5<small>RUN</small></span></div><button class="queue-toggle" aria-haspopup="dialog" :aria-expanded="queueOpen" @click="queueOpen = !queueOpen"><span class="queue-pulse" aria-hidden="true"></span><span><strong>Queue · {{ runs.filter((run) => ['queued', 'running'].includes(run.status)).length }} active</strong><small>{{ runs.filter((run) => run.status === 'completed').length }} completed this session</small></span><span class="chevron" aria-hidden="true">{{ queueOpen ? '⌄' : '⌃' }}</span></button><section v-if="queueOpen" class="queue-popover" role="dialog" aria-label="Processing queue"><div class="popover-head"><strong>Queue and results</strong><button class="close-button" aria-label="Close queue" @click="queueOpen = false">×</button></div><p v-if="queueError" class="field-error">{{ queueError }}</p><p v-if="!runs.length" class="empty-state"><strong>No runs yet</strong><span>Submit a process to see its status here.</span></p><div v-for="run in runs" :key="run.runId" class="job"><span class="job-number" aria-hidden="true">{{ run.queuePosition !== undefined ? run.queuePosition + 1 : '·' }}</span><span v-if="run.status === 'running'" class="job-spinner" aria-hidden="true"></span><span v-else class="status-dot" aria-hidden="true"></span><div><strong>{{ runTitle(run) }}</strong><small>{{ runState(run) }}</small><small v-if="run.error" class="field-error">{{ run.error }}</small><div v-if="run.artifacts?.length" class="job-artifacts"><button v-for="(artifact, index) in run.artifacts" :key="artifact.path" class="text-button" @click="void reveal(run, index)">Reveal {{ artifact.fileType ?? 'artifact' }}</button></div></div><button v-if="run.status === 'queued'" class="cancel-button" @click="void cancelQueued(run)">Cancel</button></div></section></footer>
-  </template>
- </main>
+  <main class="app-shell" :data-theme="theme">
+    <ProcessView v-if="route.name === 'process'" :process-id="currentProcessId" />
+    <template v-else>
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true">⌁</span
+          ><span><strong>CDP</strong><small>DESKTOP STUDIO</small></span>
+        </div>
+        <div class="topbar-actions">
+          <span class="status-dot"></span><span class="ready-label">Runtime ready</span
+          ><button
+            class="icon-button"
+            :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`"
+            @click="toggleTheme"
+          >
+            {{ theme === "dark" ? "☼" : "☾" }}
+          </button>
+        </div>
+      </header>
+      <label class="mobile-filter">
+        <span>Process category</span>
+        <select v-model="category">
+          <option :value="undefined">All processes</option>
+          <option v-for="item in categories" :key="item" :value="item">
+            {{ item.replaceAll("-", " ") }} ({{ categoryCounts[item] }})
+          </option>
+        </select>
+      </label>
+      <section class="workspace">
+        <aside class="category-panel" aria-label="Process categories">
+          <div class="panel-kicker">
+            CATALOG <span>R8 · {{ String(processCatalog.length).padStart(2, "0") }}</span>
+          </div>
+          <nav class="category-nav">
+            <button
+              class="category-item"
+              :class="{ active: !category }"
+              @click="category = undefined"
+            >
+              <span class="category-icon">◈</span><span>All processes</span
+              ><span class="category-count">{{ processCatalog.length }}</span></button
+            ><button
+              v-for="item in categories"
+              :key="item"
+              class="category-item"
+              :class="{ active: category === item }"
+              @click="category = item"
+            >
+              <span class="category-icon">{{
+                item === "spectral"
+                  ? "∿"
+                  : item === "edit-and-mix"
+                    ? "⊞"
+                    : item === "utilities"
+                      ? "⌘"
+                      : "⌁"
+              }}</span
+              ><span>{{ item.replaceAll("-", " ") }}</span
+              ><span class="category-count">{{ categoryCounts[item] || "—" }}</span>
+            </button>
+          </nav>
+          <div class="category-foot">
+            <div class="legend-title">FLOW STATUS</div>
+            <div><i class="legend-dot valid"></i> Ready to configure</div>
+            <div><i class="legend-dot idle"></i> Not selected</div>
+          </div>
+        </aside>
+        <section class="process-panel" aria-label="Processes">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">EXPLORE PROCESSES</div>
+              <h1>Find your next sound.</h1>
+            </div>
+            <button class="shortcut" @click="search?.focus()"><kbd>⌘</kbd><kbd>K</kbd></button>
+          </div>
+          <label class="search-box"
+            ><span aria-hidden="true">⌕</span
+            ><input
+              ref="search"
+              v-model="query"
+              type="search"
+              placeholder="Search by name, outcome, or CDP term…"
+              aria-label="Search processes"
+            /><kbd>⌘ K</kbd></label
+          >
+          <div class="result-meta">
+            <span>{{ visible.length }} processes</span
+            ><span v-if="query || category">Filtered catalog</span>
+          </div>
+          <div
+            class="process-list"
+            tabindex="0"
+            role="listbox"
+            :aria-label="`${visible.length} processes`"
+            @keydown="onListKey"
+          >
+            <button
+              v-for="item in visible"
+              :key="item.id"
+              class="process-row"
+              :class="{ selected: selected?.id === item.id }"
+              role="option"
+              :aria-selected="selected?.id === item.id"
+              @click="select(item.id)"
+            >
+              <span class="process-signal"></span
+              ><span class="process-copy"
+                ><strong>{{ item.title }}</strong
+                ><span>{{ item.summary }}</span></span
+              ><span class="type-badges"
+                ><em
+                  v-for="type in [
+                    ...new Set(item.modes.flatMap((m) => m.inputs.flatMap((i) => i.fileTypes))),
+                  ]"
+                  :key="type"
+                  >{{ type }}</em
+                ></span
+              ><span class="row-arrow">→</span>
+            </button>
+            <div v-if="!visible.length" class="empty-state">
+              <span>∅</span><strong>No matching processes</strong>
+              <p>Try another term or clear the active filters.</p>
+              <button
+                class="text-button"
+                @click="
+                  query = '';
+                  category = undefined;
+                "
+              >
+                Clear filters
+              </button>
+            </div>
+          </div>
+        </section>
+        <article v-if="selected" class="detail-panel" aria-live="polite">
+          <div class="detail-top">
+            <span class="detail-category"
+              >{{ selected.category.replaceAll("-", " ") }} / PROCESS
+              {{
+                String(processCatalog.findIndex((p) => p.id === selected?.id) + 1).padStart(2, "0")
+              }}</span
+            >
+          </div>
+          <div class="detail-title">
+            <span class="detail-mark"></span>
+            <div>
+              <h2>{{ selected.title }}</h2>
+              <p>
+                {{ selected.identity.executable
+                }}<span v-if="selected.identity.operation">
+                  · {{ selected.identity.operation }}</span
+                >
+              </p>
+            </div>
+          </div>
+          <div class="outcome-block">
+            <span class="eyebrow">WHAT IT DOES</span>
+            <p>{{ selected.description }}</p>
+          </div>
+          <div class="detail-section">
+            <span class="eyebrow">SIGNAL CONTRACT</span>
+            <div class="contract-row">
+              <div>
+                <small>INPUT</small
+                ><strong>{{
+                  [
+                    ...new Set(selected.modes.flatMap((m) => m.inputs.flatMap((i) => i.fileTypes))),
+                  ].join(", ")
+                }}</strong>
+              </div>
+              <span class="contract-arrow">→</span>
+              <div>
+                <small>OUTPUT</small
+                ><strong>{{
+                  [...new Set(selected.modes.map((m) => m.output.kind))].join(", ")
+                }}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section">
+            <span class="eyebrow">AVAILABLE MODES</span>
+            <div class="mode-list">
+              <span v-for="mode in selected.modes" :key="mode.id"
+                ><i>{{ mode.cliMode ?? "—" }}</i
+                >{{ mode.title }}</span
+              >
+            </div>
+          </div>
+          <div class="detail-note">
+            <span>i</span>
+            <p>{{ selected.useCases.join(" · ") }}</p>
+          </div>
+          <button id="open-process" class="primary-button" @click="openSelected(selected.id)">
+            Open process <span>↗</span>
+          </button>
+        </article>
+      </section>
+      <footer class="queue-bar">
+        <div class="signal-rail" aria-label="Process flow">
+          <span class="rail-node active">1<small>INPUT</small></span
+          ><span class="rail-line"></span><span class="rail-node">2<small>MODE</small></span
+          ><span class="rail-line"></span><span class="rail-node">3<small>PARAMETERS</small></span
+          ><span class="rail-line"></span><span class="rail-node">4<small>OUTPUT</small></span
+          ><span class="rail-line"></span><span class="rail-node">5<small>RUN</small></span>
+        </div>
+        <button
+          class="queue-toggle"
+          aria-haspopup="dialog"
+          :aria-expanded="queueOpen"
+          @click="queueOpen = !queueOpen"
+        >
+          <span class="queue-pulse" aria-hidden="true"></span
+          ><span
+            ><strong
+              >Queue ·
+              {{
+                runs.filter((run) => ["queued", "running"].includes(run.status)).length
+              }}
+              active</strong
+            ><small
+              >{{ runs.filter((run) => run.status === "completed").length }} completed this
+              session</small
+            ></span
+          ><span class="chevron" aria-hidden="true">{{ queueOpen ? "⌄" : "⌃" }}</span>
+        </button>
+        <section v-if="queueOpen" class="queue-popover" role="dialog" aria-label="Processing queue">
+          <div class="popover-head">
+            <strong>Queue and results</strong
+            ><button class="close-button" aria-label="Close queue" @click="queueOpen = false">
+              ×
+            </button>
+          </div>
+          <p v-if="queueError" class="field-error">{{ queueError }}</p>
+          <p v-if="!runs.length" class="empty-state">
+            <strong>No runs yet</strong><span>Submit a process to see its status here.</span>
+          </p>
+          <div v-for="run in runs" :key="run.runId" class="job">
+            <span class="job-number" aria-hidden="true">{{
+              run.queuePosition !== undefined ? run.queuePosition + 1 : "·"
+            }}</span
+            ><span v-if="run.status === 'running'" class="job-spinner" aria-hidden="true"></span
+            ><span v-else class="status-dot" aria-hidden="true"></span>
+            <div>
+              <strong>{{ runTitle(run) }}</strong
+              ><small>{{ runState(run) }}</small
+              ><small v-if="run.error" class="field-error">{{ run.error }}</small>
+              <div v-if="run.artifacts?.length" class="job-artifacts">
+                <button
+                  v-for="(artifact, index) in run.artifacts"
+                  :key="artifact.path"
+                  class="text-button"
+                  @click="void reveal(run, index)"
+                >
+                  Reveal {{ artifact.fileType ?? "artifact" }}
+                </button>
+              </div>
+            </div>
+            <button
+              v-if="run.status === 'queued'"
+              class="cancel-button"
+              @click="void cancelQueued(run)"
+            >
+              Cancel
+            </button>
+          </div>
+        </section>
+      </footer>
+    </template>
+  </main>
 </template>

@@ -1,1 +1,87 @@
-{"schemaVersion":1,"id":"sfedit-join","title":"SFEdit Join","category":"edit-and-mix","summary":"Join soundfiles in a chosen order.","description":"Splice compatible soundfiles into one continuous result.","useCases":["Assemble sections","Create a montage"],"tags":["join","splice","edit","mix"],"identity":{"executable":"sfedit","operation":"join"},"documentation":{"localPath":"cdpr8/docs/html/cgroedit.htm","anchor":"JOIN","helpCommand":["sfedit","join"],"verifiedWithVersion":"CDP Release 8"},"modes":[{"id":"join","title":"Join sounds","summary":"Append two or more compatible files.","inputs":[{"id":"sources","label":"Soundfiles","description":"Drag to reorder the join sequence.","fileTypes":["soundfile"],"minItems":2,"maxItems":null,"ordered":true,"constraints":[]}],"parameters":[{"id":"spliceMs","label":"Splice length","description":"Crossfade at each join.","required":true,"advanced":false,"unit":"ms","cli":{"kind":"option","flag":"-s","join":"separate"},"kind":"number","default":15,"min":0,"max":500,"step":1},{"id":"fadeIn","label":"Fade in first file","description":"Apply a short fade at the beginning.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-f"},"kind":"flag","default":false},{"id":"fadeOut","label":"Fade out last file","description":"Apply a short fade at the end.","required":false,"advanced":true,"cli":{"kind":"booleanFlag","flag":"-e"},"kind":"flag","default":false}],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-joined"},"argumentOrder":[{"kind":"literal","value":"join"},{"kind":"input","inputId":"sources"},{"kind":"output"},{"kind":"parameter","parameterId":"spliceMs"},{"kind":"parameter","parameterId":"fadeIn"},{"kind":"parameter","parameterId":"fadeOut"}],"constraints":[]}]}
+{
+  "schemaVersion": 1,
+  "id": "sfedit-join",
+  "title": "SFEdit Join",
+  "category": "edit-and-mix",
+  "summary": "Join soundfiles in a chosen order.",
+  "description": "Splice compatible soundfiles into one continuous result.",
+  "useCases": ["Assemble sections", "Create a montage"],
+  "tags": ["join", "splice", "edit", "mix"],
+  "identity": { "executable": "sfedit", "operation": "join" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "JOIN",
+    "helpCommand": ["sfedit", "join"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "join",
+      "title": "Join sounds",
+      "summary": "Append two or more compatible files.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Drag to reorder the join sequence.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Crossfade at each join.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "separate" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "fadeIn",
+          "label": "Fade in first file",
+          "description": "Apply a short fade at the beginning.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-f" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "fadeOut",
+          "label": "Fade out last file",
+          "description": "Apply a short fade at the end.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-joined"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "join" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "fadeIn" },
+        { "kind": "parameter", "parameterId": "fadeOut" }
+      ],
+      "constraints": []
+    }
+  ]
+}

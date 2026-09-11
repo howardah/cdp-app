@@ -564,10 +564,9 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
             "channels" | "channel count" => {
                 channels = value.split_whitespace().next().and_then(|v| v.parse().ok())
             }
-            "sample format" | "sampleformat"
-                if !value.is_empty() => {
-                    format = Some(value.to_string())
-                }
+            "sample format" | "sampleformat" if !value.is_empty() => {
+                format = Some(value.to_string())
+            }
             _ => {}
         }
     }
@@ -848,7 +847,9 @@ pub fn evaluate_constraints(
             } => {
                 let n = value(reference, &effective, metadata)?;
                 (
-                    (2.0..=32768.0).contains(&n) && n.fract() == 0.0 && (n as u64).is_power_of_two(),
+                    (2.0..=32768.0).contains(&n)
+                        && n.fract() == 0.0
+                        && (n as u64).is_power_of_two(),
                     message,
                 )
             }

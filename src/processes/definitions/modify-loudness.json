@@ -1,10 +1,350 @@
-{"schemaVersion":1,"id":"modify-loudness","title":"Modify Loudness","category":"time-domain","summary":"Alter balance or loudness of sound.","description":"Adjust gain, normalize, balance, invert phase, report loudest files, or equalize a group.","useCases":["Adjust recording level","Normalize files","Match levels across files","Invert phase"],"tags":["loudness","gain","normalize","balance","phase","equalise"],"identity":{"executable":"modify","operation":"loudness"},"documentation":{"localPath":"cdpr8/docs/html/cgromody.htm","anchor":"LOUDNESS","helpCommand":["modify","loudness"],"verifiedWithVersion":"CDP Release 8"},"modes":[
-{"id":"linear-gain","cliMode":1,"title":"Linear gain","summary":"Adjust level by a multiplier.","inputs":[{"id":"source","label":"Soundfile","description":"Sound to adjust.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"gain","label":"Gain","description":"Floating point multiplier; 1 leaves level unchanged.","required":true,"advanced":false,"unit":"×","cli":{"kind":"positional"},"kind":"number","default":1,"min":0,"max":10,"step":0.01}],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-gain"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"parameter","parameterId":"gain"}],"constraints":[]},
-{"id":"db-gain","cliMode":2,"title":"Decibel gain","summary":"Adjust level by decibels.","inputs":[{"id":"source","label":"Soundfile","description":"Sound to adjust.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"gainDb","label":"Gain","description":"Level adjustment in decibels.","required":true,"advanced":false,"unit":"dB","cli":{"kind":"positional"},"kind":"number","default":0,"min":-96,"max":96,"step":0.1}],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-gain"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"parameter","parameterId":"gainDb"}],"constraints":[]},
-{"id":"normalise","cliMode":3,"title":"Normalise","summary":"Raise or lower maximum level.","inputs":[{"id":"source","label":"Soundfile","description":"Sound to normalize.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"level","label":"Output level","description":"Target maximum amplitude; omitted uses CDP maximum.","required":false,"advanced":false,"unit":"×","cli":{"kind":"option","flag":"-l","join":"concatenated"},"kind":"number","default":1,"min":0,"max":1,"step":0.01}],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-normalised"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"parameter","parameterId":"level"}],"constraints":[]},
-{"id":"force-level","cliMode":4,"title":"Force level","summary":"Force maximum level to a target.","inputs":[{"id":"source","label":"Soundfile","description":"Sound to adjust.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[{"id":"level","label":"Output level","description":"Target maximum amplitude; omitted uses CDP maximum.","required":false,"advanced":false,"unit":"×","cli":{"kind":"option","flag":"-l","join":"concatenated"},"kind":"number","default":1,"min":0,"max":1,"step":0.01}],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-level"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"},{"kind":"parameter","parameterId":"level"}],"constraints":[]},
-{"id":"balance","cliMode":5,"title":"Balance","summary":"Match the first sound's maximum level to a second.","inputs":[{"id":"source","label":"Soundfile to balance","description":"Sound whose level is adjusted.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]},{"id":"reference","label":"Reference soundfile","description":"Sound whose maximum level is used.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[{"kind":"sameSampleRate","inputId":"source"}]}],"parameters":[],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-balanced"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"input","inputId":"reference"},{"kind":"output"}],"constraints":[]},
-{"id":"invert-phase","cliMode":6,"title":"Invert phase","summary":"Invert the phase of a sound.","inputs":[{"id":"source","label":"Soundfile","description":"Sound to invert.","fileTypes":["soundfile"],"minItems":1,"maxItems":1,"ordered":false,"constraints":[]}],"parameters":[],"output":{"kind":"singleFile","fileType":"soundfile","extension":"wav","nameSuffix":"-phase"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"source"},{"kind":"output"}],"constraints":[]},
-{"id":"find-loudest","cliMode":7,"title":"Find loudest","summary":"Report the loudest of two or more files.","inputs":[{"id":"sources","label":"Soundfiles","description":"Files to compare.","fileTypes":["soundfile"],"minItems":2,"maxItems":null,"ordered":true,"constraints":[]}],"parameters":[],"output":{"kind":"stdoutReport"},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"sources"}],"constraints":[]},
-{"id":"equalise","cliMode":8,"title":"Equalise","summary":"Scale files to the loudest file's level.","inputs":[{"id":"sources","label":"Soundfiles","description":"Files to equalize in input order.","fileTypes":["soundfile"],"minItems":2,"maxItems":null,"ordered":true,"constraints":[]}],"parameters":[],"output":{"kind":"genericRoot","fileType":"soundfile","extension":"wav","nameSuffix":"-equalised","discovery":{"prefixStyle":"root-number","mayProduceRemnant":false}},"argumentOrder":[{"kind":"literal","value":"loudness"},{"kind":"mode"},{"kind":"input","inputId":"sources"},{"kind":"output"}],"constraints":[]}
-]}
+{
+  "schemaVersion": 1,
+  "id": "modify-loudness",
+  "title": "Modify Loudness",
+  "category": "time-domain",
+  "summary": "Alter balance or loudness of sound.",
+  "description": "Adjust gain, normalize, balance, invert phase, report loudest files, or equalize a group.",
+  "useCases": [
+    "Adjust recording level",
+    "Normalize files",
+    "Match levels across files",
+    "Invert phase"
+  ],
+  "tags": ["loudness", "gain", "normalize", "balance", "phase", "equalise"],
+  "identity": { "executable": "modify", "operation": "loudness" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "LOUDNESS",
+    "helpCommand": ["modify", "loudness"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "linear-gain",
+      "cliMode": 1,
+      "title": "Linear gain",
+      "summary": "Adjust level by a multiplier.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to adjust.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Floating point multiplier; 1 leaves level unchanged.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-gain"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "gain" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "db-gain",
+      "cliMode": 2,
+      "title": "Decibel gain",
+      "summary": "Adjust level by decibels.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to adjust.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gainDb",
+          "label": "Gain",
+          "description": "Level adjustment in decibels.",
+          "required": true,
+          "advanced": false,
+          "unit": "dB",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": -96,
+          "max": 96,
+          "step": 0.1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-gain"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "gainDb" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "normalise",
+      "cliMode": 3,
+      "title": "Normalise",
+      "summary": "Raise or lower maximum level.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to normalize.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "level",
+          "label": "Output level",
+          "description": "Target maximum amplitude; omitted uses CDP maximum.",
+          "required": false,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "option", "flag": "-l", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-normalised"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "level" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "force-level",
+      "cliMode": 4,
+      "title": "Force level",
+      "summary": "Force maximum level to a target.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to adjust.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "level",
+          "label": "Output level",
+          "description": "Target maximum amplitude; omitted uses CDP maximum.",
+          "required": false,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "option", "flag": "-l", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-level"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "level" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "balance",
+      "cliMode": 5,
+      "title": "Balance",
+      "summary": "Match the first sound's maximum level to a second.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile to balance",
+          "description": "Sound whose level is adjusted.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "reference",
+          "label": "Reference soundfile",
+          "description": "Sound whose maximum level is used.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "source" }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-balanced"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "input", "inputId": "reference" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "invert-phase",
+      "cliMode": 6,
+      "title": "Invert phase",
+      "summary": "Invert the phase of a sound.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to invert.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-phase"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "find-loudest",
+      "cliMode": 7,
+      "title": "Find loudest",
+      "summary": "Report the loudest of two or more files.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Files to compare.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": { "kind": "stdoutReport" },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "equalise",
+      "cliMode": 8,
+      "title": "Equalise",
+      "summary": "Scale files to the loudest file's level.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Files to equalize in input order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-equalised",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "loudness" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}
