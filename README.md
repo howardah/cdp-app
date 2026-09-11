@@ -6,7 +6,7 @@ Composers' Desktop Application is an experimental desktop interface for the [Com
 
 ## Alpha status and safety
 
-This first version is alpha software. This is a first draft of the software written with the aide of a coding agent, and the code has not received a complete human review. Features, process definitions, and file-handling behavior may contain defects.
+This first version is alpha software. It is a first draft of the software written with the aide of a coding agent, and the code has not received a complete human review. Features, process definitions, and file-handling behavior may contain defects.
 
 Use the application at your own risk. Keep backups of source audio and other important files. Do not rely on this build for production work. The app avoids overwriting existing output files by design, but that safeguard does not replace backups or independent review.
 
