@@ -8,19 +8,22 @@
             "name": "Compile Check",
             "type": "command",
             "command": "bun run compile:check",
-            "statusMessage": "Checking for compile errors…"
+            "statusMessage": "Checking for compile errors…",
+            "description": "Lints the codebase for compile errors"
           },
           {
             "name": "Lint",
             "type": "command",
             "command": "bun run lint:fix",
-            "statusMessage": "Checking for linting errors…"
+            "statusMessage": "Checking for linting errors…",
+            "description": "Lints the codebase for linting errors"
           },
           {
             "name": "Format",
             "type": "command",
             "command": "bun run fmt",
-            "statusMessage": "Formatting codebase…"
+            "statusMessage": "Formatting codebase…",
+            "description": "Formats the codebase"
           }
         ]
       }
