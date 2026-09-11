@@ -1,8 +1,17 @@
 export type ProcessCategory = "time-domain" | "spectral" | "edit-and-mix" | "utilities";
-export type BinaryId = "modify" | "sfedit" | "pvoc" | "isolate";
+export type BinaryId = "modify" | "sfedit" | "pvoc" | "isolate" | "sfprops";
 export type CdpFileType =
   | "soundfile" | "analysis-ana" | "analysis-pvx" | "breakpoint"
   | "cuts-data" | "slice-data" | "text-data";
+export interface InspectedFile {
+  path: string;
+  fileType: CdpFileType;
+  sizeBytes: number;
+  durationSeconds?: number;
+  sampleRate?: number;
+  channels?: number;
+  sampleFormat?: string;
+}
 
 export interface FileConstraint {
   kind: "channels" | "sameSampleRate" | "sameChannels" | "sameSampleFormat";
@@ -35,5 +44,5 @@ export type OutputDefinition =
   | { kind: "stdoutReport" } | { kind: "none" };
 export interface ModeDefinition { id: string; cliMode?: number; title: string; summary: string; inputs: InputDefinition[]; parameters: ParameterDefinition[]; output: OutputDefinition; argumentOrder: ArgumentToken[]; constraints: Constraint[]; }
 export interface ProcessDefinition { schemaVersion: 1; id: string; title: string; category: ProcessCategory; summary: string; description: string; useCases: string[]; tags: string[]; identity: { executable: BinaryId; operation?: string }; documentation: { localPath: string; anchor?: string; helpCommand: string[]; verifiedWithVersion: string }; modes: ModeDefinition[]; }
-export type ParameterValue = { kind: "number"; value: number } | { kind: "choice"; value: string } | { kind: "flag"; value: boolean } | { kind: "file"; path: string };
+export type ParameterValue = { kind: "number"; value: number } | { kind: "choice"; value: string } | { kind: "flag"; value: boolean } | { kind: "file"; path: string; value?: string };
 export interface RunProcessRequest { processId: string; modeId: string; inputs: Record<string, string[]>; parameters: Record<string, ParameterValue>; outputPath: string | null; }
