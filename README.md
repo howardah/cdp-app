@@ -1,40 +1,98 @@
-# Tauri + Vue 3 + TypeScript
+# Composers' Desktop Application
 
-## CDP Desktop application plan
+Composers' Desktop Application is an experimental desktop interface for the [Composers' Desktop Project (CDP)](https://www.composersdesktop.com/). It makes a reviewed subset of CDP's command-line audio processes accessible through searchable descriptions, generated forms, safe defaults, command previews, and native processing windows.
 
-The product and contributor documentation for the Composers' Desktop Project
-application is split into six documents. Read them in this order:
+![The Composers' Desktop Application process catalog](screenshots/Screenshot-2026-09-11.png)
 
-1. [Product roadmap](docs/app/00-product-roadmap.md)
-2. [Experience and visual design](docs/app/01-experience-and-visual-design.md)
-3. [Process catalog contract](docs/app/02-process-catalog-contract.md)
-4. [Desktop runtime and delivery](docs/app/03-desktop-runtime-and-delivery.md)
-5. [Adding processes](docs/app/04-adding-processes.md)
-6. [Cross-platform builds](docs/app/05-cross-platform-builds.md)
+## Alpha status and safety
 
-The first release described by these documents is an Intel macOS vertical
-slice. Its application and catalog contracts are intentionally platform-neutral
-so that Apple Silicon, Windows, Linux, and broader CDP process coverage can be
-added without redesigning the UI or IPC boundary.
+This first version is alpha software. This is a first draft of the software written with the aide of a coding agent, and the code has not received a complete human review. Features, process definitions, and file-handling behavior may contain defects.
 
-To stage the Intel macOS sidecars for local development, run
-`bash scripts/stage-cdp-binaries.sh`. The script copies and validates the five
-required executables from `cdpr8/_cdp/_cdprogs/` into `src-tauri/binaries/`
-with Tauri's `-x86_64-apple-darwin` suffix. Redistribution rights, code signing,
-and notarization remain release gates; this repository does not sign or
-distribute these binaries.
+Use the application at your own risk. Keep backups of source audio and other important files. Do not rely on this build for production work. The app avoids overwriting existing output files by design, but that safeguard does not replace backups or independent review.
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Current platform support
 
-## Recommended IDE Setup
+The current development target is **Intel macOS only** (`x86_64-apple-darwin`). The repository contains Intel Mach-O CDP executables and does not yet provide native Apple Silicon, Windows, or Linux sidecars.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Apple Silicon, Windows, and Linux support are planned. Each target needs matching CDP binaries, packaging, signing, and clean-machine testing before it can be supported. See the [cross-platform build guide](docs/app/05-cross-platform-builds.md) for the intended platform matrix.
 
-## Type Support For `.vue` Imports in TS
+## What the application does
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+The application combines a Vue 3 interface with a Rust and Tauri runtime. You can:
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+- Browse and search reviewed CDP processes by musical intent
+- Configure process modes through generated input and parameter forms
+- Inspect the exact command before running it
+- Queue, cancel, and review processing jobs
+- Audition soundfile results and pass compatible outputs to another process
+- Follow guided recipes for selected multi-step workflows
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+Only reviewed catalog entries appear in the interface. The application does not expose every executable included with CDP Release 8.
+
+## Roadmap and project documentation
+
+The [product roadmap](docs/app/00-product-roadmap.md) describes the intended workflow, delivery milestones, current limitations, and later platform work. The remaining design and engineering documents define the contracts used by the application:
+
+1. [Experience and visual design](docs/app/01-experience-and-visual-design.md)
+2. [Process catalog contract](docs/app/02-process-catalog-contract.md)
+3. [Desktop runtime and delivery](docs/app/03-desktop-runtime-and-delivery.md)
+4. [Adding processes](docs/app/04-adding-processes.md)
+5. [Cross-platform builds](docs/app/05-cross-platform-builds.md)
+
+The roadmap includes native Apple Silicon, Windows, and Linux builds, broader process coverage, and expanded recipes. Platform support will be announced only after the relevant binaries and application bundles pass target-specific testing.
+
+## Build locally on Intel macOS
+
+Local development requires an Intel Mac or an Intel macOS environment. Install:
+
+- [Bun](https://bun.sh/)
+- [Rust](https://www.rust-lang.org/tools/install) with the `x86_64-apple-darwin` target
+- [Tauri 2 prerequisites for macOS](https://v2.tauri.app/start/prerequisites/)
+- The repository's `cdpr8` release tree, including `cdpr8/_cdp/_cdprogs/`
+
+Install the JavaScript dependencies:
+
+```sh
+bun install
+rustup target add x86_64-apple-darwin
+```
+
+Stage the five approved CDP sidecars from the bundled release tree:
+
+```sh
+bash scripts/stage-cdp-binaries.sh
+```
+
+Start the desktop application in development mode:
+
+```sh
+bun tauri dev
+```
+
+Run the automated checks before building a bundle:
+
+```sh
+bun run typecheck
+bun test
+cargo test --manifest-path src-tauri/Cargo.toml
+bun run fmt:check
+bun run lint
+```
+
+Build the Intel macOS application:
+
+```sh
+bun tauri build --target x86_64-apple-darwin
+```
+
+The local build is unsigned. Redistribution rights for the CDP binaries, code signing, notarization, and clean-machine validation remain release requirements.
+
+## Technology
+
+The application uses Vue 3, TypeScript, Vite, Rust, and Tauri 2. Rust owns command compilation, binary resolution, validation, queueing, and process execution. The webview never accepts arbitrary executable paths or shell commands.
+
+## Contributing
+
+Treat every process definition as executable behavior. Follow the [process authoring guide](docs/app/04-adding-processes.md), verify the local documentation against executable help, and add frontend, Rust, and staged-binary tests with each process.
+
+Because the project is in alpha and was developed with coding-agent assistance, contributions should prioritize human review, reproducible tests, safe file handling, and clear documentation of unresolved risks.
