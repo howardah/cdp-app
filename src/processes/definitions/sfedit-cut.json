@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-cut",
+  "title": "SFEdit Cut",
+  "category": "edit-and-mix",
+  "summary": "Keep one time range from a soundfile.",
+  "description": "Extract a continuous segment with a short splice at its boundaries.",
+  "useCases": ["Extract a sample", "Trim a recording", "Keep a phrase"],
+  "tags": ["cut", "trim", "extract", "segment"],
+  "identity": { "executable": "sfedit", "operation": "cut" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "CUT",
+    "helpCommand": ["sfedit", "cut"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Time in seconds",
+      "summary": "Set the range using seconds.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to cut.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Start time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "End time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cut"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "cut" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "start" },
+          "right": { "source": "parameter", "id": "end" },
+          "message": "Start must be before end."
+        }
+      ]
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Sample count",
+      "summary": "Set the range using sample counts.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to cut.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start sample",
+          "description": "Starting sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "end",
+          "label": "End sample",
+          "description": "Ending sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cut"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "cut" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "start" },
+          "right": { "source": "parameter", "id": "end" },
+          "message": "Start must be before end."
+        }
+      ]
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Grouped samples",
+      "summary": "Set the range using grouped samples.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to cut.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start group",
+          "description": "Starting grouped-sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "end",
+          "label": "End group",
+          "description": "Ending grouped-sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cut"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "cut" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "start" },
+          "right": { "source": "parameter", "id": "end" },
+          "message": "Start must be before end."
+        }
+      ]
+    }
+  ]
+}

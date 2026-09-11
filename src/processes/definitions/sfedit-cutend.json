@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-cutend",
+  "title": "SFEdit Cut End",
+  "category": "edit-and-mix",
+  "summary": "Keep the final portion of a soundfile.",
+  "description": "Extract a duration ending at the end of the source.",
+  "useCases": ["Keep a tail", "Trim a recording from its start"],
+  "tags": ["cut", "end", "trim", "tail"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "cutend"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "CUTEND",
+    "helpCommand": ["sfedit", "cutend"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Duration in seconds",
+      "summary": "Duration in seconds",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "length",
+          "label": "Length",
+          "description": "Duration to keep.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cutend"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cutend"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "length"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Sample count",
+      "summary": "Sample count",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "length",
+          "label": "Length",
+          "description": "Sample count to keep.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "max": 100000000,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cutend"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cutend"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "length"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Grouped samples",
+      "summary": "Grouped samples",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "length",
+          "label": "Length",
+          "description": "Grouped-sample count to keep.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "max": 100000000,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cutend"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cutend"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "length"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

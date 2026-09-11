@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-masks",
+  "title": "SFEdit Masks",
+  "category": "edit-and-mix",
+  "summary": "Silence selected ranges of a soundfile.",
+  "description": "Mask chunks listed in a cuts file while preserving the surrounding timeline.",
+  "useCases": ["Mute unwanted passages", "Create rhythmic gaps"],
+  "tags": ["mask", "silence", "cuts", "edit"],
+  "identity": { "executable": "sfedit", "operation": "masks" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "MASKS",
+    "helpCommand": ["sfedit", "masks"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Time in seconds",
+      "summary": "Mask ranges specified in seconds.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to mask.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to mask.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window around masked ranges.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-masked"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "masks" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "excisefile" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Sample count",
+      "summary": "Mask ranges specified in samples.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to mask.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to mask.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window around masked ranges.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-masked"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "masks" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "excisefile" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Grouped samples",
+      "summary": "Mask ranges specified in grouped samples.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to mask.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to mask.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window around masked ranges.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-masked"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "masks" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "excisefile" },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": []
+    }
+  ]
+}

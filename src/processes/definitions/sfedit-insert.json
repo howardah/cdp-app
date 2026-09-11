@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-insert",
+  "title": "SFEdit Insert",
+  "category": "edit-and-mix",
+  "summary": "Insert one sound into another.",
+  "description": "Place a compatible soundfile at a chosen time.",
+  "useCases": ["Layer a sound", "Add a phrase"],
+  "tags": ["insert", "layer", "splice", "edit"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "insert"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "INSERT",
+    "helpCommand": ["sfedit", "insert"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Insert a sound",
+      "summary": "Insert a sound",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "insert",
+          "label": "Inserted sound",
+          "description": "Compatible sound to insert.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "sameSampleRate",
+              "inputId": "source"
+            },
+            {
+              "kind": "sameChannels",
+              "inputId": "source"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "time",
+          "label": "Time",
+          "description": "Insertion position in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "level",
+          "label": "Level",
+          "description": "Gain multiplier for inserted sound.",
+          "required": false,
+          "advanced": true,
+          "unit": "×",
+          "cli": {
+            "kind": "option",
+            "flag": "-l",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        },
+        {
+          "id": "overwrite",
+          "label": "Overwrite",
+          "description": "Overwrite instead of spreading the source.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-o"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-insert"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "insert"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "insert"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "time"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "level"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "overwrite"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Insert a sound",
+      "summary": "Insert a sound",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "insert",
+          "label": "Inserted sound",
+          "description": "Compatible sound to insert.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "sameSampleRate",
+              "inputId": "source"
+            },
+            {
+              "kind": "sameChannels",
+              "inputId": "source"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "time",
+          "label": "Time",
+          "description": "Insertion sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "level",
+          "label": "Level",
+          "description": "Gain multiplier for inserted sound.",
+          "required": false,
+          "advanced": true,
+          "unit": "×",
+          "cli": {
+            "kind": "option",
+            "flag": "-l",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        },
+        {
+          "id": "overwrite",
+          "label": "Overwrite",
+          "description": "Overwrite instead of spreading the source.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-o"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-insert"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "insert"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "insert"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "time"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "level"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "overwrite"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Insert a sound",
+      "summary": "Insert a sound",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "insert",
+          "label": "Inserted sound",
+          "description": "Compatible sound to insert.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "sameSampleRate",
+              "inputId": "source"
+            },
+            {
+              "kind": "sameChannels",
+              "inputId": "source"
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "time",
+          "label": "Time",
+          "description": "Insertion sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        },
+        {
+          "id": "level",
+          "label": "Level",
+          "description": "Gain multiplier for inserted sound.",
+          "required": false,
+          "advanced": true,
+          "unit": "×",
+          "cli": {
+            "kind": "option",
+            "flag": "-l",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        },
+        {
+          "id": "overwrite",
+          "label": "Overwrite",
+          "description": "Overwrite instead of spreading the source.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-o"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-insert"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "insert"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "insert"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "time"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "level"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "overwrite"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

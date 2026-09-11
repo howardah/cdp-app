@@ -10,6 +10,16 @@ import join from "./definitions/sfedit-join.json";
 import analyze from "./definitions/pvoc-analyze.json";
 import synthesize from "./definitions/pvoc-synthesize.json";
 import isolate from "./definitions/isolate.json";
+import cut from "./definitions/sfedit-cut.json";
+import cutend from "./definitions/sfedit-cutend.json";
+import excise from "./definitions/sfedit-excise.json";
+import insil from "./definitions/sfedit-insil.json";
+import insert from "./definitions/sfedit-insert.json";
+import replace from "./definitions/sfedit-replace.json";
+import cutmany from "./definitions/sfedit-cutmany.json";
+import masks from "./definitions/sfedit-masks.json";
+import space from "./definitions/modify-space.json";
+import revecho from "./definitions/modify-revecho.json";
 
 export const processCatalog = [
   speed,
@@ -18,6 +28,16 @@ export const processCatalog = [
   analyze,
   synthesize,
   isolate,
+  cut,
+  cutend,
+  excise,
+  insil,
+  insert,
+  replace,
+  cutmany,
+  masks,
+  space,
+  revecho,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 

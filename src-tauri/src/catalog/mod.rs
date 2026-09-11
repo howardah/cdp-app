@@ -15,6 +15,16 @@ pub fn bundled_catalog() -> Result<Vec<ProcessDefinition>, String> {
         include_str!("../../../src/processes/definitions/pvoc-analyze.json"),
         include_str!("../../../src/processes/definitions/pvoc-synthesize.json"),
         include_str!("../../../src/processes/definitions/isolate.json"),
+        include_str!("../../../src/processes/definitions/sfedit-cut.json"),
+        include_str!("../../../src/processes/definitions/sfedit-cutend.json"),
+        include_str!("../../../src/processes/definitions/sfedit-excise.json"),
+        include_str!("../../../src/processes/definitions/sfedit-insil.json"),
+        include_str!("../../../src/processes/definitions/sfedit-insert.json"),
+        include_str!("../../../src/processes/definitions/sfedit-replace.json"),
+        include_str!("../../../src/processes/definitions/sfedit-cutmany.json"),
+        include_str!("../../../src/processes/definitions/sfedit-masks.json"),
+        include_str!("../../../src/processes/definitions/modify-space.json"),
+        include_str!("../../../src/processes/definitions/modify-revecho.json"),
     ])
 }
 

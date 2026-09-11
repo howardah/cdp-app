@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-excise",
+  "title": "SFEdit Excise",
+  "category": "edit-and-mix",
+  "summary": "Remove one time range from a soundfile.",
+  "description": "Remove a continuous segment and close the gap with a splice.",
+  "useCases": ["Excise unwanted material", "Tighten a recording"],
+  "tags": ["excise", "remove", "trim", "edit"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "excise"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "EXCISE",
+    "helpCommand": ["sfedit", "excise"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Remove a range",
+      "summary": "Remove a range",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Start time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "End time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excise"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excise"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "start"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "end"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": {
+            "source": "parameter",
+            "id": "start"
+          },
+          "right": {
+            "source": "parameter",
+            "id": "end"
+          },
+          "message": "Start must be before end."
+        }
+      ]
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Remove a range",
+      "summary": "Remove a range",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Starting sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "Ending sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excise"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excise"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "start"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "end"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": {
+            "source": "parameter",
+            "id": "start"
+          },
+          "right": {
+            "source": "parameter",
+            "id": "end"
+          },
+          "message": "Start must be before end."
+        }
+      ]
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Remove a range",
+      "summary": "Remove a range",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Starting sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "Ending sample count.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice window.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excise"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excise"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "start"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "end"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": {
+            "source": "parameter",
+            "id": "start"
+          },
+          "right": {
+            "source": "parameter",
+            "id": "end"
+          },
+          "message": "Start must be before end."
+        }
+      ]
+    }
+  ]
+}

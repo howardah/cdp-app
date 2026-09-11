@@ -20,6 +20,38 @@ describe("process catalog", () => {
     ).toBe(true);
   });
 
+  it("contains the ten newly shipped process entries", () => {
+    expect(processCatalog).toHaveLength(16);
+    expect(searchCatalog("mask").map((process) => process.id)).toContain("sfedit-masks");
+    expect(searchCatalog("echo").map((process) => process.id)).toContain("modify-revecho");
+    expect(searchCatalog("narrow").map((process) => process.id)).toContain("modify-space");
+  });
+
+  it("covers new modes, defaults, constraints, and argument order", () => {
+    expect(findProcess("sfedit-cut")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 3]);
+    expect(findProcess("sfedit-masks")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 3]);
+    expect(findProcess("modify-revecho")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 3]);
+    const cutMany = findMode(findProcess("sfedit-cutmany")!, "seconds")!;
+    expect(cutMany.argumentOrder.slice(0, 6)).toEqual([
+      { kind: "literal", value: "cutmany" },
+      { kind: "mode" },
+      { kind: "input", inputId: "source" },
+      { kind: "output" },
+      { kind: "input", inputId: "cuts" },
+      { kind: "parameter", parameterId: "spliceMs" },
+    ]);
+    expect(defaultParameterValues(findMode(findProcess("sfedit-masks")!, "seconds")!)).toEqual({
+      spliceMs: 15,
+    });
+    const spacePan = findMode(findProcess("modify-space")!, "pan")!;
+    expect(spacePan.inputs[0].constraints).toEqual([{ kind: "channels", min: 1, max: 1 }]);
+    const insert = findMode(findProcess("sfedit-insert")!, "seconds")!;
+    expect(insert.inputs[1].constraints).toEqual([
+      { kind: "sameSampleRate", inputId: "source" },
+      { kind: "sameChannels", inputId: "source" },
+    ]);
+  });
+
   it("exposes the documented MVP mode coverage", () => {
     expect(findProcess("modify-speed")!.modes.map((mode) => mode.cliMode)).toEqual([1, 2, 5, 6]);
     expect(findProcess("modify-loudness")!.modes.map((mode) => mode.cliMode)).toEqual([

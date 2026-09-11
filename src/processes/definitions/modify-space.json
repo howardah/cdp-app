@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-space",
+  "title": "Modify Space",
+  "category": "time-domain",
+  "summary": "Pan, mirror, or narrow stereo sound.",
+  "description": "Change stereo distribution or narrow a stereo image.",
+  "useCases": ["Pan mono recordings", "Mirror stereo", "Reduce stereo width"],
+  "tags": ["space", "pan", "stereo", "narrow"],
+  "identity": {
+    "executable": "modify",
+    "operation": "space"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "SPACE",
+    "helpCommand": ["modify", "space"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "pan",
+      "cliMode": 1,
+      "title": "Pan mono",
+      "summary": "Position mono sound in stereo.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "pan",
+          "label": "Pan",
+          "description": "Pan position.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": -1,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "prescale",
+          "label": "Prescale",
+          "description": "Input prescale to avoid clipping.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-p",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0.7,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-space"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "space"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "pan"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "prescale"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "mirror",
+      "cliMode": 2,
+      "title": "Mirror stereo",
+      "summary": "Invert stereo positions.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Stereo soundfile",
+          "description": "Stereo sound to mirror.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 2,
+              "max": 2
+            }
+          ]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-space"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "space"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "narrow",
+      "cliMode": 4,
+      "title": "Narrow stereo",
+      "summary": "Reduce stereo width.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Stereo soundfile",
+          "description": "Stereo sound to narrow.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 2,
+              "max": 2
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "narrowing",
+          "label": "Narrowing",
+          "description": "Stereo width from -1 to 1.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": -1,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-space"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "space"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "narrowing"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

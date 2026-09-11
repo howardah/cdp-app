@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-cutmany",
+  "title": "SFEdit Cut Many",
+  "category": "edit-and-mix",
+  "summary": "Extract several ranges into numbered files.",
+  "description": "Use a cuts file to create one output per selected segment.",
+  "useCases": ["Extract phrases", "Batch segment a recording"],
+  "tags": ["cut", "segments", "batch", "extract"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "cutmany"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "CUTMANY",
+    "helpCommand": ["sfedit", "cutmany"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Extract ranges",
+      "summary": "Extract ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to segment.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Start/end pairs.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-segments",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "cutmany" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "cuts" },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Extract ranges",
+      "summary": "Extract ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to segment.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Start/end pairs.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-segments",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cutmany"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "cuts"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Extract ranges",
+      "summary": "Extract ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to segment.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Start/end pairs.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-segments",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cutmany"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "cuts"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}
