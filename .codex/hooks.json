@@ -5,16 +5,19 @@
       {
         "hooks": [
           {
+            "name": "Compile Check",
             "type": "command",
             "command": "bun run compile:check",
             "statusMessage": "Checking for compile errors…"
           },
           {
+            "name": "Lint",
             "type": "command",
             "command": "bun run lint:fix",
             "statusMessage": "Checking for linting errors…"
           },
           {
+            "name": "Format",
             "type": "command",
             "command": "bun run fmt",
             "statusMessage": "Formatting codebase…"
