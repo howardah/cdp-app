@@ -1,27 +1,39 @@
 {
   "name": "composers-desktop-application",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "test": "vitest run",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "oxlint src/",
+    "lint:fix": "oxlint src/ --fix",
+    "fmt": "oxfmt src/ &&  cargo fmt --manifest-path src-tauri/Cargo.toml",
+    "fmt:check": "oxfmt src/ --check && cargo fmt --check --manifest-path src-tauri/Cargo.toml",
+    "bump:patch": "bun ./scripts/bump-version.ts patch",
+    "bump:minor": "bun ./scripts/bump-version.ts minor",
+    "bump:major": "bun ./scripts/bump-version.ts major"
   },
   "dependencies": {
-    "vue": "^3.3.4",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "^2",
+    "vue": "^3.3.4",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/bun": "^1.4.2",
+    "@types/node": "^22.20.2",
     "@vitejs/plugin-vue": "^5.0.4",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
     "typescript": "^5.0.2",
     "vite": "^5.0.0",
-    "vue-tsc": "^2.2.10",
-    "@tauri-apps/cli": "^2",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "vue-tsc": "^2.2.10"
   }
 }
