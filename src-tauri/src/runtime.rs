@@ -42,8 +42,8 @@ pub struct CompiledCommand {
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CommandPreview {
-    pub executable: String,
-    pub args: Vec<String>,
+    pub display: String,
+    pub tokens: Vec<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -553,7 +553,9 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
         let Some((label, raw)) = line.split_once(':') else {
             continue;
         };
-        let value = raw.trim();
+        // Some Release 8 builds print `sample type: : 16-bit`; accept the
+        // extra separator while keeping the parser label-driven.
+        let value = raw.trim().trim_start_matches(':').trim();
         match label.trim().to_ascii_lowercase().as_str() {
             "duration" | "duration seconds" => {
                 duration = value.split_whitespace().next().and_then(|v| v.parse().ok())
@@ -564,7 +566,7 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
             "channels" | "channel count" => {
                 channels = value.split_whitespace().next().and_then(|v| v.parse().ok())
             }
-            "sample format" | "sampleformat" if !value.is_empty() => {
+            "sample format" | "sampleformat" | "sample type" if !value.is_empty() => {
                 format = Some(value.to_string())
             }
             _ => {}
@@ -745,13 +747,17 @@ pub fn compile_request(
             }
         }
     }
-    let preview = CommandPreview {
-        executable: process.identity.executable_string(),
-        args: args
-            .iter()
-            .map(|a| a.to_string_lossy().into_owned())
-            .collect(),
-    };
+    let executable = process.identity.executable_string();
+    let tokens = args
+        .iter()
+        .map(|a| a.to_string_lossy().into_owned())
+        .collect::<Vec<_>>();
+    let display = std::iter::once(executable.as_str())
+        .chain(tokens.iter().map(String::as_str))
+        .map(|token| format!("{token:?}"))
+        .collect::<Vec<_>>()
+        .join(" ");
+    let preview = CommandPreview { display, tokens };
     Ok((
         CompiledCommand {
             binary: process.identity.executable,
@@ -1322,6 +1328,17 @@ mod tests {
         )
         .is_err());
         assert!(parse_sfprops(&[0xff], true).is_err());
+    }
+
+    #[test]
+    fn sfprops_parser_accepts_release_8_sample_type_label() {
+        let props = parse_sfprops(
+            b"Format : Standard WAVE format\nSample Rate : 48000\nChannels : 1\nsample type: : 16-bit\nduration : 3.7500 secs\n",
+            true,
+        )
+        .unwrap();
+        assert_eq!(props.sample_format, "16-bit");
+        assert_eq!(props.sample_rate, 48_000);
     }
 
     #[test]

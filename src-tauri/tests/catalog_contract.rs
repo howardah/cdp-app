@@ -36,7 +36,9 @@ fn shipped_process_ids_are_unique_and_nonempty() {
 
 #[test]
 fn catalog_rejects_unsupported_schema_versions() {
-    let manifest = MANIFESTS[0].replace("\"schemaVersion\":1", "\"schemaVersion\":2");
+    let mut value: serde_json::Value = serde_json::from_str(MANIFESTS[0]).unwrap();
+    value["schemaVersion"] = serde_json::json!(2);
+    let manifest = serde_json::to_string(&value).unwrap();
     let error = load_catalog(&[&manifest]).expect_err("schema version drift must be rejected");
     assert!(error.contains("unsupported catalog schema"));
 }

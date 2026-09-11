@@ -206,21 +206,21 @@ function onFormKey(event: KeyboardEvent) {
 async function request() {
   touched.value = true;
   if (!process.value || !mode.value || issues.value?.length) return;
-  const request = {
+  const runRequest = {
     processId: process.value.id,
     modeId: mode.value.id,
     inputs,
     parameters: values,
     outputPath: outputPath.value || null,
   };
-  preview.value = await requestCommandPreview(request);
+  preview.value = await requestCommandPreview(runRequest);
   if (!preview.value) {
     runtimeMessage.value =
       "Runtime preview is unavailable. Start the desktop runtime to run this process.";
     status.value = "failed";
     return;
   }
-  const accepted = await enqueueProcess(request);
+  const accepted = await enqueueProcess(runRequest);
   if (!accepted) {
     runtimeMessage.value =
       "This process is ready, but the desktop queue is unavailable in browser preview.";
@@ -230,6 +230,22 @@ async function request() {
   runId.value = accepted.runId;
   status.value = "queued";
   void poll();
+}
+async function togglePreview() {
+  previewOpen.value = !previewOpen.value;
+  if (!previewOpen.value || preview.value || !process.value || !mode.value) return;
+  if (issues.value?.length) {
+    runtimeMessage.value = "Complete the required fields to preview this command.";
+    return;
+  }
+  preview.value = await requestCommandPreview({
+    processId: process.value.id,
+    modeId: mode.value.id,
+    inputs,
+    parameters: values,
+    outputPath: outputPath.value || null,
+  });
+  if (!preview.value) runtimeMessage.value = "The desktop runtime could not create a command preview.";
 }
 async function suggestOutput() {
   const first = Object.values(inputs).flat().find(Boolean);
@@ -654,7 +670,7 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
             <p>Review the backend-produced command preview, then submit to the queue.</p>
           </div>
         </div>
-        <button type="button" class="secondary-button" @click="previewOpen = !previewOpen">
+        <button type="button" class="secondary-button" @click="togglePreview">
           {{ previewOpen ? "Hide" : "Show" }} command preview
         </button>
         <pre v-if="previewOpen" class="command-preview">{{
