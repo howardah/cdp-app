@@ -564,11 +564,10 @@ pub fn parse_sfprops(stdout: &[u8], success: bool) -> Result<SfProps, String> {
             "channels" | "channel count" => {
                 channels = value.split_whitespace().next().and_then(|v| v.parse().ok())
             }
-            "sample format" | "sampleformat" => {
-                if !value.is_empty() {
+            "sample format" | "sampleformat"
+                if !value.is_empty() => {
                     format = Some(value.to_string())
                 }
-            }
             _ => {}
         }
     }
@@ -802,7 +801,7 @@ pub fn evaluate_constraints(
                     ParameterValue::Number { value } => Some(*value),
                     _ => None,
                 })
-                .or_else(|| None)
+                .or(None)
                 .ok_or_else(|| format!("constraint requires numeric parameter {id}")),
             ValueRef::InputMetadata { input_id, property } => {
                 let m = metadata
@@ -849,7 +848,7 @@ pub fn evaluate_constraints(
             } => {
                 let n = value(reference, &effective, metadata)?;
                 (
-                    n >= 2.0 && n <= 32768.0 && n.fract() == 0.0 && (n as u64).is_power_of_two(),
+                    (2.0..=32768.0).contains(&n) && n.fract() == 0.0 && (n as u64).is_power_of_two(),
                     message,
                 )
             }

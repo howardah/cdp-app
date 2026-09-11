@@ -11,7 +11,7 @@
     "tauri": "tauri",
     "typecheck": "vue-tsc --noEmit",
     "lint": "oxlint src/ && cargo clippy --manifest-path src-tauri/Cargo.toml",
-    "lint:fix": "oxlint src/ --fix && cargo clippy --fix --manifest-path src-tauri/Cargo.toml",
+    "lint:fix": "oxlint src/ --fix && cargo clippy --fix --manifest-path src-tauri/Cargo.toml --allow-dirty",
     "fmt": "oxfmt src/ && cargo fmt --manifest-path src-tauri/Cargo.toml",
     "fmt:check": "oxfmt src/ --check && cargo fmt --check --manifest-path src-tauri/Cargo.toml",
     "compile:check": "cargo check --manifest-path src-tauri/Cargo.toml",
