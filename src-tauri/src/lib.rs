@@ -139,7 +139,7 @@ struct InspectedFile {
 
 #[tauri::command]
 fn inspect_file(
-    app: tauri::AppHandle,
+    _app: tauri::AppHandle,
     path: std::path::PathBuf,
     expected_types: Vec<catalog::types::CdpFileType>,
 ) -> Result<InspectedFile, String> {
@@ -178,7 +178,7 @@ fn inspect_file(
             | catalog::types::CdpFileType::AnalysisPvx
     ) {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("binaries");
-        let binary = resolve_binary(&app, catalog::types::BinaryId::Sfprops, &root)?;
+        let binary = resolve_binary(catalog::types::BinaryId::Sfprops, &root)?;
         let output = std::process::Command::new(binary)
             .arg(&canonical)
             .output()
@@ -246,7 +246,7 @@ fn suggest_output_path(
 
 #[tauri::command]
 fn enqueue_process(
-    app: tauri::AppHandle,
+    _app: tauri::AppHandle,
     window: tauri::WebviewWindow,
     request: runtime::RunProcessRequest,
     state: tauri::State<'_, runtime::SharedRunRegistry>,
@@ -261,8 +261,8 @@ fn enqueue_process(
         .find(|p| p.id == request.process_id)
         .ok_or("unknown process")?;
     let binary_root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("binaries");
-    let binary = resolve_binary(&app, process.identity.executable, &binary_root)?;
-    let sfprops = resolve_binary(&app, catalog::types::BinaryId::Sfprops, &binary_root)?;
+    let binary = resolve_binary(process.identity.executable, &binary_root)?;
+    let sfprops = resolve_binary(catalog::types::BinaryId::Sfprops, &binary_root)?;
     let mode = process
         .modes
         .iter()
@@ -354,16 +354,28 @@ fn allow_artifact_playback(
 }
 
 fn resolve_binary(
-    app: &tauri::AppHandle,
     id: catalog::types::BinaryId,
     fallback: &std::path::Path,
 ) -> Result<std::path::PathBuf, String> {
-    if let Ok(resources) = app.path().resource_dir() {
-        if let Ok(path) = runtime::resolve_packaged(&resources.join("binaries"), id) {
+    // Tauri places externalBin sidecars beside the application executable, not
+    // under resource_dir. Derive that directory from the executable itself so
+    // the layout is also correct inside a macOS .app bundle.
+    if let Ok(executable) = std::env::current_exe() {
+        if let Ok(path) = resolve_packaged_external_bin(&executable, id) {
             return Ok(path);
         }
     }
-    runtime::resolve_packaged(fallback, id)
+    runtime::resolve_development(fallback, id)
+}
+
+fn resolve_packaged_external_bin(
+    executable: &std::path::Path,
+    id: catalog::types::BinaryId,
+) -> Result<std::path::PathBuf, String> {
+    let root = executable
+        .parent()
+        .ok_or("application executable has no parent directory")?;
+    runtime::resolve_packaged(root, id)
 }
 
 fn asset_path(path: &str) -> String {
@@ -438,5 +450,28 @@ mod tests {
         let error = process_window_url(&catalog, "modify-speed", Some("normalise"), Uuid::nil())
             .expect_err("a mismatched mode must be rejected");
         assert_eq!(error, "unknown mode for process");
+    }
+
+    #[test]
+    fn packaged_external_bins_resolve_beside_the_application_executable() {
+        let dir = tempfile::tempdir().expect("temporary app bundle root");
+        let executable = dir.path().join(if cfg!(target_os = "windows") {
+            "Composers Desktop.exe"
+        } else {
+            "Composers Desktop"
+        });
+        let sidecar = dir.path().join(if cfg!(target_os = "windows") {
+            "modify.exe"
+        } else {
+            "modify"
+        });
+        std::fs::write(&executable, b"app").expect("application executable fixture");
+        std::fs::write(&sidecar, b"sidecar").expect("externalBin fixture");
+
+        assert_eq!(
+            resolve_packaged_external_bin(&executable, catalog::types::BinaryId::Modify)
+                .expect("sidecar beside executable should resolve"),
+            sidecar
+        );
     }
 }

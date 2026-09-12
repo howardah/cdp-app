@@ -9,14 +9,18 @@ foreign-architecture binary to a Tauri target suffix does not make it native.
 
 The intended matrix is:
 
-| Platform | Rust/Tauri target | Required sidecar suffix |
-| --- | --- | --- |
-| macOS Intel | `x86_64-apple-darwin` | `-x86_64-apple-darwin` |
-| macOS Apple Silicon | `aarch64-apple-darwin` | `-aarch64-apple-darwin` |
-| Windows x64 | `x86_64-pc-windows-msvc` | `-x86_64-pc-windows-msvc.exe` |
-| Windows ARM64 | `aarch64-pc-windows-msvc` | `-aarch64-pc-windows-msvc.exe` |
-| Linux x64 | `x86_64-unknown-linux-gnu` | `-x86_64-unknown-linux-gnu` |
-| Linux ARM64 | `aarch64-unknown-linux-gnu` | `-aarch64-unknown-linux-gnu` |
+| Platform | Rust/Tauri target | Required sidecar suffix | Status |
+| --- | --- | --- | --- |
+| macOS Intel | `x86_64-apple-darwin` | `-x86_64-apple-darwin` | `building` |
+| macOS Apple Silicon | `aarch64-apple-darwin` | `-aarch64-apple-darwin` | `planned` |
+| Windows x64 | `x86_64-pc-windows-msvc` | `-x86_64-pc-windows-msvc.exe` | `planned` |
+| Windows ARM64 | `aarch64-pc-windows-msvc` | `-aarch64-pc-windows-msvc.exe` | `planned` |
+| Linux x64 | `x86_64-unknown-linux-gnu` | `-x86_64-unknown-linux-gnu` | `planned` |
+| Linux ARM64 | `aarch64-unknown-linux-gnu` | `-aarch64-unknown-linux-gnu` | `planned` |
+
+These statuses describe release qualification, not resolver availability. Intel
+macOS remains `building` until its unsigned bundled sidecars pass signing and
+clean-machine qualification; no target is currently `released`.
 
 Build separate macOS artifacts for Intel and Apple Silicon first. A universal
 macOS artifact is optional and requires universal CDP sidecars as well as the

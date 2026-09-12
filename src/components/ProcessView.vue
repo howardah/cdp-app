@@ -300,7 +300,7 @@ async function revealResult(index: number) {
   if (!runId.value) return;
   try {
     await revealArtifact(runId.value, index);
-    artifactMessage.value = "Artifact revealed in Finder.";
+    artifactMessage.value = "Artifact revealed in the file manager.";
   } catch (error) {
     artifactMessage.value = error instanceof Error ? error.message : String(error);
   }

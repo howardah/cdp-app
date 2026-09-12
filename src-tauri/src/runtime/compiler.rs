@@ -510,30 +510,129 @@ pub trait BinaryResolver {
     fn resolve(&self, id: BinaryId) -> Result<PathBuf, String>;
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct SupportedTarget {
+    triple: &'static str,
+    executable_extension: &'static str,
+}
+
+#[allow(dead_code)] // The complete matrix is verified by host-independent resolver tests.
+impl SupportedTarget {
+    const MACOS_X64: Self = Self {
+        triple: "x86_64-apple-darwin",
+        executable_extension: "",
+    };
+    const MACOS_ARM64: Self = Self {
+        triple: "aarch64-apple-darwin",
+        executable_extension: "",
+    };
+    const WINDOWS_X64: Self = Self {
+        triple: "x86_64-pc-windows-msvc",
+        executable_extension: ".exe",
+    };
+    const WINDOWS_ARM64: Self = Self {
+        triple: "aarch64-pc-windows-msvc",
+        executable_extension: ".exe",
+    };
+    const LINUX_X64: Self = Self {
+        triple: "x86_64-unknown-linux-gnu",
+        executable_extension: "",
+    };
+    const LINUX_ARM64: Self = Self {
+        triple: "aarch64-unknown-linux-gnu",
+        executable_extension: "",
+    };
+
+    const ALL: [Self; 6] = [
+        Self::MACOS_X64,
+        Self::MACOS_ARM64,
+        Self::WINDOWS_X64,
+        Self::WINDOWS_ARM64,
+        Self::LINUX_X64,
+        Self::LINUX_ARM64,
+    ];
+
+    fn from_triple(triple: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|target| target.triple == triple)
+    }
+}
+
 #[cfg(all(target_os = "macos", target_arch = "x86_64"))]
-const TARGET_SUFFIX: &str = "-x86_64-apple-darwin";
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::MACOS_X64;
 #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
-const TARGET_SUFFIX: &str = "-aarch64-apple-darwin";
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::MACOS_ARM64;
 #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
-const TARGET_SUFFIX: &str = "-x86_64-pc-windows-msvc";
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::WINDOWS_X64;
+#[cfg(all(target_os = "windows", target_arch = "aarch64"))]
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::WINDOWS_ARM64;
 #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
-const TARGET_SUFFIX: &str = "-x86_64-unknown-linux-gnu";
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::LINUX_X64;
+#[cfg(all(target_os = "linux", target_arch = "aarch64"))]
+const CURRENT_TARGET: SupportedTarget = SupportedTarget::LINUX_ARM64;
 #[cfg(not(any(
     all(target_os = "macos", target_arch = "x86_64"),
     all(target_os = "macos", target_arch = "aarch64"),
     all(target_os = "windows", target_arch = "x86_64"),
-    all(target_os = "linux", target_arch = "x86_64")
+    all(target_os = "windows", target_arch = "aarch64"),
+    all(target_os = "linux", target_arch = "x86_64"),
+    all(target_os = "linux", target_arch = "aarch64")
 )))]
-const TARGET_SUFFIX: &str = "";
+compile_error!("CDP Desktop supports only macOS x86_64/aarch64, Windows x86_64/aarch64, and Linux x86_64/aarch64 targets");
 
-pub fn resolve_packaged(root: &Path, id: BinaryId) -> Result<PathBuf, String> {
-    let name = format!("{:?}", id).to_lowercase();
-    let path = root.join(format!("{name}{TARGET_SUFFIX}"));
+fn binary_name(id: BinaryId) -> String {
+    format!("{:?}", id).to_lowercase()
+}
+
+fn development_filename(id: BinaryId, target: SupportedTarget) -> String {
+    format!(
+        "{}-{}{}",
+        binary_name(id),
+        target.triple,
+        target.executable_extension
+    )
+}
+
+fn packaged_filename(id: BinaryId, target: SupportedTarget) -> String {
+    // Tauri removes the target triple when it copies an externalBin into the
+    // application resources. The platform extension remains part of its name.
+    format!("{}{}", binary_name(id), target.executable_extension)
+}
+
+fn resolve_named(root: &Path, filename: String) -> Result<PathBuf, String> {
+    let path = root.join(filename);
     if path.is_file() {
         Ok(path)
     } else {
         Err("required CDP binary is missing".into())
     }
+}
+
+/// Resolve a sidecar staged next to the Rust project for development. These
+/// files retain Tauri's target-triple filename convention.
+fn resolve_development_for(
+    root: &Path,
+    id: BinaryId,
+    target: SupportedTarget,
+) -> Result<PathBuf, String> {
+    resolve_named(root, development_filename(id, target))
+}
+
+pub fn resolve_development(root: &Path, id: BinaryId) -> Result<PathBuf, String> {
+    resolve_development_for(root, id, CURRENT_TARGET)
+}
+
+/// Resolve a sidecar copied into a packaged application's resources. Tauri
+/// bundles this under its logical (unsuffixed) resource filename.
+fn resolve_packaged_for(
+    root: &Path,
+    id: BinaryId,
+    target: SupportedTarget,
+) -> Result<PathBuf, String> {
+    resolve_named(root, packaged_filename(id, target))
+}
+
+pub fn resolve_packaged(root: &Path, id: BinaryId) -> Result<PathBuf, String> {
+    resolve_packaged_for(root, id, CURRENT_TARGET)
 }
 
 pub fn validate_metadata_constraints(
@@ -599,4 +698,103 @@ pub fn validate_metadata_constraints(
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod resolver_tests {
+    use super::*;
+
+    #[test]
+    fn every_supported_target_has_the_documented_development_filename() {
+        let expected = [
+            (
+                SupportedTarget::MACOS_X64,
+                "x86_64-apple-darwin",
+                "modify-x86_64-apple-darwin",
+            ),
+            (
+                SupportedTarget::MACOS_ARM64,
+                "aarch64-apple-darwin",
+                "modify-aarch64-apple-darwin",
+            ),
+            (
+                SupportedTarget::WINDOWS_X64,
+                "x86_64-pc-windows-msvc",
+                "modify-x86_64-pc-windows-msvc.exe",
+            ),
+            (
+                SupportedTarget::WINDOWS_ARM64,
+                "aarch64-pc-windows-msvc",
+                "modify-aarch64-pc-windows-msvc.exe",
+            ),
+            (
+                SupportedTarget::LINUX_X64,
+                "x86_64-unknown-linux-gnu",
+                "modify-x86_64-unknown-linux-gnu",
+            ),
+            (
+                SupportedTarget::LINUX_ARM64,
+                "aarch64-unknown-linux-gnu",
+                "modify-aarch64-unknown-linux-gnu",
+            ),
+        ];
+        assert_eq!(SupportedTarget::ALL.len(), expected.len());
+        for (target, triple, filename) in expected {
+            assert_eq!(SupportedTarget::from_triple(triple), Some(target));
+            assert_eq!(development_filename(BinaryId::Modify, target), filename);
+        }
+    }
+
+    #[test]
+    fn unsupported_target_triples_are_rejected() {
+        assert_eq!(SupportedTarget::from_triple("i686-pc-windows-msvc"), None);
+        assert_eq!(
+            SupportedTarget::from_triple("riscv64gc-unknown-linux-gnu"),
+            None
+        );
+    }
+
+    #[test]
+    fn packaged_names_are_logical_names_with_only_platform_extensions() {
+        for target in SupportedTarget::ALL {
+            let expected = if target.executable_extension == ".exe" {
+                "sfprops.exe"
+            } else {
+                "sfprops"
+            };
+            assert_eq!(packaged_filename(BinaryId::Sfprops, target), expected);
+        }
+    }
+
+    #[test]
+    fn development_and_packaged_resolution_use_different_names() {
+        let dir = tempfile::tempdir().unwrap();
+        let target = SupportedTarget::WINDOWS_ARM64;
+        let development = dir
+            .path()
+            .join(development_filename(BinaryId::Modify, target));
+        let packaged = dir.path().join(packaged_filename(BinaryId::Modify, target));
+        std::fs::write(&development, b"sidecar").unwrap();
+        assert_eq!(
+            resolve_development_for(dir.path(), BinaryId::Modify, target).unwrap(),
+            development
+        );
+        assert!(resolve_packaged_for(dir.path(), BinaryId::Modify, target).is_err());
+        std::fs::write(&packaged, b"sidecar").unwrap();
+        assert_eq!(
+            resolve_packaged_for(dir.path(), BinaryId::Modify, target).unwrap(),
+            packaged
+        );
+    }
+
+    #[test]
+    fn resolver_rejects_missing_files_and_wrong_extensions() {
+        let dir = tempfile::tempdir().unwrap();
+        let target = SupportedTarget::WINDOWS_X64;
+        std::fs::write(dir.path().join("modify-x86_64-pc-windows-msvc"), b"sidecar").unwrap();
+        std::fs::write(dir.path().join("modify"), b"sidecar").unwrap();
+        assert!(resolve_development_for(dir.path(), BinaryId::Modify, target).is_err());
+        assert!(resolve_packaged_for(dir.path(), BinaryId::Modify, target).is_err());
+        assert!(resolve_development_for(dir.path(), BinaryId::Sfprops, target).is_err());
+    }
 }

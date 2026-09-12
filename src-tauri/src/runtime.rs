@@ -11,8 +11,8 @@ mod registry;
 mod types;
 
 pub use compiler::{
-    compile_request, evaluate_constraints, resolve_packaged, validate_metadata_constraints,
-    validate_request_files, BinaryResolver,
+    compile_request, evaluate_constraints, resolve_development, resolve_packaged,
+    validate_metadata_constraints, validate_request_files, BinaryResolver,
 };
 pub use paths::{
     discover_generic_outputs, inspect_audio_metadata, parse_sfprops, suggest_output_path,

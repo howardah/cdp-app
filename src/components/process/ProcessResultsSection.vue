@@ -48,7 +48,7 @@ defineEmits<{
           class="secondary-button"
           @click="$emit('reveal', index)"
         >
-          Reveal in Finder</button
+          Reveal in file manager</button
         ><button
           v-if="!artifact.unavailable"
           type="button"

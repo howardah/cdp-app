@@ -57,10 +57,11 @@ bun install
 rustup target add x86_64-apple-darwin
 ```
 
-Stage the five approved CDP sidecars from the bundled release tree:
+Stage the approved CDP sidecars from the bundled release tree, explicitly
+identifying the architecture they were built for:
 
 ```sh
-bash scripts/stage-cdp-binaries.sh
+bash scripts/stage-cdp-binaries.sh cdpr8/_cdp/_cdprogs x86_64-apple-darwin
 ```
 
 Start the desktop application in development mode:
