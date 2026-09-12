@@ -7,6 +7,10 @@
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .process-panel {
   border-right: 1px solid var(--line);
@@ -15,6 +19,7 @@
   min-height: 0;
   flex-direction: column;
   overflow: hidden;
+  padding-bottom: 0;
 }
 .panel-kicker,
 .eyebrow,
@@ -162,6 +167,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
+  padding-bottom: 2rem;
 }
 .process-row {
   text-align: left;
@@ -272,6 +278,10 @@
 .detail-panel {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .detail-top {
   display: flex;

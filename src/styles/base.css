@@ -28,7 +28,11 @@ input:focus-visible,
   outline-offset: 2px;
 }
 .app-shell {
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
   background: #151a1e;
   color: #e5ecec;
   --surface: #1d252a;
@@ -38,6 +42,12 @@ input:focus-visible,
   --faint: #6f7b7e;
   --teal: #2eb6a6;
   --amber: #dfa14a;
+}
+.app-content {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .app-shell[data-theme="light"] {
   background: #f2f5f5;

@@ -1,12 +1,15 @@
 .workspace {
+  flex: 1;
   display: grid;
   grid-template-columns: 205px minmax(310px, 1fr) minmax(330px, 1.06fr);
-  height: calc(100vh - 132px);
+  height: 100%;
   min-height: 0;
 }
 .recipes-workspace {
+  flex: 1;
   min-width: 820px;
-  min-height: calc(100vh - 132px);
+  min-height: 0;
+  height: 100%;
   display: grid;
   grid-template-columns: minmax(300px, 0.72fr) minmax(500px, 1.6fr);
 }
@@ -14,6 +17,10 @@
   border-right: 1px solid var(--line);
   padding: 36px 30px 30px;
   background: #19212555;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .recipe-heading {
   display: flex;
@@ -90,7 +97,9 @@
     monospace;
 }
 .recipe-detail {
+  min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 42px clamp(38px, 6vw, 88px) 70px;
 }
 .recipe-detail-header {

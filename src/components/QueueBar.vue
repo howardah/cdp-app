@@ -79,11 +79,13 @@ const { runs, queueOpen, queueError, runTitle, runState, cancelQueued, reveal } 
 @reference "../styles.css";
 
 .queue-bar {
-  @apply flex h-15 items-center justify-between border-t border-muted bg-muted px-7;
+  @apply relative z-10 flex h-18 items-center justify-between border-t border-muted px-7;
+  background: var(--surface);
+  flex-shrink: 0;
 }
 
 .signal-rail {
-  @apply flex items-center;
+  @apply flex items-center -mt-3;
   width: min(590px, 65%);
 }
 

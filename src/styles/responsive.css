@@ -65,6 +65,6 @@ body {
   }
   .workspace {
     grid-template-columns: minmax(340px, 1fr) minmax(360px, 1fr);
-    height: calc(100vh - 192px);
+    height: 100%;
   }
 }
