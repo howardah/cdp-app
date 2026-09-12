@@ -148,7 +148,8 @@ input:focus-visible,
 .workspace {
   display: grid;
   grid-template-columns: 205px minmax(310px, 1fr) minmax(330px, 1.06fr);
-  min-height: calc(100vh - 132px);
+  height: calc(100vh - 132px);
+  min-height: 0;
 }
 .recipes-workspace {
   min-width: 820px;
@@ -417,6 +418,10 @@ input:focus-visible,
 .process-panel {
   border-right: 1px solid var(--line);
   background: #19212555;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
 }
 .panel-kicker,
 .eyebrow,
@@ -557,7 +562,13 @@ input:focus-visible,
 }
 .process-list {
   display: grid;
+  min-height: 0;
+  flex: 1;
+  align-content: start;
   gap: 2px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .process-row {
   text-align: left;
@@ -825,8 +836,9 @@ input:focus-visible,
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  flex: 0 0 28px;
+  width: 28px;
   height: 28px;
-  min-width: 34px;
   border: 1px solid var(--line);
   border-radius: 50%;
   color: var(--faint);
@@ -1003,6 +1015,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    height: 60px;
     min-width: 820px;
     padding: 12px 20px;
     border-bottom: 1px solid var(--line);
@@ -1023,5 +1036,6 @@ body {
   }
   .workspace {
     grid-template-columns: minmax(340px, 1fr) minmax(360px, 1fr);
+    height: calc(100vh - 192px);
   }
 }
