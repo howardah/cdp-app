@@ -1,0 +1,208 @@
+name: Release Intel macOS
+
+on:
+  push:
+    branches:
+      - master
+
+# Run the inexpensive version gate for every master push. GitHub's server-side
+# path filtering considers only a bounded changed-file set, which could miss a
+# version manifest in an unusually large push.
+
+# All jobs start with only the permission needed to read the checkout. The
+# publishing job elevates this to create the release and its tag/assets.
+permissions:
+  contents: read
+
+# Serialize master releases. Besides avoiding duplicate assets, this makes the
+# final release check authoritative when version bumps are pushed in quick
+# succession.
+concurrency:
+  group: release-intel-macos
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Verify release version
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.version.outputs.changed }}
+      value: ${{ steps.version.outputs.value }}
+      release_exists: ${{ steps.release.outputs.exists }}
+      tag_conflict: ${{ steps.tag.outputs.conflict }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # A push can contain more than one commit, so retain the event's
+          # before SHA even when it is not HEAD's immediate parent.
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2.1.0
+        with:
+          bun-version: 1.2.13
+
+      - id: version
+        name: Confirm a consistent version bump
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$BEFORE" == '0000000000000000000000000000000000000000' ]] || ! git cat-file -e "$BEFORE^{commit}"; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'No prior commit is available to compare; not publishing.'
+            exit 0
+          fi
+
+          if git diff --quiet "$BEFORE" "$AFTER" -- package.json src-tauri/Cargo.toml src-tauri/tauri.conf.json; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'No version manifest changed; not publishing.'
+            exit 0
+          fi
+
+          # This is the single repository version contract. Its output is the
+          # release value, and it rejects mismatches, invalid SemVer, and 0.0.0.
+          package_version="$(bun run --silent version:check)"
+          previous_version="$(git show "$BEFORE:package.json" | jq -r '.version')"
+          if [[ "$package_version" == "$previous_version" ]]; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'Manifest files changed, but the project version did not; not publishing.'
+            exit 0
+          fi
+
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
+          echo "value=$package_version" >> "$GITHUB_OUTPUT"
+
+      - id: tag
+        name: Refuse a tag that targets another commit
+        if: steps.version.outputs.changed == 'true'
+        env:
+          TAG: v${{ steps.version.outputs.value }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            git fetch --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"
+            tagged_commit="$(git rev-list -n 1 "$TAG")"
+            if [[ "$tagged_commit" != "$GITHUB_SHA" ]]; then
+              echo 'conflict=true' >> "$GITHUB_OUTPUT"
+              echo "Tag $TAG targets $tagged_commit, not $GITHUB_SHA; refusing to publish."
+              exit 0
+            fi
+          fi
+          echo 'conflict=false' >> "$GITHUB_OUTPUT"
+
+      - id: release
+        name: Refuse an existing release tag
+        if: steps.version.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.value }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'exists=true' >> "$GITHUB_OUTPUT"
+            echo "Release $TAG already exists; it will not be replaced."
+          else
+            echo 'exists=false' >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    name: Build and publish Intel macOS
+    needs: version
+    if: needs.version.outputs.changed == 'true' && needs.version.outputs.release_exists != 'true' && needs.version.outputs.tag_conflict != 'true'
+    runs-on: macos-15-intel
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2.1.0
+        with:
+          bun-version: 1.2.13
+
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # v1
+        with:
+          toolchain: 1.90.0
+          targets: x86_64-apple-darwin
+
+      - name: Install JavaScript dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Verify committed Intel CDP sidecars
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='x86_64-apple-darwin'
+          jq -r '.bundle.externalBin[]' src-tauri/tauri.conf.json | while IFS= read -r logical_path; do
+            sidecar="src-tauri/${logical_path}-${target}"
+            [[ -f "$sidecar" ]] || { echo "Missing staged sidecar: $sidecar" >&2; exit 1; }
+            [[ -x "$sidecar" ]] || { echo "Non-executable staged sidecar: $sidecar" >&2; exit 1; }
+            file -b "$sidecar" | grep -Eq 'Mach-O.*(x86_64|x86-64)' || {
+              echo "Non-Intel-Mach-O staged sidecar: $sidecar" >&2
+              exit 1
+            }
+          done
+
+      - name: Run required checks
+        run: |
+          set -euo pipefail
+          bun run typecheck
+          bun test
+          cargo test --manifest-path src-tauri/Cargo.toml
+          bun run fmt:check
+          bun run lint
+
+      - name: Build Intel macOS DMG
+        run: bun tauri build --target x86_64-apple-darwin --bundles dmg
+
+      - name: Publish a new GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ needs.version.outputs.value }}
+          VERSION: ${{ needs.version.outputs.value }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          artifacts=(src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg)
+          (( ${#artifacts[@]} > 0 )) || { echo 'No DMG was produced.' >&2; exit 1; }
+
+          # This second check protects against an out-of-band or manually
+          # created release. `gh release create` also fails rather than updating
+          # a release if a race creates this tag after the check.
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Refusing to overwrite existing release $TAG." >&2
+            exit 1
+          fi
+
+          tag_exists=false
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            git fetch --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"
+            tagged_commit="$(git rev-list -n 1 "$TAG")"
+            [[ "$tagged_commit" == "$GITHUB_SHA" ]] || {
+              echo "Refusing tag $TAG at $tagged_commit; expected $GITHUB_SHA." >&2
+              exit 1
+            }
+            tag_exists=true
+          fi
+
+          release_notes='This is an unsigned, unnotarized Intel macOS alpha build. macOS may require manual approval to open it. It is not a released-platform qualification; install and use it only for evaluation.'
+          release_args=(
+            release create "$TAG" "${artifacts[@]}"
+            --repo "$GITHUB_REPOSITORY"
+            --title "Composers' Desktop Application v$VERSION"
+            --prerelease
+            --generate-notes
+            --notes "$release_notes"
+          )
+          if [[ "$tag_exists" == true ]]; then
+            release_args+=(--verify-tag)
+          else
+            release_args+=(--target "$GITHUB_SHA")
+          fi
+
+          gh "${release_args[@]}"

@@ -88,6 +88,21 @@ bun tauri build --target x86_64-apple-darwin
 
 The local build is unsigned. Redistribution rights for the CDP binaries, code signing, notarization, and clean-machine validation remain release requirements.
 
+## Versioning and releases
+
+Release versions are stable `MAJOR.MINOR.PATCH` values and must match in
+`package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
+Use `bun run bump:major`, `bun run bump:minor`, or `bun run bump:patch` to
+update all three together. Before a release, run `bun run version:check`; it
+rejects mismatches and the `0.0.0` development placeholder, and prints the
+verified version for release automation.
+
+A synchronized version change pushed to `master` runs the Intel macOS release
+workflow. It publishes a `v<version>` GitHub prerelease containing the DMG only
+after the full checks and committed-sidecar architecture validation pass. These
+automated artifacts are currently unsigned and unnotarized alpha builds, so
+publishing one does not promote Intel macOS to `released` platform status.
+
 ## Technology
 
 The application uses Vue 3, TypeScript, Vite, Rust, and Tauri 2. Rust owns command compilation, binary resolution, validation, queueing, and process execution. The webview never accepts arbitrary executable paths or shell commands.
