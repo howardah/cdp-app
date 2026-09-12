@@ -1,0 +1,260 @@
+.workspace {
+  display: grid;
+  grid-template-columns: 205px minmax(310px, 1fr) minmax(330px, 1.06fr);
+  height: calc(100vh - 132px);
+  min-height: 0;
+}
+.recipes-workspace {
+  min-width: 820px;
+  min-height: calc(100vh - 132px);
+  display: grid;
+  grid-template-columns: minmax(300px, 0.72fr) minmax(500px, 1.6fr);
+}
+.recipe-index {
+  border-right: 1px solid var(--line);
+  padding: 36px 30px 30px;
+  background: #19212555;
+}
+.recipe-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+.recipe-heading .eyebrow,
+.recipe-detail-header .eyebrow {
+  margin: 0;
+}
+.recipe-heading h1 {
+  margin: 7px 0 8px;
+  font-size: 25px;
+  letter-spacing: -0.025em;
+}
+.recipe-heading > div > p:last-child {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.recipe-count {
+  color: var(--amber);
+  font:
+    22px "IBM Plex Mono",
+    monospace;
+}
+.recipe-search {
+  margin-bottom: 14px;
+}
+.recipe-list {
+  border-top: 1px solid var(--line);
+}
+.recipe-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 31px 1fr auto;
+  gap: 11px;
+  align-items: center;
+  padding: 17px 9px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+}
+.recipe-row:hover,
+.recipe-row.selected {
+  color: inherit;
+  background: var(--elevated);
+}
+.recipe-row.selected {
+  box-shadow: inset 3px 0 0 var(--amber);
+}
+.recipe-row strong,
+.recipe-row small {
+  display: block;
+}
+.recipe-row strong {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.recipe-row small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.recipe-number {
+  color: var(--amber);
+  font:
+    11px "IBM Plex Mono",
+    monospace;
+}
+.recipe-detail {
+  overflow: auto;
+  padding: 42px clamp(38px, 6vw, 88px) 70px;
+}
+.recipe-detail-header {
+  max-width: 760px;
+  padding-bottom: 27px;
+  border-bottom: 1px solid var(--line);
+}
+.recipe-detail-header h2 {
+  margin: 10px 0 12px;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+.recipe-outcome {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 18px;
+}
+.recipe-tags span {
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--teal);
+  font:
+    10px "IBM Plex Mono",
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.recipe-source {
+  max-width: 760px;
+  margin: 26px 0 30px;
+  padding: 16px 18px;
+  border-left: 2px solid var(--amber);
+  background: var(--surface);
+}
+.recipe-source p {
+  margin: 7px 0 0;
+  line-height: 1.55;
+}
+.recipe-patch {
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.recipe-patch li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 18px;
+  padding-bottom: 25px;
+}
+.recipe-patch li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 36px;
+  bottom: -2px;
+  left: 20px;
+  width: 2px;
+  background: linear-gradient(var(--teal), var(--amber));
+}
+.patch-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+  background: #151a1e;
+  color: var(--teal);
+  font:
+    12px "IBM Plex Mono",
+    monospace;
+  box-shadow: 0 0 0 5px #2eb6a615;
+}
+.app-shell[data-theme="light"] .patch-node {
+  background: #f2f5f5;
+}
+.patch-stage {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+}
+.patch-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.patch-title small {
+  color: var(--amber);
+  font:
+    10px "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.patch-title h3 {
+  margin: 4px 0 0;
+  font-size: 19px;
+}
+.patch-stage > p {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.patch-stage .patch-handoff {
+  display: flex;
+  gap: 9px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  color: inherit;
+}
+.patch-handoff span {
+  color: var(--teal);
+}
+.secondary-button {
+  flex: none;
+  padding: 8px 11px;
+  border: 1px solid var(--teal);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 700;
+}
+.secondary-button:hover {
+  background: #2eb6a615;
+}
+.recipe-cautions {
+  max-width: 760px;
+  display: flex;
+  gap: 12px;
+  margin-top: 3px;
+  padding: 15px 17px;
+  border: 1px solid #dfa14a66;
+  background: #dfa14a0d;
+  color: var(--muted);
+}
+.recipe-cautions > span {
+  color: var(--amber);
+  font:
+    16px "IBM Plex Mono",
+    monospace;
+}
+.recipe-cautions strong {
+  color: inherit;
+  font-size: 13px;
+}
+.recipe-cautions p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}

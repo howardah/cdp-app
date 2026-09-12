@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from "vue";
 import { defaultParameterValues, findProcess, findMode, validateRequest } from "../processes";
-import type { InspectedFile, ParameterDefinition } from "../processes";
+import type { InspectedFile, ParameterDefinition, ParameterValue } from "../processes";
 import { requestCommandPreview, type CommandPreview } from "../services/preview";
 import { useRoute, useRouter } from "vue-router";
 import { open } from "@tauri-apps/plugin-dialog";
@@ -15,6 +15,12 @@ import {
   suggestOutputPath,
   type RunStatus,
 } from "../services/runtime";
+import ProcessInputSection from "./process/ProcessInputSection.vue";
+import ProcessModeSection from "./process/ProcessModeSection.vue";
+import ProcessParametersSection from "./process/ProcessParametersSection.vue";
+import ProcessOutputSection from "./process/ProcessOutputSection.vue";
+import ProcessRunSection from "./process/ProcessRunSection.vue";
+import ProcessResultsSection from "./process/ProcessResultsSection.vue";
 
 const props = defineProps<{ processId: string }>();
 const router = useRouter();
@@ -131,6 +137,12 @@ function setNumber(parameter: ParameterDefinition, value: string) {
     parameter.kind === "numberOrBreakpoint"
   )
     values[parameter.id] = { kind: "number", value: value === "" ? NaN : Number(value) };
+}
+function setInput(inputId: string, index: number, value: string) {
+  inputs[inputId][index] = value;
+}
+function setParameterValue(parameterId: string, value: ParameterValue) {
+  values[parameterId] = value;
 }
 function setBreakpoint(parameter: ParameterDefinition, path: string) {
   if (parameter.kind === "numberOrBreakpoint") values[parameter.id] = { kind: "file", path };
@@ -312,7 +324,7 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
 </script>
 
 <template>
-  <main class="process-shell" v-if="process && mode">
+  <main v-if="process && mode" class="process-shell">
     <header class="process-header">
       <button class="back-button" @click="router.push({ name: 'navigator' })">← Navigator</button>
       <div>
@@ -335,416 +347,60 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
       <li :class="{ valid: Boolean(outputPath) }">Output</li>
       <li>Run</li>
     </ol>
-    <form class="process-form" @submit.prevent="request" @keydown="onFormKey" novalidate>
-      <section class="form-section">
-        <div class="section-heading">
-          <span class="step-index">01</span>
-          <div>
-            <h2>Input</h2>
-            <p>Choose paths already on your computer. Browser file objects are not used.</p>
-          </div>
-        </div>
-        <div v-for="input in mode.inputs" :key="input.id" class="field">
-          <label
-            >{{ input.label }} <small>{{ input.fileTypes.join(" · ") }}</small></label
-          >
-          <div
-            v-for="(_, index) in inputs[input.id]"
-            :key="`${input.id}-${index}`"
-            class="file-picker"
-          >
-            <input
-              :id="`input-${input.id}-${index}`"
-              v-model="inputs[input.id][index]"
-              type="text"
-              :aria-describedby="
-                issueFor(`input.${input.id}`) ? `error-input-${input.id}` : undefined
-              "
-              placeholder="/path/to/source.wav"
-              @blur="touched = true"
-            /><button type="button" class="secondary-button" @click="chooseInput(input.id, false)">
-              Choose…</button
-            ><button
-              v-if="input.ordered && inputs[input.id].length > 1"
-              type="button"
-              class="icon-button"
-              :disabled="index === 0"
-              aria-label="Move input up"
-              @click="moveInput(input.id, index, -1)"
-            >
-              ↑</button
-            ><button
-              v-if="input.ordered && inputs[input.id].length > 1"
-              type="button"
-              class="icon-button"
-              :disabled="index === inputs[input.id].length - 1"
-              aria-label="Move input down"
-              @click="moveInput(input.id, index, 1)"
-            >
-              ↓</button
-            ><button
-              v-if="inputs[input.id].length > input.minItems"
-              type="button"
-              class="icon-button"
-              aria-label="Remove input"
-              @click="removeInput(input.id, index)"
-            >
-              ×
-            </button>
-          </div>
-          <button
-            v-if="input.maxItems === null || inputs[input.id].length < input.maxItems"
-            type="button"
-            class="text-button"
-            @click="addInput(input.id)"
-          >
-            + Add another file
-          </button>
-          <p
-            v-if="issueFor(`input.${input.id}`)"
-            class="field-error"
-            :id="`error-input-${input.id}`"
-          >
-            {{ issueFor(`input.${input.id}`) }}
-          </p>
-          <p class="field-help">{{ input.description }}</p>
-          <div
-            v-if="inspectedFile && inputs[input.id]?.includes(inspectedFile.path)"
-            class="inspection-meta"
-            :class="{ 'mono-warning': inspectedWarnings.length }"
-            role="status"
-          >
-            <span v-if="inspectedFile.durationSeconds !== undefined"
-              >{{ inspectedFile.durationSeconds.toFixed(2) }} s</span
-            ><span v-if="inspectedFile.sampleRate"
-              >{{ (inspectedFile.sampleRate / 1000).toFixed(1) }} kHz</span
-            ><span v-if="inspectedFile.channels">{{ inspectedFile.channels }} ch</span
-            ><span v-if="inspectedFile.sampleFormat">{{ inspectedFile.sampleFormat }}</span
-            ><strong v-if="inspectedWarnings.length">{{ inspectedWarnings[0] }}</strong>
-          </div>
-        </div>
-      </section>
-      <section class="form-section">
-        <div class="section-heading">
-          <span class="step-index">02</span>
-          <div>
-            <h2>Mode</h2>
-            <p>Select the musical operation you want to perform.</p>
-          </div>
-        </div>
-        <div class="mode-options">
-          <label
-            v-for="candidate in process.modes"
-            :key="candidate.id"
-            class="mode-option"
-            :class="{ selected: candidate.id === mode.id }"
-            ><input
-              :checked="candidate.id === modeId"
-              type="radio"
-              :value="candidate.id"
-              @change="preserveMode(candidate.id)"
-            /><span
-              ><strong>{{ candidate.title }}</strong
-              ><small>{{ candidate.summary }}</small></span
-            ></label
-          >
-        </div>
-      </section>
-      <section class="form-section">
-        <div class="section-heading">
-          <span class="step-index">03</span>
-          <div>
-            <h2>Parameters</h2>
-            <p>Safe starting values are prefilled; adjust them for your material.</p>
-          </div>
-        </div>
-        <template v-for="group in [false, true]" :key="String(group)"
-          ><details
-            v-if="group && mode.parameters.some((parameter) => parameter.advanced)"
-            class="advanced-parameters"
-          >
-            <summary>
-              Advanced parameters
-              <small>{{ mode.parameters.filter((parameter) => parameter.advanced).length }}</small>
-            </summary>
-            <div
-              v-for="parameter in mode.parameters.filter((parameter) => parameter.advanced)"
-              :key="parameter.id"
-              class="field"
-            >
-              <label :for="`parameter-${parameter.id}`"
-                >{{ parameter.label }}
-                <small v-if="parameter.unit">{{ parameter.unit }}</small></label
-              ><template v-if="parameter.kind === 'flag'"
-                ><label class="toggle"
-                  ><input
-                    :id="`parameter-${parameter.id}`"
-                    type="checkbox"
-                    :checked="values[parameter.id]?.kind === 'flag' && values[parameter.id].value"
-                    @change="
-                      values[parameter.id] = {
-                        kind: 'flag',
-                        value: ($event.target as HTMLInputElement).checked,
-                      }
-                    "
-                  /><span>Enable this option</span></label
-                ></template
-              ><template v-else
-                ><input
-                  :id="`parameter-${parameter.id}`"
-                  type="number"
-                  :min="'min' in parameter ? parameter.min : undefined"
-                  :max="'max' in parameter ? parameter.max : undefined"
-                  :step="'step' in parameter ? parameter.step : undefined"
-                  :value="values[parameter.id]?.kind === 'number' ? values[parameter.id].value : ''"
-                  @input="setNumber(parameter, ($event.target as HTMLInputElement).value)"
-                  @blur="touched = true"
-                  :aria-describedby="
-                    issueFor(`parameter.${parameter.id}`)
-                      ? `error-parameter-${parameter.id}`
-                      : undefined
-                  "
-              /></template>
-              <p class="field-help">{{ parameter.description }}</p>
-              <p
-                v-if="issueFor(`parameter.${parameter.id}`)"
-                class="field-error"
-                :id="`error-parameter-${parameter.id}`"
-              >
-                {{ issueFor(`parameter.${parameter.id}`) }}
-              </p>
-            </div>
-          </details>
-          <div
-            v-else-if="!group"
-            v-for="parameter in mode.parameters.filter((parameter) => !parameter.advanced)"
-            :key="parameter.id"
-            class="field"
-          >
-            <label :for="`parameter-${parameter.id}`"
-              >{{ parameter.label }}
-              <small v-if="parameter.unit">{{ parameter.unit }}</small></label
-            ><template v-if="parameter.kind === 'choice'"
-              ><select
-                :id="`parameter-${parameter.id}`"
-                :value="values[parameter.id]?.kind === 'choice' ? values[parameter.id].value : ''"
-                @change="
-                  values[parameter.id] = {
-                    kind: 'choice',
-                    value: ($event.target as HTMLSelectElement).value,
-                  }
-                "
-              >
-                <option
-                  v-for="choice in parameter.choices"
-                  :key="choice.value"
-                  :value="choice.value"
-                >
-                  {{ choice.label }}
-                </option>
-              </select></template
-            ><template v-else-if="parameter.kind === 'flag'"
-              ><label class="toggle"
-                ><input
-                  :id="`parameter-${parameter.id}`"
-                  type="checkbox"
-                  :checked="values[parameter.id]?.kind === 'flag' && values[parameter.id].value"
-                  @change="
-                    values[parameter.id] = {
-                      kind: 'flag',
-                      value: ($event.target as HTMLInputElement).checked,
-                    }
-                  "
-                /><span>Enable this option</span></label
-              ></template
-            ><template v-else-if="parameter.kind === 'numberOrBreakpoint'"
-              ><div class="parameter-toggle">
-                <button
-                  type="button"
-                  :class="{ selected: values[parameter.id]?.kind !== 'file' }"
-                  @click="
-                    setNumber(
-                      parameter,
-                      String(
-                        values[parameter.id]?.kind === 'number'
-                          ? values[parameter.id].value
-                          : parameter.default.value,
-                      ),
-                    )
-                  "
-                >
-                  Scalar</button
-                ><button
-                  type="button"
-                  :class="{ selected: values[parameter.id]?.kind === 'file' }"
-                  @click="chooseBreakpoint(parameter)"
-                >
-                  Breakpoint file
-                </button>
-              </div>
-              <input
-                v-if="values[parameter.id]?.kind !== 'file'"
-                :id="`parameter-${parameter.id}`"
-                type="number"
-                :min="parameter.min"
-                :max="parameter.max"
-                :step="parameter.step"
-                :value="values[parameter.id]?.value"
-                @input="setNumber(parameter, ($event.target as HTMLInputElement).value)"
-                @blur="touched = true"
-                :aria-describedby="
-                  issueFor(`parameter.${parameter.id}`)
-                    ? `error-parameter-${parameter.id}`
-                    : undefined
-                "
-              />
-              <div v-else class="file-picker">
-                <input
-                  :id="`parameter-${parameter.id}`"
-                  :value="values[parameter.id].path"
-                  readonly
-                  :aria-describedby="
-                    issueFor(`parameter.${parameter.id}`)
-                      ? `error-parameter-${parameter.id}`
-                      : undefined
-                  "
-                /><button
-                  type="button"
-                  class="secondary-button"
-                  @click="chooseBreakpoint(parameter)"
-                >
-                  Choose…
-                </button>
-              </div></template
-            ><template v-else
-              ><input
-                :id="`parameter-${parameter.id}`"
-                type="number"
-                :min="'min' in parameter ? parameter.min : undefined"
-                :max="'max' in parameter ? parameter.max : undefined"
-                :step="'step' in parameter ? parameter.step : undefined"
-                :value="values[parameter.id]?.kind === 'number' ? values[parameter.id].value : ''"
-                @input="setNumber(parameter, ($event.target as HTMLInputElement).value)"
-                @blur="touched = true"
-                :aria-describedby="
-                  issueFor(`parameter.${parameter.id}`)
-                    ? `error-parameter-${parameter.id}`
-                    : undefined
-                "
-            /></template>
-            <p class="field-help">{{ parameter.description }}</p>
-            <p
-              v-if="issueFor(`parameter.${parameter.id}`)"
-              class="field-error"
-              :id="`error-parameter-${parameter.id}`"
-            >
-              {{ issueFor(`parameter.${parameter.id}`) }}
-            </p>
-          </div></template
-        >
-      </section>
-      <section class="form-section">
-        <div class="section-heading">
-          <span class="step-index">04</span>
-          <div>
-            <h2>Output</h2>
-            <p>Choose a new destination. Existing files are never overwritten.</p>
-          </div>
-        </div>
-        <div class="field">
-          <label for="output-path">Output path</label>
-          <div class="file-picker">
-            <input
-              id="output-path"
-              v-model="outputPath"
-              type="text"
-              placeholder="/path/to/result.wav"
-              @blur="touched = true"
-              :aria-describedby="issueFor('output') ? 'error-output' : undefined"
-            /><button type="button" class="secondary-button" @click="chooseOutput">Choose…</button>
-          </div>
-          <p v-if="issueFor('output')" id="error-output" class="field-error">
-            {{ issueFor("output") }}
-          </p>
-        </div>
-      </section>
-      <section class="form-section run-section">
-        <div class="section-heading">
-          <span class="step-index">05</span>
-          <div>
-            <h2>Run</h2>
-            <p>Review the backend-produced command preview, then submit to the queue.</p>
-          </div>
-        </div>
-        <button type="button" class="secondary-button" @click="togglePreview">
-          {{ previewOpen ? "Hide" : "Show" }} command preview
-        </button>
-        <pre v-if="previewOpen" class="command-preview">{{
-          preview?.display ?? "Preview becomes available when the Rust runtime is connected."
-        }}</pre>
-      </section>
+    <form class="process-form" novalidate @submit.prevent="request" @keydown="onFormKey">
+      <ProcessInputSection
+        :mode="mode"
+        :inputs="inputs"
+        :issue-for="issueFor"
+        :inspected-file="inspectedFile"
+        :inspected-warnings="inspectedWarnings"
+        @choose-input="chooseInput"
+        @update-input="setInput"
+        @add-input="addInput"
+        @remove-input="removeInput"
+        @move-input="moveInput"
+        @touched="touched = true"
+      />
+      <ProcessModeSection
+        :process="process"
+        :mode="mode"
+        :mode-id="modeId"
+        @preserve-mode="preserveMode"
+      />
+      <ProcessParametersSection
+        :mode="mode"
+        :values="values"
+        :issue-for="issueFor"
+        @set-number="setNumber"
+        @set-value="setParameterValue"
+        @choose-breakpoint="chooseBreakpoint"
+        @touched="touched = true"
+      />
+      <ProcessOutputSection
+        v-model:output-path="outputPath"
+        :issue-for="issueFor"
+        @choose-output="chooseOutput"
+        @touched="touched = true"
+      />
+      <ProcessRunSection
+        :preview-open="previewOpen"
+        :preview="preview"
+        @toggle-preview="togglePreview"
+      />
       <p v-if="runtimeMessage" class="field-error" role="alert">{{ runtimeMessage }}</p>
-      <section v-if="artifacts.length" class="result-section" aria-live="polite">
-        <h2>Results</h2>
-        <p v-if="artifactMessage" class="field-help">{{ artifactMessage }}</p>
-        <div
-          v-for="(artifact, index) in artifacts"
-          :key="`${artifact.path}-${index}`"
-          class="result-artifact"
-        >
-          <div>
-            <strong>{{ artifact.path }}</strong
-            ><small
-              >{{ artifact.fileType ?? "artifact"
-              }}<span v-if="artifact.sizeBytes">
-                · {{ Math.max(1, Math.round(artifact.sizeBytes / 1024)) }} KB</span
-              ></small
-            >
-          </div>
-          <div class="artifact-actions">
-            <button
-              v-if="artifact.playable && !artifact.unavailable"
-              type="button"
-              class="secondary-button"
-              @click="void playArtifact(index)"
-            >
-              Play</button
-            ><button
-              v-if="!artifact.unavailable"
-              type="button"
-              class="secondary-button"
-              @click="void revealResult(index)"
-            >
-              Reveal in Finder</button
-            ><button
-              v-if="!artifact.unavailable"
-              type="button"
-              class="secondary-button"
-              @click="reuseArtifact(artifact)"
-            >
-              Use as input</button
-            ><button
-              v-else
-              type="button"
-              class="secondary-button"
-              @click="void locateArtifact(index)"
-            >
-              Locate file
-            </button>
-          </div>
-        </div>
-        <audio
-          v-if="audioUrl"
-          :src="audioUrl"
-          controls
-          preload="none"
-          @play="audioPlaying = true"
-          @pause="audioPlaying = false"
-          @ended="audioPlaying = false"
-        ></audio>
-      </section>
+      <ProcessResultsSection
+        :artifacts="artifacts"
+        :artifact-message="artifactMessage"
+        :audio-url="audioUrl"
+        @play="playArtifact"
+        @reveal="revealResult"
+        @locate="locateArtifact"
+        @reuse="reuseArtifact"
+        @audio-play="audioPlaying = true"
+        @audio-pause="audioPlaying = false"
+      />
       <footer class="process-footer">
-        <span :class="`status status-${status}`">{{
+        <span :class="'status status-' + status">{{
           status === "queued"
             ? "Queued for processing"
             : status === "running"
@@ -754,7 +410,7 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
                 : status === "completed"
                   ? "Completed"
                   : touched && issues?.length
-                    ? `${issues.length} issue(s) to fix`
+                    ? issues.length + " issue(s) to fix"
                     : "Ready to configure"
         }}</span
         ><button

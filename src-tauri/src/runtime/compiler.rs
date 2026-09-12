@@ -1,0 +1,602 @@
+use super::paths::{validate_breakpoint, validate_text_data};
+use super::process::file_type_for_path;
+use super::types::{
+    CommandPreview, CompiledCommand, InputMetadata, ParameterValue, RunProcessRequest,
+};
+use crate::catalog::types::*;
+use std::{
+    collections::HashMap,
+    ffi::OsString,
+    path::{Path, PathBuf},
+};
+
+pub fn compile_request(
+    catalog: &[ProcessDefinition],
+    request: &RunProcessRequest,
+    program: PathBuf,
+) -> Result<(CompiledCommand, CommandPreview), String> {
+    let process = catalog
+        .iter()
+        .find(|p| p.id == request.process_id)
+        .ok_or("unknown process")?;
+    let mode = process
+        .modes
+        .iter()
+        .find(|m| m.id == request.mode_id)
+        .ok_or("unknown mode")?;
+    for input in &mode.inputs {
+        let values = request
+            .inputs
+            .get(&input.id)
+            .ok_or_else(|| format!("missing input {}", input.id))?;
+        if values.len() < input.min_items || input.max_items.is_some_and(|max| values.len() > max) {
+            return Err(format!("invalid number of {} inputs", input.id));
+        }
+        if values.iter().any(|p| p.trim().is_empty()) {
+            return Err(format!("empty path in {}", input.id));
+        }
+    }
+    if request
+        .inputs
+        .keys()
+        .any(|key| !mode.inputs.iter().any(|i| i.id == *key))
+    {
+        return Err("unknown input key".into());
+    }
+    for param in &mode.parameters {
+        let id = parameter_id(param);
+        if required(param) && !request.parameters.contains_key(id) {
+            return Err(format!("missing parameter {id}"));
+        }
+    }
+    if request
+        .parameters
+        .keys()
+        .any(|key| !mode.parameters.iter().any(|p| parameter_id(p) == key))
+    {
+        return Err("unknown parameter key".into());
+    }
+    evaluate_constraints(mode, &request.parameters, &HashMap::new())?;
+    let needs_output = matches!(
+        mode.output,
+        OutputDefinition::SingleFile { .. }
+            | OutputDefinition::GenericRoot { .. }
+            | OutputDefinition::Composite { .. }
+    );
+    if needs_output != request.output_path.is_some() {
+        return Err(if needs_output {
+            "output path required"
+        } else {
+            "output path not allowed"
+        }
+        .into());
+    }
+    if let Some(output) = &request.output_path {
+        validate_output_path(Path::new(output), &mode.output)?;
+    }
+    let mut args = Vec::new();
+    for token in &mode.argument_order {
+        match token {
+            ArgumentToken::Literal { value } => args.push(OsString::from(value)),
+            ArgumentToken::Mode => {
+                if let Some(mode) = mode.cli_mode {
+                    args.push(mode.to_string().into())
+                }
+            }
+            ArgumentToken::Input { input_id } => args.extend(
+                request
+                    .inputs
+                    .get(input_id)
+                    .into_iter()
+                    .flatten()
+                    .map(OsString::from),
+            ),
+            ArgumentToken::Output => {
+                if let Some(path) = &request.output_path {
+                    args.push(OsString::from(path));
+                }
+            }
+            ArgumentToken::Parameter { parameter_id } => {
+                if let Some(value) = request.parameters.get(parameter_id) {
+                    let definition = mode
+                        .parameters
+                        .iter()
+                        .find(|p| parameter_id_of(p) == parameter_id)
+                        .ok_or("unknown parameter binding")?;
+                    validate_parameter(definition, value)?;
+                    append_bound_value(&mut args, definition, value)?;
+                }
+            }
+        }
+    }
+    let executable = process.identity.executable_string();
+    let tokens = args
+        .iter()
+        .map(|a| a.to_string_lossy().into_owned())
+        .collect::<Vec<_>>();
+    let display = std::iter::once(executable.as_str())
+        .chain(tokens.iter().map(String::as_str))
+        .map(|token| format!("{token:?}"))
+        .collect::<Vec<_>>()
+        .join(" ");
+    let preview = CommandPreview { display, tokens };
+    let resolved_output = match &mode.output {
+        OutputDefinition::AutoNamedGeneric { extension, .. } => {
+            let source = mode
+                .inputs
+                .first()
+                .and_then(|input| request.inputs.get(&input.id))
+                .and_then(|paths| paths.first())
+                .ok_or("auto-named output requires a source input")?;
+            let source = Path::new(source);
+            let stem = source
+                .file_stem()
+                .and_then(|value| value.to_str())
+                .ok_or("source filename is invalid")?;
+            let root = stem
+                .strip_suffix(|_: char| true)
+                .filter(|value| !value.is_empty())
+                .ok_or("source filename is too short for CDP auto-naming")?;
+            Some(source.with_file_name(root).with_extension(extension))
+        }
+        _ => request.output_path.as_ref().map(PathBuf::from),
+    };
+    Ok((
+        CompiledCommand {
+            binary: process.identity.executable,
+            program,
+            args,
+            output: resolved_output,
+            output_definition: mode.output.clone(),
+        },
+        preview,
+    ))
+}
+
+/// Evaluate all manifest cross-field constraints. Input metadata is keyed by
+/// input id and is supplied by the trusted sfprops inspector at enqueue time.
+pub fn evaluate_constraints(
+    mode: &ModeDefinition,
+    parameters: &HashMap<String, ParameterValue>,
+    metadata: &HashMap<String, InputMetadata>,
+) -> Result<(), String> {
+    let mut effective = parameters.clone();
+    for parameter in &mode.parameters {
+        let base = parameter_base(parameter);
+        if effective.contains_key(&base.id) {
+            continue;
+        }
+        let Some(default) = base.details.get("default") else {
+            continue;
+        };
+        if let Some(value) = default
+            .as_f64()
+            .or_else(|| default.get("value").and_then(|v| v.as_f64()))
+        {
+            effective.insert(base.id.clone(), ParameterValue::Number { value });
+        }
+    }
+    fn value(
+        reference: &ValueRef,
+        parameters: &HashMap<String, ParameterValue>,
+        metadata: &HashMap<String, InputMetadata>,
+    ) -> Result<f64, String> {
+        match reference {
+            ValueRef::Literal { value } => Ok(*value),
+            ValueRef::Parameter { id } => parameters
+                .get(id)
+                .and_then(|v| match v {
+                    ParameterValue::Number { value } => Some(*value),
+                    _ => None,
+                })
+                .or(None)
+                .ok_or_else(|| format!("constraint requires numeric parameter {id}")),
+            ValueRef::InputMetadata { input_id, property } => {
+                let m = metadata
+                    .get(input_id)
+                    .ok_or_else(|| format!("metadata unavailable for input {input_id}"))?;
+                match property.as_str() {
+                    "duration" | "durationSeconds" => Ok(m.duration_seconds),
+                    "sampleRate" => Ok(m.sample_rate as f64),
+                    "channels" => Ok(m.channels as f64),
+                    _ => Err(format!("unsupported input metadata property: {property}")),
+                }
+            }
+        }
+    }
+    for constraint in &mode.constraints {
+        let (ok, message) = match constraint {
+            Constraint::LessThan {
+                left,
+                right,
+                message,
+            } => (
+                value(left, &effective, metadata)? < value(right, &effective, metadata)?,
+                message,
+            ),
+            Constraint::LessThanOrEqual {
+                left,
+                right,
+                message,
+            } => (
+                value(left, &effective, metadata)? <= value(right, &effective, metadata)?,
+                message,
+            ),
+            Constraint::GreaterThan {
+                left,
+                right,
+                message,
+            } => (
+                value(left, &effective, metadata)? > value(right, &effective, metadata)?,
+                message,
+            ),
+            Constraint::PowerOfTwo {
+                value: reference,
+                message,
+            } => {
+                let n = value(reference, &effective, metadata)?;
+                (
+                    (2.0..=32768.0).contains(&n)
+                        && n.fract() == 0.0
+                        && (n as u64).is_power_of_two(),
+                    message,
+                )
+            }
+        };
+        if !ok {
+            return Err(message.clone());
+        }
+    }
+    Ok(())
+}
+
+/// Canonicalize every user-selected path immediately before preview/enqueue.
+pub fn validate_request_files(
+    catalog: &[ProcessDefinition],
+    request: &RunProcessRequest,
+) -> Result<(), String> {
+    let process = catalog
+        .iter()
+        .find(|p| p.id == request.process_id)
+        .ok_or("unknown process")?;
+    let mode = process
+        .modes
+        .iter()
+        .find(|m| m.id == request.mode_id)
+        .ok_or("unknown mode")?;
+    for input in &mode.inputs {
+        for raw in request.inputs.get(&input.id).into_iter().flatten() {
+            let path =
+                std::fs::canonicalize(raw).map_err(|_| format!("input does not exist: {raw}"))?;
+            let kind = file_type_for_path(&path)
+                .ok_or_else(|| format!("unrecognized input type: {raw}"))?;
+            if !input.file_types.contains(&kind) {
+                return Err(format!("input type is incompatible: {raw}"));
+            }
+            for constraint in &input.constraints {
+                if matches!(
+                    constraint,
+                    FileConstraint::Channels { .. }
+                        | FileConstraint::SameSampleRate { .. }
+                        | FileConstraint::SameChannels { .. }
+                        | FileConstraint::SameSampleFormat { .. }
+                ) {
+                    // Detailed metadata constraints are enforced after sfprops inspection;
+                    // retaining this gate prevents unrecognized binary data from proceeding.
+                    let _ = path;
+                }
+            }
+            if matches!(kind, CdpFileType::Breakpoint) {
+                validate_breakpoint(&path)?;
+            }
+            if matches!(kind, CdpFileType::TextData) {
+                validate_text_data(&path)?;
+            }
+        }
+    }
+    for value in request.parameters.values() {
+        if let ParameterValue::File { path } = value {
+            let canonical = std::fs::canonicalize(path)
+                .map_err(|_| format!("parameter file does not exist: {path}"))?;
+            if file_type_for_path(&canonical) == Some(CdpFileType::Breakpoint) {
+                validate_breakpoint(&canonical)?;
+            }
+            if file_type_for_path(&canonical) == Some(CdpFileType::TextData) {
+                validate_text_data(&canonical)?;
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn validate_output_path(path: &Path, output: &OutputDefinition) -> Result<(), String> {
+    let (extension, generic) = match output {
+        OutputDefinition::SingleFile { extension, .. } => (Some(extension.as_str()), false),
+        OutputDefinition::GenericRoot { extension, .. }
+        | OutputDefinition::AutoNamedGeneric { extension, .. }
+        | OutputDefinition::Composite { extension, .. } => (Some(extension.as_str()), true),
+        OutputDefinition::None | OutputDefinition::StdoutReport => {
+            return Err("output path not allowed".into())
+        }
+    };
+    let parent = path.parent().ok_or("output path has no parent directory")?;
+    if !parent.is_dir() {
+        return Err("output parent directory does not exist".into());
+    }
+    if path.exists() {
+        return Err("output path already exists; choose a new path".into());
+    }
+    let wanted = extension.unwrap().trim_start_matches('.');
+    if path
+        .extension()
+        .and_then(|v| v.to_str())
+        .map(|v| v.eq_ignore_ascii_case(wanted))
+        != Some(true)
+    {
+        return Err(format!("output must use the .{wanted} extension"));
+    }
+    if generic {
+        // A generic root is itself a namespace: an existing matching numbered output
+        // would make discovery ambiguous and is therefore rejected up front.
+        let stem = path
+            .file_name()
+            .and_then(|v| v.to_str())
+            .ok_or("output path is invalid")?;
+        for entry in std::fs::read_dir(parent).map_err(|_| "output parent cannot be read")? {
+            let candidate = entry.map_err(|_| "output parent cannot be read")?.path();
+            let Some(name) = candidate.file_name().and_then(|v| v.to_str()) else {
+                continue;
+            };
+            if name
+                .strip_prefix(stem)
+                .is_some_and(|rest| rest.starts_with('-'))
+            {
+                return Err("an existing file matches the output root".into());
+            }
+        }
+    }
+    Ok(())
+}
+fn parameter_id(p: &ParameterDefinition) -> &str {
+    match p {
+        ParameterDefinition::Number(b)
+        | ParameterDefinition::Integer(b)
+        | ParameterDefinition::Choice(b)
+        | ParameterDefinition::Flag(b)
+        | ParameterDefinition::File(b)
+        | ParameterDefinition::NumberOrBreakpoint(b) => &b.id,
+    }
+}
+fn required(p: &ParameterDefinition) -> bool {
+    match p {
+        ParameterDefinition::Number(b)
+        | ParameterDefinition::Integer(b)
+        | ParameterDefinition::Choice(b)
+        | ParameterDefinition::Flag(b)
+        | ParameterDefinition::File(b)
+        | ParameterDefinition::NumberOrBreakpoint(b) => b.required,
+    }
+}
+fn append_value(args: &mut Vec<OsString>, value: &ParameterValue) -> Result<(), String> {
+    match value {
+        ParameterValue::Number { value } if value.is_finite() => {
+            args.push(value.to_string().into())
+        }
+        ParameterValue::Number { .. } => return Err("number must be finite".into()),
+        ParameterValue::Choice { value } | ParameterValue::File { path: value } => {
+            args.push(value.into())
+        }
+        ParameterValue::Flag { value } => {
+            if *value {
+                args.push(OsString::from("1"));
+            }
+        }
+    }
+    Ok(())
+}
+fn parameter_id_of(p: &ParameterDefinition) -> &str {
+    match p {
+        ParameterDefinition::Number(b)
+        | ParameterDefinition::Integer(b)
+        | ParameterDefinition::Choice(b)
+        | ParameterDefinition::Flag(b)
+        | ParameterDefinition::File(b)
+        | ParameterDefinition::NumberOrBreakpoint(b) => &b.id,
+    }
+}
+fn parameter_base(p: &ParameterDefinition) -> &ParameterBase {
+    match p {
+        ParameterDefinition::Number(b)
+        | ParameterDefinition::Integer(b)
+        | ParameterDefinition::Choice(b)
+        | ParameterDefinition::Flag(b)
+        | ParameterDefinition::File(b)
+        | ParameterDefinition::NumberOrBreakpoint(b) => b,
+    }
+}
+fn validate_parameter(
+    definition: &ParameterDefinition,
+    value: &ParameterValue,
+) -> Result<(), String> {
+    let base = parameter_base(definition);
+    let d = &base.details;
+    match (definition, value) {
+        (
+            ParameterDefinition::Number(_)
+            | ParameterDefinition::Integer(_)
+            | ParameterDefinition::NumberOrBreakpoint(_),
+            ParameterValue::Number { value },
+        ) => {
+            if !value.is_finite() {
+                return Err(format!("{} must be finite", base.id));
+            }
+            if let Some(min) = d.get("min").and_then(|v| v.as_f64()) {
+                if *value < min {
+                    return Err(format!("{} is below minimum", base.id));
+                }
+            }
+            if let Some(max) = d.get("max").and_then(|v| v.as_f64()) {
+                if *value > max {
+                    return Err(format!("{} is above maximum", base.id));
+                }
+            }
+            if matches!(definition, ParameterDefinition::Integer(_)) && value.fract() != 0.0 {
+                return Err(format!("{} must be an integer", base.id));
+            }
+        }
+        (ParameterDefinition::NumberOrBreakpoint(_), ParameterValue::File { path }) => {
+            validate_breakpoint(Path::new(path))?;
+        }
+        (ParameterDefinition::Choice(_), ParameterValue::Choice { value }) => {
+            if !d
+                .get("choices")
+                .and_then(|v| v.as_array())
+                .is_some_and(|cs| {
+                    cs.iter()
+                        .any(|c| c.get("value").and_then(|v| v.as_str()) == Some(value))
+                })
+            {
+                return Err(format!("invalid choice for {}", base.id));
+            }
+        }
+        (ParameterDefinition::Flag(_), ParameterValue::Flag { .. })
+        | (ParameterDefinition::File(_), ParameterValue::File { .. }) => {}
+        _ => return Err(format!("wrong value type for {}", base.id)),
+    }
+    Ok(())
+}
+fn append_bound_value(
+    args: &mut Vec<OsString>,
+    definition: &ParameterDefinition,
+    value: &ParameterValue,
+) -> Result<(), String> {
+    let binding = &parameter_base(definition).cli;
+    match binding {
+        CliBinding::Positional => append_value(args, value),
+        CliBinding::Option { flag, join } => {
+            let mut rendered = Vec::new();
+            append_value(&mut rendered, value)?;
+            let val = rendered.pop().ok_or("empty option value")?;
+            match join {
+                JoinStyle::Concatenated => {
+                    args.push(format!("{flag}{}", val.to_string_lossy()).into())
+                }
+                JoinStyle::Separate => {
+                    args.push(flag.into());
+                    args.push(val);
+                }
+            }
+            Ok(())
+        }
+        CliBinding::BooleanFlag { flag } => {
+            if matches!(value, ParameterValue::Flag { value: true }) {
+                args.push(flag.into());
+                Ok(())
+            } else {
+                Ok(())
+            }
+        }
+    }
+}
+trait ExecutableName {
+    fn executable_string(&self) -> String;
+}
+impl ExecutableName for Identity {
+    fn executable_string(&self) -> String {
+        format!("{:?}", self.executable).to_lowercase()
+    }
+}
+pub trait BinaryResolver {
+    fn resolve(&self, id: BinaryId) -> Result<PathBuf, String>;
+}
+
+#[cfg(all(target_os = "macos", target_arch = "x86_64"))]
+const TARGET_SUFFIX: &str = "-x86_64-apple-darwin";
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+const TARGET_SUFFIX: &str = "-aarch64-apple-darwin";
+#[cfg(all(target_os = "windows", target_arch = "x86_64"))]
+const TARGET_SUFFIX: &str = "-x86_64-pc-windows-msvc";
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+const TARGET_SUFFIX: &str = "-x86_64-unknown-linux-gnu";
+#[cfg(not(any(
+    all(target_os = "macos", target_arch = "x86_64"),
+    all(target_os = "macos", target_arch = "aarch64"),
+    all(target_os = "windows", target_arch = "x86_64"),
+    all(target_os = "linux", target_arch = "x86_64")
+)))]
+const TARGET_SUFFIX: &str = "";
+
+pub fn resolve_packaged(root: &Path, id: BinaryId) -> Result<PathBuf, String> {
+    let name = format!("{:?}", id).to_lowercase();
+    let path = root.join(format!("{name}{TARGET_SUFFIX}"));
+    if path.is_file() {
+        Ok(path)
+    } else {
+        Err("required CDP binary is missing".into())
+    }
+}
+
+pub fn validate_metadata_constraints(
+    mode: &ModeDefinition,
+    input_metadata: &HashMap<String, InputMetadata>,
+) -> Result<(), String> {
+    for input in &mode.inputs {
+        let Some(metadata) = input_metadata.get(&input.id) else {
+            continue;
+        };
+        for constraint in &input.constraints {
+            match constraint {
+                FileConstraint::Channels { min, max }
+                    if metadata.channels < *min || metadata.channels > *max =>
+                {
+                    return Err(format!(
+                        "{} must have between {min} and {max} channels",
+                        input.label
+                    ));
+                }
+                FileConstraint::SameSampleRate { input_id }
+                    if input_metadata
+                        .get(input_id)
+                        .is_some_and(|m| m.sample_rate != metadata.sample_rate) =>
+                {
+                    return Err(format!(
+                        "{} must match the sample rate of {input_id}",
+                        input.label
+                    ))
+                }
+                FileConstraint::SameChannels { input_id }
+                    if input_metadata
+                        .get(input_id)
+                        .is_some_and(|m| m.channels != metadata.channels) =>
+                {
+                    return Err(format!(
+                        "{} must match the channel count of {input_id}",
+                        input.label
+                    ))
+                }
+                FileConstraint::SameSampleFormat { input_id }
+                    if input_metadata
+                        .get(input_id)
+                        .is_some_and(|m| m.sample_format != metadata.sample_format) =>
+                {
+                    return Err(format!(
+                        "{} must match the sample format of {input_id}",
+                        input.label
+                    ))
+                }
+                FileConstraint::SameDuration { input_id }
+                    if input_metadata.get(input_id).is_some_and(|m| {
+                        (m.duration_seconds - metadata.duration_seconds).abs() > 1e-6
+                    }) =>
+                {
+                    return Err(format!(
+                        "{} must match the duration of {input_id}",
+                        input.label
+                    ))
+                }
+                _ => {}
+            }
+        }
+    }
+    Ok(())
+}

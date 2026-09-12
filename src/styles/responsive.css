@@ -1,0 +1,70 @@
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media (max-width: 960px) {
+  .workspace {
+    grid-template-columns: 170px minmax(290px, 1fr) minmax(300px, 0.9fr);
+  }
+  .category-panel,
+  .process-panel,
+  .detail-panel {
+    padding: 23px 19px;
+  }
+  .type-badges {
+    display: none;
+  }
+  .ready-label {
+    display: none;
+  }
+  .recipe-detail {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+}
+/* Keep the navigator at its documented desktop minimum while allowing a process window
+   to honor its smaller 640 px minimum. */
+body {
+  min-width: 0;
+}
+.workspace,
+.topbar,
+.queue-bar {
+  min-width: 820px;
+}
+.mobile-filter {
+  display: none;
+}
+@media (max-width: 900px) {
+  .mobile-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 60px;
+    min-width: 820px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .mobile-filter select {
+    min-width: 220px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--elevated);
+    color: inherit;
+  }
+  .category-panel {
+    display: none;
+  }
+  .workspace {
+    grid-template-columns: minmax(340px, 1fr) minmax(360px, 1fr);
+    height: calc(100vh - 192px);
+  }
+}

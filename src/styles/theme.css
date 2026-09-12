@@ -1,0 +1,25 @@
+/* CDP palette mapped to Nuxt UI semantic colors in vite.config.ts. */
+@theme static {
+  --color-brand-50: #effcf9;
+  --color-brand-100: #d6f7f1;
+  --color-brand-200: #afece2;
+  --color-brand-300: #78ded1;
+  --color-brand-400: #48c9ba;
+  --color-brand-500: #2eb6a6;
+  --color-brand-600: #229487;
+  --color-brand-700: #1d766e;
+  --color-brand-800: #1c5e59;
+  --color-brand-900: #1b4e4a;
+  --color-brand-950: #0e2f2d;
+  --color-meter-50: #fff9eb;
+  --color-meter-100: #fff0c7;
+  --color-meter-200: #ffdf8a;
+  --color-meter-300: #f8c35b;
+  --color-meter-400: #dfa14a;
+  --color-meter-500: #c9852d;
+  --color-meter-600: #a96422;
+  --color-meter-700: #884a20;
+  --color-meter-800: #713d20;
+  --color-meter-900: #60351e;
+  --color-meter-950: #371b0d;
+}
