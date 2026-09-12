@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-findpan",
+  "title": "Modify Find Pan",
+  "category": "time-domain",
+  "summary": "Estimate stereo pan position.",
+  "description": "Report the stereo position represented by a stereo file at a time.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["find pan", "stereo", "analysis"],
+  "identity": {
+    "executable": "modify",
+    "operation": "findpan"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "FINDPAN",
+    "helpCommand": ["modify", "findpan"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "report",
+      "title": "Report pan position",
+      "summary": "Report pan position",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Stereo soundfile",
+          "description": "Stereo sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 2,
+              "max": 2
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "time",
+          "label": "Time",
+          "description": "Time to inspect in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "findpan"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "time"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

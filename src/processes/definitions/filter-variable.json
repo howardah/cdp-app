@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-variable",
+  "title": "Filter variable",
+  "category": "spectral",
+  "summary": "Apply variable filtering.",
+  "description": "Use the CDP variable filter to shape the frequency content.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["filter", "variable"],
+  "identity": {
+    "executable": "filter",
+    "operation": "variable"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "VARIABLE",
+    "helpCommand": ["filter", "variable"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "variable",
+      "cliMode": 1,
+      "title": "variable",
+      "summary": "variable",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "acuity",
+          "label": "Acuity",
+          "description": "Filter acuity.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0.0001,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Output gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Filter frequency in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1000,
+          "min": 0.1,
+          "max": 24000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-variable"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "variable"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "acuity"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "frequency"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

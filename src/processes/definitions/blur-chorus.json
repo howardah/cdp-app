@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "blur-chorus",
+  "title": "Spectral Chorus",
+  "category": "spectral",
+  "summary": "Add controlled random variation to partials.",
+  "description": "Randomize partial amplitudes in a PVOC analysis file to create a chorus-like character.",
+  "useCases": ["Thicken a tone", "Add spectral animation"],
+  "tags": ["chorus", "random", "partials", "amplitude"],
+  "identity": { "executable": "blur", "operation": "chorus" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cblur.htm",
+    "anchor": "CHORUS",
+    "helpCommand": ["blur", "chorus"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "amplitude",
+      "cliMode": 1,
+      "title": "Randomize amplitudes",
+      "summary": "Scatter partial amplitudes.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "amplitudeSpread",
+          "label": "Amplitude spread",
+          "description": "Maximum random scatter of partial amplitudes.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 1,
+          "max": 1028,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-chorus"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "chorus" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "amplitudeSpread" }
+      ],
+      "constraints": []
+    }
+  ]
+}

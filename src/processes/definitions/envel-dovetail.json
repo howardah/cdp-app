@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-dovetail",
+  "title": "Envel Dovetail",
+  "category": "time-domain",
+  "summary": "Fade the beginning and end.",
+  "description": "Apply fades at both ends of a sound.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["dovetail", "fade", "envelope"],
+  "identity": {
+    "executable": "envel",
+    "operation": "dovetail"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "DOVETAIL",
+    "helpCommand": ["envel", "dovetail"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "fade",
+      "cliMode": 2,
+      "title": "fade",
+      "summary": "fade",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "fadeIn",
+          "label": "Fade in",
+          "description": "Fade-in duration.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "fadeOut",
+          "label": "Fade out",
+          "description": "Fade-out duration.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-dovetail"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "dovetail"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "fadeIn"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "fadeOut"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

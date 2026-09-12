@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-joindyn",
+  "title": "SFEdit Dynamic Join",
+  "category": "edit-and-mix",
+  "summary": "Join files with level changes.",
+  "description": "Join ordered sources using paired file and gain pattern data.",
+  "useCases": ["Edit a recording", "Assemble sound"],
+  "tags": ["join", "dynamic", "gain"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "joindyn"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "JOINDYN",
+    "helpCommand": ["sfedit", "joindyn"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "dynamic",
+      "title": "dynamic",
+      "summary": "dynamic",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Ordered source files.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        },
+        {
+          "id": "pattern",
+          "label": "Pattern",
+          "description": "Pattern and gain text file.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice duration.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "fadeIn",
+          "label": "Fade in",
+          "description": "Fade in first file.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-b"
+          },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "fadeOut",
+          "label": "Fade out",
+          "description": "Fade out last file.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-e"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-joindyn"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "join"
+        },
+        {
+          "kind": "input",
+          "inputId": "sources"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "pattern"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "fadeIn"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "fadeOut"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

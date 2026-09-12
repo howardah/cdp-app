@@ -8,6 +8,25 @@ pub enum BinaryId {
     Pvoc,
     Isolate,
     Sfprops,
+    Blur,
+    Bounce,
+    Combine,
+    Envel,
+    Envnu,
+    Extend,
+    Filter,
+    Flatten,
+    Focus,
+    Hover,
+    Hover2,
+    Iterline,
+    Iterlinef,
+    Phasor,
+    Reverb,
+    Sfecho,
+    Spectstr,
+    Stretch,
+    Submix,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -27,6 +46,9 @@ pub enum CdpFileType {
     CutsData,
     SliceData,
     TextData,
+    BinaryEnvelope,
+    Mixfile,
+    DomainImage,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -135,6 +157,17 @@ pub enum OutputDefinition {
         name_suffix: String,
         discovery: OutputDiscoveryRule,
     },
+    AutoNamedGeneric {
+        file_type: CdpFileType,
+        extension: String,
+        name_suffix: String,
+        discovery: OutputDiscoveryRule,
+    },
+    Composite {
+        extension: String,
+        name_suffix: String,
+        components: Vec<OutputComponent>,
+    },
     StdoutReport,
     None,
 }
@@ -143,6 +176,13 @@ pub enum OutputDefinition {
 pub struct OutputDiscoveryRule {
     pub prefix_style: String,
     pub may_produce_remnant: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OutputComponent {
+    pub file_type: CdpFileType,
+    pub extension: String,
+    pub name_suffix: String,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(
@@ -177,6 +217,10 @@ pub enum FileConstraint {
         input_id: String,
     },
     SameSampleFormat {
+        #[serde(rename = "inputId")]
+        input_id: String,
+    },
+    SameDuration {
         #[serde(rename = "inputId")]
         input_id: String,
     },

@@ -114,6 +114,8 @@ function outputTypes(processId: string, modeId: string): CdpFileType[] {
   const process = findProcess(processId);
   const mode = process && findMode(process, modeId);
   if (!mode || mode.output.kind === "none" || mode.output.kind === "stdoutReport") return [];
+  if (mode.output.kind === "composite")
+    return mode.output.components.map((component) => component.fileType);
   return [mode.output.fileType];
 }
 

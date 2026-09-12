@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-syllables",
+  "title": "SFEdit Syllables",
+  "category": "edit-and-mix",
+  "summary": "Extract contiguous syllable-like events.",
+  "description": "Create numbered files from event boundaries.",
+  "useCases": ["Edit a recording", "Assemble sound"],
+  "tags": ["syllables", "speech", "segments"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "syllables"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "SYLLABLES",
+    "helpCommand": ["sfedit", "syllables"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "title": "seconds",
+      "summary": "seconds",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source soundfile.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "cuts",
+          "label": "Cuts data",
+          "description": "Time pairs.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "dovetailMs",
+          "label": "Dovetail",
+          "description": "Overlap between syllables.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Boundary splice.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "pairs",
+          "label": "Pairs",
+          "description": "Cut pairs of syllables.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-p"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-syllables",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "syllables"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "cuts"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "dovetailMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "pairs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

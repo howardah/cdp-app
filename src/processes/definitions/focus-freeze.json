@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "focus-freeze",
+  "title": "Freeze Spectral Characteristics",
+  "category": "spectral",
+  "summary": "Hold selected spectral characteristics over time.",
+  "description": "Freeze amplitudes, frequencies, or both at times specified in a data file.",
+  "useCases": ["Freeze a texture", "Create sustained spectra"],
+  "tags": ["focus", "freeze", "sustain"],
+  "identity": { "executable": "focus", "operation": "freeze" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cfocus.htm",
+    "anchor": "FREEZE",
+    "helpCommand": ["focus", "freeze"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "amplitudes",
+      "cliMode": 1,
+      "title": "Freeze amplitudes",
+      "summary": "Freeze spectral channel amplitudes.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "times",
+          "label": "Freeze times",
+          "description": "Text data containing freeze times.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-frozen"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "freeze" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "times" }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-inbetween2",
+  "title": "Generate Cycle-Aligned In-Betweens",
+  "category": "edit-and-mix",
+  "summary": "Create intermediate sounds aligned to zero crossings.",
+  "description": "Interpolate between two sounds while using zero crossings to preserve waveform continuity.",
+  "useCases": ["Create transition sequences", "Blend related sustained sounds"],
+  "tags": ["mix", "inbetween", "interpolate", "zero crossing"],
+  "identity": { "executable": "submix", "operation": "inbetween2" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "INBETWEEN2",
+    "helpCommand": ["submix", "inbetween2"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "interpolate",
+      "title": "Interpolate",
+      "summary": "Generate cycle-aligned intermediate sounds.",
+      "inputs": [
+        {
+          "id": "sourceA",
+          "label": "First soundfile",
+          "description": "Sound that begins the transition.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "sourceB",
+          "label": "Second soundfile",
+          "description": "Sound that ends the transition.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            { "kind": "sameSampleRate", "inputId": "sourceA" },
+            { "kind": "sameChannels", "inputId": "sourceA" }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "count",
+          "label": "Output count",
+          "description": "Number of intermediate sounds to create.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 3,
+          "min": 1,
+          "max": 100,
+          "step": 1
+        },
+        {
+          "id": "cutoff",
+          "label": "Noise cutoff",
+          "description": "Frequency above which cycles are treated as noise.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 8000,
+          "min": 20,
+          "max": 24000,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-inbetween2",
+        "discovery": { "prefixStyle": "root-number-padded", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "inbetween2" },
+        { "kind": "input", "inputId": "sourceA" },
+        { "kind": "input", "inputId": "sourceB" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "count" },
+        { "kind": "parameter", "parameterId": "cutoff" }
+      ],
+      "constraints": []
+    }
+  ]
+}

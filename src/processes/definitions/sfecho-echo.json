@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "id": "sfecho-echo",
+  "title": "Repeating Echoes",
+  "category": "time-domain",
+  "summary": "Repeat a sound with changing delay and level.",
+  "description": "Create a series of discrete echoes whose spacing and attenuation produce a decaying repeat pattern.",
+  "useCases": ["Create rhythmic echoes", "Extend a sound into a tail", "Add depth to percussion"],
+  "tags": ["echo", "delay", "repeat", "attenuation", "tail"],
+  "identity": { "executable": "sfecho", "operation": "echo" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "ECHOES",
+    "helpCommand": ["sfecho", "echo"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "echo",
+      "title": "Echo",
+      "summary": "Repeat a sound at a fixed delay and attenuation.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to repeat; the delay must exceed its duration according to CDP.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "delay",
+          "label": "Delay",
+          "description": "Time between echo repeats; must exceed the source duration.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 6,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.001
+        },
+        {
+          "id": "attenuation",
+          "label": "Attenuation",
+          "description": "Relative level of each repeat; zero is silent and one is unchanged.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "duration",
+          "label": "Total duration",
+          "description": "Maximum output duration in seconds; use at least twice the delay.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 12,
+          "min": 0.001,
+          "max": 7200,
+          "step": 0.01
+        },
+        {
+          "id": "randomize",
+          "label": "Randomize echo times",
+          "description": "Vary the timing of repeated echoes by a random amount from zero to one.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-r", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "cutoff",
+          "label": "Cutoff level",
+          "description": "Stop when echoes decay below this dB level.",
+          "required": false,
+          "advanced": true,
+          "unit": "dB",
+          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
+          "kind": "number",
+          "default": -96,
+          "min": -96,
+          "max": 0,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-echo"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "echo" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "delay" },
+        { "kind": "parameter", "parameterId": "attenuation" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "randomize" },
+        { "kind": "parameter", "parameterId": "cutoff" }
+      ],
+      "constraints": [
+        {
+          "kind": "greaterThan",
+          "left": { "source": "parameter", "id": "duration" },
+          "right": { "source": "parameter", "id": "delay" },
+          "message": "Total duration must be longer than the delay."
+        }
+      ]
+    }
+  ]
+}

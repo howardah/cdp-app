@@ -260,7 +260,8 @@ impl ProcessRunner for PackagedRunner {
                 .output
                 .as_ref()
                 .and_then(|root| match &command.output_definition {
-                    OutputDefinition::GenericRoot { extension, .. } => {
+                    OutputDefinition::GenericRoot { extension, .. }
+                    | OutputDefinition::AutoNamedGeneric { extension, .. } => {
                         matching_generic_outputs(root, extension).ok()
                     }
                     _ => None,
@@ -284,7 +285,9 @@ impl RunningProcess for ChildProcess {
             return Err(format!("CDP process failed with status {status}"));
         }
         if let Some(path) = &self.output {
-            if let OutputDefinition::GenericRoot { extension, .. } = &self.output_definition {
+            if let OutputDefinition::GenericRoot { extension, .. }
+            | OutputDefinition::AutoNamedGeneric { extension, .. } = &self.output_definition
+            {
                 let paths = discover_generic_outputs(path, extension, &self.generic_before)?;
                 if paths.is_empty() {
                     return Err("CDP process completed without producing outputs".into());
@@ -302,7 +305,7 @@ impl RunningProcess for ChildProcess {
                 file_type: file_type_for_path(path)
                     .ok_or("output has an unrecognized file type")?,
                 size_bytes: size,
-                playable: true,
+                playable: file_type_for_path(path) == Some(CdpFileType::Soundfile),
                 available: true,
                 metadata: None,
             }]));
@@ -383,6 +386,9 @@ pub fn file_type_for_path(path: &Path) -> Option<CdpFileType> {
         "ana" => Some(CdpFileType::AnalysisAna),
         "pvx" => Some(CdpFileType::AnalysisPvx),
         "brk" | "bpf" => Some(CdpFileType::Breakpoint),
+        "env" | "evl" => Some(CdpFileType::BinaryEnvelope),
+        "mix" => Some(CdpFileType::Mixfile),
+        "dimg" | "domain" => Some(CdpFileType::DomainImage),
         "txt" => Some(CdpFileType::TextData),
         _ => None,
     }
@@ -640,21 +646,18 @@ pub fn discover_generic_outputs(
         let Some(suffix) = name.strip_prefix(stem) else {
             continue;
         };
-        if !suffix.starts_with('-')
-            || path
-                .extension()
-                .and_then(|v| v.to_str())
-                .map(|v| v.eq_ignore_ascii_case(&ext))
-                != Some(true)
+        if path
+            .extension()
+            .and_then(|v| v.to_str())
+            .map(|v| v.eq_ignore_ascii_case(&ext))
+            != Some(true)
         {
             continue;
         }
-        let Some(number) = suffix
-            .strip_prefix('-')
-            .and_then(|v| v.strip_suffix(&format!(".{ext}")))
-        else {
+        let Some(number_with_ext) = suffix.strip_suffix(&format!(".{ext}")) else {
             continue;
         };
+        let number = number_with_ext.strip_prefix('-').unwrap_or(number_with_ext);
         if !number.is_empty() && number.chars().all(|c| c.is_ascii_digit()) {
             found.push(path);
         }
@@ -712,7 +715,9 @@ pub fn compile_request(
     evaluate_constraints(mode, &request.parameters, &HashMap::new())?;
     let needs_output = matches!(
         mode.output,
-        OutputDefinition::SingleFile { .. } | OutputDefinition::GenericRoot { .. }
+        OutputDefinition::SingleFile { .. }
+            | OutputDefinition::GenericRoot { .. }
+            | OutputDefinition::Composite { .. }
     );
     if needs_output != request.output_path.is_some() {
         return Err(if needs_output {
@@ -771,12 +776,33 @@ pub fn compile_request(
         .collect::<Vec<_>>()
         .join(" ");
     let preview = CommandPreview { display, tokens };
+    let resolved_output = match &mode.output {
+        OutputDefinition::AutoNamedGeneric { extension, .. } => {
+            let source = mode
+                .inputs
+                .first()
+                .and_then(|input| request.inputs.get(&input.id))
+                .and_then(|paths| paths.first())
+                .ok_or("auto-named output requires a source input")?;
+            let source = Path::new(source);
+            let stem = source
+                .file_stem()
+                .and_then(|value| value.to_str())
+                .ok_or("source filename is invalid")?;
+            let root = stem
+                .strip_suffix(|_: char| true)
+                .filter(|value| !value.is_empty())
+                .ok_or("source filename is too short for CDP auto-naming")?;
+            Some(source.with_file_name(root).with_extension(extension))
+        }
+        _ => request.output_path.as_ref().map(PathBuf::from),
+    };
     Ok((
         CompiledCommand {
             binary: process.identity.executable,
             program,
             args,
-            output: request.output_path.as_ref().map(PathBuf::from),
+            output: resolved_output,
             output_definition: mode.output.clone(),
         },
         preview,
@@ -942,7 +968,9 @@ pub fn validate_request_files(
 fn validate_output_path(path: &Path, output: &OutputDefinition) -> Result<(), String> {
     let (extension, generic) = match output {
         OutputDefinition::SingleFile { extension, .. } => (Some(extension.as_str()), false),
-        OutputDefinition::GenericRoot { extension, .. } => (Some(extension.as_str()), true),
+        OutputDefinition::GenericRoot { extension, .. }
+        | OutputDefinition::AutoNamedGeneric { extension, .. }
+        | OutputDefinition::Composite { extension, .. } => (Some(extension.as_str()), true),
         OutputDefinition::None | OutputDefinition::StdoutReport => {
             return Err("output path not allowed".into())
         }
@@ -1212,6 +1240,16 @@ pub fn validate_metadata_constraints(
                         input.label
                     ))
                 }
+                FileConstraint::SameDuration { input_id }
+                    if input_metadata.get(input_id).is_some_and(|m| {
+                        (m.duration_seconds - metadata.duration_seconds).abs() > 1e-6
+                    }) =>
+                {
+                    return Err(format!(
+                        "{} must match the duration of {input_id}",
+                        input.label
+                    ))
+                }
                 _ => {}
             }
         }
@@ -1388,6 +1426,18 @@ mod tests {
         for path in [&old, &new, &unrelated] {
             std::fs::write(path, b"x").unwrap();
         }
+        let found = discover_generic_outputs(&root, "wav", &[old]).unwrap();
+        assert_eq!(found, vec![new]);
+    }
+
+    #[test]
+    fn generic_discovery_accepts_padded_root_number_outputs() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join("source");
+        let old = dir.path().join("source001.wav");
+        let new = dir.path().join("source002.wav");
+        std::fs::write(&old, b"x").unwrap();
+        std::fs::write(&new, b"x").unwrap();
         let found = discover_generic_outputs(&root, "wav", &[old]).unwrap();
         assert_eq!(found, vec![new]);
     }

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "envnu-peakchop",
+  "title": "Envnu Peak Chop",
+  "category": "time-domain",
+  "summary": "Isolate peaks from a source.",
+  "description": "Extract peak events using an envelope detector.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["peak", "chop", "events"],
+  "identity": {
+    "executable": "envnu",
+    "operation": "peakchop"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "PEAKCHOP",
+    "helpCommand": ["envnu", "peakchop"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "envelope",
+      "cliMode": 2,
+      "title": "envelope",
+      "summary": "envelope",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Extraction window.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 50,
+          "min": 1,
+          "max": 64,
+          "step": 0.01
+        },
+        {
+          "id": "peakWidth",
+          "label": "Peak width",
+          "description": "Retained peak width.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 20,
+          "min": 1,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "riseTime",
+          "label": "Rise time",
+          "description": "Rise time.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0,
+          "max": 10000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-peakchop"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "peakchop"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "windowMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "peakWidth"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "riseTime"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

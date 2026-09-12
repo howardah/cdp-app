@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-extract",
+  "title": "Envel Extract",
+  "category": "time-domain",
+  "summary": "Extract an amplitude envelope.",
+  "description": "Save a binary envelope or breakpoint envelope.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["extract", "envelope", "analysis"],
+  "identity": {
+    "executable": "envel",
+    "operation": "extract"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "EXTRACT",
+    "helpCommand": ["envel", "extract"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "binary",
+      "cliMode": 1,
+      "title": "binary",
+      "summary": "binary",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Analysis window in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 50,
+          "min": 5,
+          "max": 100000,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-envelope"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "extract"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "windowMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -91,6 +91,22 @@ type BinaryId = 'modify' | 'sfedit' | 'pvoc' | 'isolate'
 `helpCommand` is documentation provenance and is never executed in response to a
 frontend request.
 
+The catalog also supports the following reviewed file and output vocabulary:
+
+- `binary-envelope` (`.env`) and `mixfile` (`.mix`) are typed CDP data files;
+  they are validated by extension and never treated as sound output.
+- `sameDuration` is an input metadata constraint. Runtime validation allows a
+  tolerance of one microsecond for inspected durations.
+- `autoNamedGeneric` is a generic numbered output whose root name is suggested
+  by the app and whose numbered artifacts are discovered by the Rust runtime.
+- `composite` describes a fixed set of typed components emitted beneath one
+  output root. Components are declarative; manifests cannot provide shell text
+  or arbitrary naming expressions.
+
+These variants are serialized identically by TypeScript and Rust. Composite
+outputs use the declared root extension for path validation and are discovered
+through the same packaged-runtime boundary as generic outputs.
+
 ### Inputs
 
 ```ts

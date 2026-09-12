@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-loop",
+  "title": "Extend Loop",
+  "category": "time-domain",
+  "summary": "Repeat a selected segment.",
+  "description": "Loop through a source segment with controlled timing.",
+  "useCases": ["Create variations", "Sound design"],
+  "tags": ["loop", "repeat", "segment"],
+  "identity": {
+    "executable": "extend",
+    "operation": "loop"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "LOOP",
+    "helpCommand": ["extend", "loop"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "advance",
+      "cliMode": 1,
+      "title": "advance",
+      "summary": "advance",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Loop start in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "length",
+          "label": "Length",
+          "description": "Loop length in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 500,
+          "min": 0.001,
+          "max": 60000,
+          "step": 0.01
+        },
+        {
+          "id": "step",
+          "label": "Step",
+          "description": "Start advance in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 500,
+          "min": 0.001,
+          "max": 60000,
+          "step": 0.01
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Loop splice length.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "scatter",
+          "label": "Scatter",
+          "description": "Loop timing scatter.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-s",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "balance",
+          "label": "Balance",
+          "description": "Balance loop output.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-b"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-loop"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "loop"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "start"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "length"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "step"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "scatter"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "balance"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-swell",
+  "title": "Envel Swell",
+  "category": "time-domain",
+  "summary": "Fade into and out from a peak.",
+  "description": "Create a swell around a selected peak time.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["swell", "fade", "peak"],
+  "identity": {
+    "executable": "envel",
+    "operation": "swell"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "SWELL",
+    "helpCommand": ["envel", "swell"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "swell",
+      "title": "swell",
+      "summary": "swell",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "peakTime",
+          "label": "Peak time",
+          "description": "Peak time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "peakType",
+          "label": "Peak type",
+          "description": "0 linear, 1 exponential.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-swell"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "swell"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "peakTime"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "peakType"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

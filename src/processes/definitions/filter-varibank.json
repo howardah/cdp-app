@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-varibank",
+  "title": "Filter varibank",
+  "category": "spectral",
+  "summary": "Apply varibank filtering.",
+  "description": "Use the CDP varibank filter to shape the frequency content.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["filter", "varibank"],
+  "identity": {
+    "executable": "filter",
+    "operation": "varibank"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "VARIBANK",
+    "helpCommand": ["filter", "varibank"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "varibank",
+      "cliMode": 1,
+      "title": "varibank",
+      "summary": "varibank",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "data",
+          "label": "Filter data",
+          "description": "Time-varying filter bands.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["text-data"]
+        },
+        {
+          "id": "q",
+          "label": "Q",
+          "description": "Filter tightness.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-varibank"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "varibank"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "data"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "q"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

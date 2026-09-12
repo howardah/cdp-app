@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "envnu-expdecay",
+  "title": "Envnu Exponential Decay",
+  "category": "time-domain",
+  "summary": "Apply exponential decay.",
+  "description": "Fade a sound exponentially to silence.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["decay", "exponential", "fade"],
+  "identity": {
+    "executable": "envnu",
+    "operation": "expdecay"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvnu.htm",
+    "anchor": "EXPDECAY",
+    "helpCommand": ["envnu", "expdecay"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "decay",
+      "title": "decay",
+      "summary": "decay",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "startTime",
+          "label": "Start time",
+          "description": "Decay start in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "endTime",
+          "label": "End time",
+          "description": "Decay end in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 2,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-expdecay"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "expdecay"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "startTime"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "endTime"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

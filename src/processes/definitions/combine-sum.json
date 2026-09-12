@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-sum",
+  "title": "Sum Spectra",
+  "category": "spectral",
+  "summary": "Add two compatible spectra together.",
+  "description": "Sum spectral values from two PVOC analyses with optional crossover weighting.",
+  "useCases": ["Layer spectral analyses"],
+  "tags": ["combine", "sum", "spectrum"],
+  "identity": { "executable": "combine", "operation": "sum" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "SUM",
+    "helpCommand": ["combine", "sum"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sum",
+      "title": "Sum",
+      "summary": "Add two spectra.",
+      "inputs": [
+        {
+          "id": "first",
+          "label": "First analysis",
+          "description": "First PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "second",
+          "label": "Second analysis",
+          "description": "Second PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "first" }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "crossover",
+          "label": "Crossover",
+          "description": "Amount of the second spectrum added.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-sum"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "sum" },
+        { "kind": "input", "inputId": "first" },
+        { "kind": "input", "inputId": "second" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "crossover" }
+      ],
+      "constraints": []
+    }
+  ]
+}

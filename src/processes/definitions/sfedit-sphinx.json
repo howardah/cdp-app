@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-sphinx",
+  "title": "SFEdit Sphinx",
+  "category": "edit-and-mix",
+  "summary": "Switch files using individual timelines.",
+  "description": "Build a sound by switching among related sources.",
+  "useCases": ["Edit a recording", "Assemble sound"],
+  "tags": ["switch", "segments", "sphinx"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "sphinx"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "SPHINX",
+    "helpCommand": ["sfedit", "sphinx"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sequence",
+      "title": "sequence",
+      "summary": "sequence",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Ordered source files.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        },
+        {
+          "id": "switchTimes",
+          "label": "Switch times",
+          "description": "Increasing segment boundaries.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice duration.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-sphinx"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "sphinx"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "sources"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "switchTimes"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -45,7 +45,12 @@ export function validateRequest(
         field: `parameter.${parameter.id}`,
         message: `${parameter.label} is required.`,
       });
-  if (mode.output.kind === "singleFile" || mode.output.kind === "genericRoot") {
+  if (
+    mode.output.kind === "singleFile" ||
+    mode.output.kind === "genericRoot" ||
+    mode.output.kind === "autoNamedGeneric" ||
+    mode.output.kind === "composite"
+  ) {
     if (!request.outputPath)
       issues.push({ field: "output", message: "Choose an output path before running." });
   } else if (request.outputPath !== null)

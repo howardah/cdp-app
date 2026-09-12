@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-convolve",
+  "title": "Modify Convolve",
+  "category": "time-domain",
+  "summary": "Convolve two compatible sounds.",
+  "description": "Apply one sound's impulse character to another.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["convolve", "impulse", "filter"],
+  "identity": {
+    "executable": "modify",
+    "operation": "convolve"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "CONVOLVE",
+    "helpCommand": ["modify", "convolve"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "static",
+      "cliMode": 1,
+      "title": "Convolve sounds",
+      "summary": "Convolve sounds",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "source2",
+          "label": "Second soundfile",
+          "description": "Sound used for convolution.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "sameChannels",
+              "inputId": "source"
+            }
+          ]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-convolve"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "convolve"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "source2"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

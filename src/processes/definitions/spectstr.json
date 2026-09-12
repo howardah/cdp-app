@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "spectstr",
+  "title": "Artifact-Reduced Spectral Stretch",
+  "category": "spectral",
+  "summary": "Time-stretch analysis data while suppressing artifacts.",
+  "description": "Stretch a PVOC analysis with controlled channel discoherence to reduce artifacts at large stretch factors.",
+  "useCases": ["Long spectral pads", "Artifact-reduced time stretch"],
+  "tags": ["spectstr", "stretch", "discohere", "spectral"],
+  "identity": { "executable": "spectstr", "operation": "stretch" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cstretch.htm",
+    "anchor": "SPECTSTR",
+    "helpCommand": ["spectstr", "stretch"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "stretch",
+      "title": "Stretch",
+      "summary": "Stretch analysis with artifact suppression.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis to stretch.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "factor",
+          "label": "Time multiplier",
+          "description": "Stretch or shrink multiplier.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.0001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "discohereRatio",
+          "label": "Discoherence ratio",
+          "description": "Proportion of channels to discohere.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "discohereRandom",
+          "label": "Frequency randomization",
+          "description": "Randomization applied to discohered channels.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spectstr"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "stretch" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "factor" },
+        { "kind": "parameter", "parameterId": "discohereRatio" },
+        { "kind": "parameter", "parameterId": "discohereRandom" }
+      ],
+      "constraints": []
+    }
+  ]
+}

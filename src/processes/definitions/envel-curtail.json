@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-curtail",
+  "title": "Envel Curtail",
+  "category": "time-domain",
+  "summary": "Fade a sound to silence.",
+  "description": "Shorten a sound with a controlled fade.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["curtail", "fade", "trim"],
+  "identity": {
+    "executable": "envel",
+    "operation": "curtail"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "CURTAIL",
+    "helpCommand": ["envel", "curtail"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "fade",
+      "cliMode": 4,
+      "title": "fade",
+      "summary": "fade",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Fade start",
+          "description": "Fade start time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "end",
+          "label": "Fade end",
+          "description": "Fade end time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 2,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-curtail"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "curtail"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "start"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "end"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

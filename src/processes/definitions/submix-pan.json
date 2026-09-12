@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-pan",
+  "title": "Pan Mixfile",
+  "category": "edit-and-mix",
+  "summary": "Transform spatial positions in a mixfile.",
+  "description": "Apply a pan value to the spatial positions encoded in a CDP mixfile.",
+  "useCases": ["Render spatial arrangements"],
+  "tags": ["mix", "pan", "space"],
+  "identity": { "executable": "submix", "operation": "pan" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "PAN",
+    "helpCommand": ["submix", "pan"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "pan",
+      "title": "Pan",
+      "summary": "Apply a pan position.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile with spatial positions.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "pan",
+          "label": "Pan",
+          "description": "Pan value applied to the mixfile.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": -1,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-panned"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "pan" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "pan" }
+      ],
+      "constraints": []
+    }
+  ]
+}

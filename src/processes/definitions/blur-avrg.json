@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "blur-avrg",
+  "title": "Average Spectral Channels",
+  "category": "spectral",
+  "summary": "Average energy across neighboring spectral channels.",
+  "description": "Smooth local spectral energy in a PVOC analysis file.",
+  "useCases": ["Roughen timbre", "Soften spectral detail"],
+  "tags": ["blur", "average", "channels"],
+  "identity": { "executable": "blur", "operation": "avrg" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cblur.htm",
+    "anchor": "AVRG",
+    "helpCommand": ["blur", "avrg"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "average",
+      "title": "Average",
+      "summary": "Average N adjacent channels.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "channels",
+          "label": "Channels",
+          "description": "Number of adjacent channels to average; use an odd number.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 3,
+          "min": 1,
+          "step": 2
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-averaged"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "avrg" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "channels" }
+      ],
+      "constraints": []
+    }
+  ]
+}

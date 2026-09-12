@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-zigzag",
+  "title": "Zigzag",
+  "category": "time-domain",
+  "summary": "Read a sound backward and forward between positions.",
+  "description": "Create a longer sound by moving back and forth through a source interval with spliced joins.",
+  "useCases": ["Extend a short texture", "Create rhythmic reversals", "Make looping variations"],
+  "tags": ["zigzag", "reverse", "extend", "loop"],
+  "identity": { "executable": "extend", "operation": "zigzag" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "ZIGZAG",
+    "helpCommand": ["extend", "zigzag"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "random",
+      "cliMode": 1,
+      "title": "Random zigzags",
+      "summary": "Generate zigzags through a source interval.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to read back and forth.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Beginning of source interval in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "End of source interval in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Total output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "step": 0.01
+        },
+        {
+          "id": "minimumZig",
+          "label": "Minimum zigzag",
+          "description": "Minimum time between zigzag points in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length at zigzag joins.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 25,
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        {
+          "id": "maximumZig",
+          "label": "Maximum zigzag",
+          "description": "Maximum time between zigzag points in seconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-m", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "seed",
+          "label": "Seed",
+          "description": "Repeatable random sequence seed; zero chooses a new sequence.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-r", "join": "concatenated" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-zigzag"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "zigzag" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "minimumZig" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "maximumZig" },
+        { "kind": "parameter", "parameterId": "seed" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "start" },
+          "right": { "source": "parameter", "id": "end" },
+          "message": "Start must be before end."
+        }
+      ]
+    }
+  ]
+}

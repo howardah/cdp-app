@@ -21,7 +21,7 @@ describe("process catalog", () => {
   });
 
   it("contains the ten newly shipped process entries", () => {
-    expect(processCatalog).toHaveLength(16);
+    expect(processCatalog).toHaveLength(116);
     expect(searchCatalog("mask").map((process) => process.id)).toContain("sfedit-masks");
     expect(searchCatalog("echo").map((process) => process.id)).toContain("modify-revecho");
     expect(searchCatalog("narrow").map((process) => process.id)).toContain("modify-space");
@@ -50,6 +50,16 @@ describe("process catalog", () => {
       { kind: "sameSampleRate", inputId: "source" },
       { kind: "sameChannels", inputId: "source" },
     ]);
+  });
+
+  it("keeps envelope outputs typed and accepted", () => {
+    for (const id of ["envel-cyclic", "envel-create", "envel-extract"]) {
+      const process = findProcess(id)!;
+      expect(process.modes[0].output).toMatchObject({
+        fileType: "binary-envelope",
+        extension: "evl",
+      });
+    }
   });
 
   it("exposes the documented MVP mode coverage", () => {

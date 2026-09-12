@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-timewarp",
+  "title": "Warp Mix Timing",
+  "category": "edit-and-mix",
+  "summary": "Transform event times in a mixfile.",
+  "description": "Apply a time transformation to events in a CDP mixfile.",
+  "useCases": ["Retiming an arrangement"],
+  "tags": ["mix", "timewarp", "timing"],
+  "identity": { "executable": "submix", "operation": "timewarp" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "TIMEWARP",
+    "helpCommand": ["submix", "timewarp"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "warp",
+      "title": "Time warp",
+      "summary": "Warp mix event timing.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to retime.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-timewarped"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "timewarp" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

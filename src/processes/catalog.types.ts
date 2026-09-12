@@ -1,5 +1,29 @@
 export type ProcessCategory = "time-domain" | "spectral" | "edit-and-mix" | "utilities";
-export type BinaryId = "modify" | "sfedit" | "pvoc" | "isolate" | "sfprops";
+export type BinaryId =
+  | "modify"
+  | "sfedit"
+  | "pvoc"
+  | "isolate"
+  | "sfprops"
+  | "blur"
+  | "bounce"
+  | "combine"
+  | "envel"
+  | "envnu"
+  | "extend"
+  | "filter"
+  | "flatten"
+  | "focus"
+  | "hover"
+  | "hover2"
+  | "iterline"
+  | "iterlinef"
+  | "phasor"
+  | "reverb"
+  | "sfecho"
+  | "spectstr"
+  | "stretch"
+  | "submix";
 export type CdpFileType =
   | "soundfile"
   | "analysis-ana"
@@ -7,7 +31,10 @@ export type CdpFileType =
   | "breakpoint"
   | "cuts-data"
   | "slice-data"
-  | "text-data";
+  | "text-data"
+  | "binary-envelope"
+  | "mixfile"
+  | "domain-image";
 export interface InspectedFile {
   path: string;
   fileType: CdpFileType;
@@ -19,7 +46,7 @@ export interface InspectedFile {
 }
 
 export interface FileConstraint {
-  kind: "channels" | "sameSampleRate" | "sameChannels" | "sameSampleFormat";
+  kind: "channels" | "sameSampleRate" | "sameChannels" | "sameSampleFormat" | "sameDuration";
   min?: number;
   max?: number;
   inputId?: string;
@@ -96,6 +123,19 @@ export type OutputDefinition =
       extension: string;
       nameSuffix: string;
       discovery: { prefixStyle: "root-number" | "root-number-padded"; mayProduceRemnant: boolean };
+    }
+  | {
+      kind: "autoNamedGeneric";
+      fileType: CdpFileType;
+      extension: string;
+      nameSuffix: string;
+      discovery: { prefixStyle: "root-number" | "root-number-padded"; mayProduceRemnant: boolean };
+    }
+  | {
+      kind: "composite";
+      extension: string;
+      nameSuffix: string;
+      components: { fileType: CdpFileType; extension: string; nameSuffix: string }[];
     }
   | { kind: "stdoutReport" }
   | { kind: "none" };

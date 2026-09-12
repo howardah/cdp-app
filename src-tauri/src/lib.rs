@@ -228,6 +228,16 @@ fn suggest_output_path(
             name_suffix,
             ..
         } => (extension.as_str(), name_suffix.as_str()),
+        catalog::types::OutputDefinition::AutoNamedGeneric {
+            extension,
+            name_suffix,
+            ..
+        }
+        | catalog::types::OutputDefinition::Composite {
+            extension,
+            name_suffix,
+            ..
+        } => (extension.as_str(), name_suffix.as_str()),
         _ => return Err("this mode does not produce a file".into()),
     };
     runtime::suggest_output_path(&primary_input, suffix.trim_start_matches('-'), extension)

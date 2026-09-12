@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-interleave",
+  "title": "Interleave Spectra",
+  "category": "spectral",
+  "summary": "Alternate windows from compatible analyses.",
+  "description": "Build an analysis by interleaving windows from two or more PVOC files.",
+  "useCases": ["Combine spectral gestures"],
+  "tags": ["combine", "interleave", "spectrum"],
+  "identity": { "executable": "combine", "operation": "interleave" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "INTERLEAVE",
+    "helpCommand": ["combine", "interleave"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "interleave",
+      "title": "Interleave",
+      "summary": "Alternate analysis windows.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Analysis files",
+          "description": "Two or more compatible PVOC analyses.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "leafSize",
+          "label": "Leaf size",
+          "description": "Number of windows per interleaved leaf.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-interleaved"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "interleave" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "leafSize" }
+      ],
+      "constraints": []
+    }
+  ]
+}

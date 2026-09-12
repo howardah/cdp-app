@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-scaledpan",
+  "title": "Modify Scaled Pan",
+  "category": "time-domain",
+  "summary": "Scale a pan trajectory to a sound's duration.",
+  "description": "Pan a sound using a breakpoint trajectory scaled to its duration.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["scaled pan", "panning", "trajectory"],
+  "identity": {
+    "executable": "modify",
+    "operation": "scaledpan"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "SCALEDPAN",
+    "helpCommand": ["modify", "scaledpan"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "scaled",
+      "title": "Scale pan trajectory",
+      "summary": "Scale pan trajectory",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "pan",
+          "label": "Pan trajectory",
+          "description": "Time and position breakpoint data.",
+          "fileTypes": ["breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "prescale",
+          "label": "Prescale",
+          "description": "Input prescale.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-p",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0.7,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-scaledpan"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "scaledpan"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "pan"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "prescale"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

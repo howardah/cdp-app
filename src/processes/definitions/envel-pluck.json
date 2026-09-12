@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-pluck",
+  "title": "Envel Pluck",
+  "category": "time-domain",
+  "summary": "Give a mono sound a plucked onset.",
+  "description": "Apply a short plucked attack to a mono source.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["pluck", "attack", "mono"],
+  "identity": {
+    "executable": "envel",
+    "operation": "pluck"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "PLUCK",
+    "helpCommand": ["envel", "pluck"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "pluck",
+      "title": "pluck",
+      "summary": "pluck",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 1,
+              "max": 1
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "startSample",
+          "label": "Start sample",
+          "description": "Sample at which pluck ends.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "max": 100000000,
+          "step": 1
+        },
+        {
+          "id": "waveLength",
+          "label": "Wavelength",
+          "description": "Wave length in samples.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 100,
+          "min": 1,
+          "max": 100000000,
+          "step": 1
+        },
+        {
+          "id": "attackCycles",
+          "label": "Attack cycles",
+          "description": "Attack wave cycles.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-a",
+            "join": "concatenated"
+          },
+          "kind": "integer",
+          "default": 32,
+          "min": 2,
+          "max": 32767,
+          "step": 1
+        },
+        {
+          "id": "decayRate",
+          "label": "Decay rate",
+          "description": "Decay rate.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-d",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 100,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-pluck"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "pluck"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "startSample"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "waveLength"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "attackCycles"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "decayRate"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-low-high",
+  "title": "Filter low-high",
+  "category": "spectral",
+  "summary": "Apply low-high filtering.",
+  "description": "Use the CDP low-high filter to shape the frequency content.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["filter", "low-high"],
+  "identity": {
+    "executable": "filter",
+    "operation": "lohi"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "LOHI",
+    "helpCommand": ["filter", "lohi"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "low-high",
+      "cliMode": 1,
+      "title": "low-high",
+      "summary": "low-high",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "attenuation",
+          "label": "Attenuation",
+          "description": "Stop-band attenuation in decibels.",
+          "required": true,
+          "advanced": false,
+          "unit": "dB",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": -48,
+          "min": -96,
+          "max": 0,
+          "step": 0.01
+        },
+        {
+          "id": "passBand",
+          "label": "Pass band",
+          "description": "Last frequency passed in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1000,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        },
+        {
+          "id": "stopBand",
+          "label": "Stop band",
+          "description": "First frequency stopped in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 2000,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-low-high"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "lohi"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "attenuation"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "passBand"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "stopBand"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

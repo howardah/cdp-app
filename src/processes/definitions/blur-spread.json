@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "blur-spread",
+  "title": "Spread Spectral Peaks",
+  "category": "spectral",
+  "summary": "Broaden spectral peaks to introduce controlled noisiness.",
+  "description": "Spread peaks in a PVOC analysis using a formant or pitch-wise envelope.",
+  "useCases": ["Soften resonances", "Add controlled noisiness"],
+  "tags": ["spread", "peaks", "spectrum", "formant"],
+  "identity": { "executable": "blur", "operation": "spread" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cblur.htm",
+    "anchor": "SPREAD",
+    "helpCommand": ["blur", "spread"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "formant",
+      "title": "Formant-wise spread",
+      "summary": "Spread peaks using a linear frequency envelope.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "points",
+          "label": "Envelope points",
+          "description": "Frequency spacing used to extract the formant envelope.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-f", "join": "concatenated" },
+          "kind": "integer",
+          "default": 8,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "spread",
+          "label": "Spread",
+          "description": "Degree of spectral spreading.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spread"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "spread" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "points" },
+        { "kind": "parameter", "parameterId": "spread" }
+      ],
+      "constraints": []
+    }
+  ]
+}

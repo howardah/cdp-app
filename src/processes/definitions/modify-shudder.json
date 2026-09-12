@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-shudder",
+  "title": "Modify Shudder",
+  "category": "time-domain",
+  "summary": "Add scattered stereo amplitude gestures.",
+  "description": "Apply dramatic shudder events to a stereo soundfile.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["shudder", "stereo", "gesture"],
+  "identity": {
+    "executable": "modify",
+    "operation": "shudder"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "SHUDDER",
+    "helpCommand": ["modify", "shudder"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "shudder",
+      "title": "Shudder stereo sound",
+      "summary": "Shudder stereo sound",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Stereo soundfile",
+          "description": "Stereo sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 2,
+              "max": 2
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "startTime",
+          "label": "Start time",
+          "description": "Start time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Average shudder frequency.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 4,
+          "min": 0,
+          "max": 100,
+          "step": 0.01
+        },
+        {
+          "id": "scatter",
+          "label": "Scatter",
+          "description": "Timing randomization.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "stereoSpread",
+          "label": "Stereo spread",
+          "description": "Stereo event spread.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "minDepth",
+          "label": "Minimum depth",
+          "description": "Minimum depth.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "maxDepth",
+          "label": "Maximum depth",
+          "description": "Maximum depth.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "minWidth",
+          "label": "Minimum width",
+          "description": "Minimum event width in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.01,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "maxWidth",
+          "label": "Maximum width",
+          "description": "Maximum event width in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "balance",
+          "label": "Balance channels",
+          "description": "Balance the average level of the stereo channels.",
+          "cli": { "kind": "booleanFlag", "flag": "-b" },
+          "required": false,
+          "advanced": true,
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-shudder"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "shudder"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "startTime"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "frequency"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "scatter"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "stereoSpread"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "minDepth"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "maxDepth"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "minWidth"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "maxWidth"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "balance"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-noisecut",
+  "title": "SFEdit Noise Cut",
+  "category": "edit-and-mix",
+  "summary": "Suppress quiet noise between wanted mono events.",
+  "description": "Replace detected noise with silence while retaining clear events.",
+  "useCases": ["Clean a mono recording", "Remove background noise"],
+  "tags": ["noise", "denoise", "silence", "mono"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "noisecut"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "NOISECUT",
+    "helpCommand": ["sfedit", "noisecut"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "suppress",
+      "title": "Suppress noise",
+      "summary": "Suppress noise",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 1,
+              "max": 1
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice duration in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "noiseFrequency",
+          "label": "Noise frequency",
+          "description": "Frequency above which sound is treated as noise.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 6000,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        },
+        {
+          "id": "maxNoise",
+          "label": "Maximum noise",
+          "description": "Maximum noise duration to leave in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "minTone",
+          "label": "Minimum tone",
+          "description": "Minimum retained tone duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.05,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "retainNoise",
+          "label": "Retain noise",
+          "description": "Retain noise instead of non-noise events.",
+          "required": false,
+          "advanced": true,
+          "cli": {
+            "kind": "booleanFlag",
+            "flag": "-n"
+          },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-noisecut"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "noisecut"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "noiseFrequency"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "maxNoise"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "minTone"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "retainNoise"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-attack",
+  "title": "Envel Attack",
+  "category": "time-domain",
+  "summary": "Emphasize a sound attack.",
+  "description": "Strengthen the onset of a sound.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["attack", "envelope", "transient"],
+  "identity": {
+    "executable": "envel",
+    "operation": "attack"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "ATTACK",
+    "helpCommand": ["envel", "attack"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "attack",
+      "cliMode": 1,
+      "title": "attack",
+      "summary": "attack",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gate",
+          "label": "Gate",
+          "description": "Gate level.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Attack gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        },
+        {
+          "id": "onset",
+          "label": "Onset",
+          "description": "Onset duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.01,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "decay",
+          "label": "Decay",
+          "description": "Decay duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-attack"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "attack"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gate"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "onset"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "decay"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

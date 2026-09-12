@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-syncattack",
+  "title": "Synchronize Attacks",
+  "category": "edit-and-mix",
+  "summary": "Align detected attacks across mixed sounds.",
+  "description": "Synchronize attacks in a CDP mix arrangement.",
+  "useCases": ["Align rhythmic layers"],
+  "tags": ["mix", "sync", "attack"],
+  "identity": { "executable": "submix", "operation": "syncattack" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "SYNCATTACK",
+    "helpCommand": ["submix", "syncattack"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sync",
+      "title": "Synchronize attacks",
+      "summary": "Align attacks in a mixfile.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to synchronize.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-attack-synced"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "syncattack" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

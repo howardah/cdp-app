@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-create",
+  "title": "Envel Create",
+  "category": "time-domain",
+  "summary": "Create an envelope from instructions.",
+  "description": "Generate a binary envelope from an envelope instruction file.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["create", "envelope", "generate"],
+  "identity": {
+    "executable": "envel",
+    "operation": "create"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "CREATE",
+    "helpCommand": ["envel", "create"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "binary",
+      "cliMode": 1,
+      "title": "binary",
+      "summary": "binary",
+      "inputs": [
+        {
+          "id": "instructions",
+          "label": "Envelope instructions",
+          "description": "Envelope instructions.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Envelope window in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 50,
+          "min": 1,
+          "max": 100000,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-envelope"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "create"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "instructions"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "windowMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

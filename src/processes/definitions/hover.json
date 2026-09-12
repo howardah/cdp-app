@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "hover",
+  "title": "Hover",
+  "category": "time-domain",
+  "summary": "Zigzag through a mono sound at a controlled frequency.",
+  "description": "Read forward and backward around a source location to prolong or reshape a sound.",
+  "useCases": ["Extend a texture", "Create ebb-and-flow motion"],
+  "tags": ["hover", "zigzag", "texture", "extend"],
+  "identity": { "executable": "hover", "operation": "hover" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "HOVER",
+    "helpCommand": ["hover", "hover"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "hover",
+      "title": "Hover",
+      "summary": "Move through a mono sound around a position.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source to read back and forth.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "frequency",
+          "label": "Read frequency",
+          "description": "Rate of forward/backward reading in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 4,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "location",
+          "label": "Source location",
+          "description": "Center position in the source in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "frequencyRandom",
+          "label": "Frequency variation",
+          "description": "Random frequency variation from zero to one.",
+          "required": true,
+          "advanced": true,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "locationRandom",
+          "label": "Location variation",
+          "description": "Random location variation from zero to one.",
+          "required": true,
+          "advanced": true,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length at zigzag turns.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 5,
+          "min": 0,
+          "max": 100,
+          "step": 1
+        },
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Total output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.01,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-hover"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "hover" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "location" },
+        { "kind": "parameter", "parameterId": "frequencyRandom" },
+        { "kind": "parameter", "parameterId": "locationRandom" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "duration" }
+      ],
+      "constraints": []
+    }
+  ]
+}

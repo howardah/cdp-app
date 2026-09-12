@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-radical",
+  "title": "Modify Radical",
+  "category": "time-domain",
+  "summary": "Reverse, shred, degrade, or modulate sound.",
+  "description": "Apply a fundamental radical transformation to a soundfile.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["radical", "reverse", "shred", "degrade"],
+  "identity": {
+    "executable": "modify",
+    "operation": "radical"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "RADICAL",
+    "helpCommand": ["modify", "radical"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "reverse",
+      "cliMode": 1,
+      "title": "Reverse sound",
+      "summary": "Reverse sound",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-radical"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "radical"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

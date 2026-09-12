@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-iterate",
+  "title": "Extend Iterate",
+  "category": "time-domain",
+  "summary": "Repeat a sound fluidly.",
+  "description": "Create iterative repetitions with optional variation.",
+  "useCases": ["Create variations", "Sound design"],
+  "tags": ["iterate", "repeat", "variation"],
+  "identity": {
+    "executable": "extend",
+    "operation": "iterate"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "ITERATE",
+    "helpCommand": ["extend", "iterate"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "duration",
+      "cliMode": 1,
+      "title": "duration",
+      "summary": "duration",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "outputDuration",
+          "label": "Output duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "delay",
+          "label": "Delay",
+          "description": "Average delay in seconds.",
+          "required": false,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "option",
+            "flag": "-d",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "randomness",
+          "label": "Randomness",
+          "description": "Delay randomization.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-r",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "pitchShift",
+          "label": "Pitch shift",
+          "description": "Maximum random pitch shift.",
+          "required": false,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": {
+            "kind": "option",
+            "flag": "-p",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 12,
+          "step": 0.01
+        },
+        {
+          "id": "amplitudeCut",
+          "label": "Amplitude cut",
+          "description": "Maximum amplitude cut.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-a",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "fade",
+          "label": "Fade",
+          "description": "Fade between iterations.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-f",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall gain.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-g",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "seed",
+          "label": "Seed",
+          "description": "Random seed.",
+          "required": false,
+          "advanced": false,
+          "cli": {
+            "kind": "option",
+            "flag": "-s",
+            "join": "concatenated"
+          },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "max": 2147483647,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-iterate"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "iterate"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "outputDuration"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "delay"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "randomness"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "pitchShift"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "amplitudeCut"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "fade"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "seed"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

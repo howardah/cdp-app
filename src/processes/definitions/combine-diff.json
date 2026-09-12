@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-diff",
+  "title": "Spectral Difference",
+  "category": "spectral",
+  "summary": "Subtract one spectrum from another.",
+  "description": "Produce the difference between two compatible PVOC analyses.",
+  "useCases": ["Reveal spectral contrast"],
+  "tags": ["combine", "difference", "spectrum"],
+  "identity": { "executable": "combine", "operation": "diff" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "DIFF",
+    "helpCommand": ["combine", "diff"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "difference",
+      "title": "Difference",
+      "summary": "Subtract a controlled amount of the second spectrum.",
+      "inputs": [
+        {
+          "id": "first",
+          "label": "First analysis",
+          "description": "Base PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "second",
+          "label": "Second analysis",
+          "description": "Spectrum to subtract.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "first" }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "crossover",
+          "label": "Crossover",
+          "description": "Amount of the second spectrum to subtract.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-difference"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "diff" },
+        { "kind": "input", "inputId": "first" },
+        { "kind": "input", "inputId": "second" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "crossover" }
+      ],
+      "constraints": []
+    }
+  ]
+}

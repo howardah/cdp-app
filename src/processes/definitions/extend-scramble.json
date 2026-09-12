@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-scramble",
+  "title": "Scramble Sound",
+  "category": "time-domain",
+  "summary": "Reorder sound chunks into a new version.",
+  "description": "Cut a source into random chunks and splice them into an output of the requested duration.",
+  "useCases": ["Create glitch textures", "Reorder recordings"],
+  "tags": ["scramble", "random", "chunks", "splice"],
+  "identity": { "executable": "extend", "operation": "scramble" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "SCRAMBLE",
+    "helpCommand": ["extend", "scramble"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "random-chunks",
+      "cliMode": 1,
+      "title": "Random chunks",
+      "summary": "Cut random chunks and splice them end to end.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source to scramble.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "minimumSegment",
+          "label": "Minimum chunk",
+          "description": "Minimum chunk length in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "maximumSegment",
+          "label": "Maximum chunk",
+          "description": "Maximum chunk length in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Requested output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.01,
+          "step": 0.01
+        },
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice length in milliseconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-w", "join": "concatenated" },
+          "kind": "number",
+          "default": 25,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "seed",
+          "label": "Seed",
+          "description": "Repeatable random seed.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-scrambled"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "scramble" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "minimumSegment" },
+        { "kind": "parameter", "parameterId": "maximumSegment" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "spliceMs" },
+        { "kind": "parameter", "parameterId": "seed" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "minimumSegment" },
+          "right": { "source": "parameter", "id": "maximumSegment" },
+          "message": "Minimum chunk must be shorter than maximum chunk."
+        }
+      ]
+    }
+  ]
+}

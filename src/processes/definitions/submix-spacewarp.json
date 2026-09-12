@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-spacewarp",
+  "title": "Warp Mix Space",
+  "category": "edit-and-mix",
+  "summary": "Transform spatial positions across a mix.",
+  "description": "Invert stereo positions in alternating lines of a CDP mixfile.",
+  "useCases": ["Transform spatial movement"],
+  "tags": ["mix", "space", "warp"],
+  "identity": { "executable": "submix", "operation": "spacewarp" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "SPACEWARP",
+    "helpCommand": ["submix", "spacewarp"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "alternate",
+      "cliMode": 7,
+      "title": "Alternate stereo",
+      "summary": "Invert stereo in alternating mixfile lines.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to transform.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-spacewarp"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "spacewarp" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

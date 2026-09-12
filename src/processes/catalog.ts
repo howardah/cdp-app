@@ -20,6 +20,106 @@ import cutmany from "./definitions/sfedit-cutmany.json";
 import masks from "./definitions/sfedit-masks.json";
 import space from "./definitions/modify-space.json";
 import revecho from "./definitions/modify-revecho.json";
+import zcut from "./definitions/sfedit-zcut.json";
+import zcuts from "./definitions/sfedit-zcuts.json";
+import excises from "./definitions/sfedit-excises.json";
+import noisecut from "./definitions/sfedit-noisecut.json";
+import radical from "./definitions/modify-radical.json";
+import convolve from "./definitions/modify-convolve.json";
+import stack from "./definitions/modify-stack.json";
+import shudder from "./definitions/modify-shudder.json";
+import scaledpan from "./definitions/modify-scaledpan.json";
+import brassage from "./definitions/modify-brassage.json";
+import sausage from "./definitions/modify-sausage.json";
+import spaceform from "./definitions/modify-spaceform.json";
+import findpan from "./definitions/modify-findpan.json";
+import reverb from "./definitions/reverb.json";
+import filterFixed from "./definitions/filter-fixed.json";
+import filterLohi from "./definitions/filter-lohi.json";
+import filterVariable from "./definitions/filter-variable.json";
+import filterSweeping from "./definitions/filter-sweeping.json";
+import filterPhasing from "./definitions/filter-phasing.json";
+import filterIterated from "./definitions/filter-iterated.json";
+import filterBank from "./definitions/filter-bank.json";
+import filterUserbank from "./definitions/filter-userbank.json";
+import filterVaribank from "./definitions/filter-varibank.json";
+import phasor from "./definitions/phasor.json";
+import blurAvrg from "./definitions/blur-avrg.json";
+import blurBlur from "./definitions/blur-blur.json";
+import blurChorus from "./definitions/blur-chorus.json";
+import blurDrunk from "./definitions/blur-drunk.json";
+import blurNoise from "./definitions/blur-noise.json";
+import blurScatter from "./definitions/blur-scatter.json";
+import blurSpread from "./definitions/blur-spread.json";
+import extendDrunk from "./definitions/extend-drunk.json";
+import extendRepetitions from "./definitions/extend-repetitions.json";
+import extendScramble from "./definitions/extend-scramble.json";
+import extendSequence from "./definitions/extend-sequence.json";
+import extendZigzag from "./definitions/extend-zigzag.json";
+import hover from "./definitions/hover.json";
+import hover2 from "./definitions/hover2.json";
+import sfecho from "./definitions/sfecho-echo.json";
+import spectstr from "./definitions/spectstr.json";
+import stretchSpectrum from "./definitions/stretch-spectrum.json";
+import stretchTime from "./definitions/stretch-time.json";
+import submixBalance from "./definitions/submix-balance.json";
+import submixMerge from "./definitions/submix-merge.json";
+import submixMergemany from "./definitions/submix-mergemany.json";
+import submixCrossfade from "./definitions/submix-crossfade.json";
+import submixMix from "./definitions/submix-mix.json";
+import submixInterleave from "./definitions/submix-interleave.json";
+import submixPan from "./definitions/submix-pan.json";
+import submixSpacewarp from "./definitions/submix-spacewarp.json";
+import blurShuffle from "./definitions/blur-shuffle.json";
+import iterline from "./definitions/iterline.json";
+import iterlinef from "./definitions/iterlinef.json";
+import submixInbetween from "./definitions/submix-inbetween.json";
+import submixInbetween2 from "./definitions/submix-inbetween2.json";
+import submixSync from "./definitions/submix-sync.json";
+import submixSyncattack from "./definitions/submix-syncattack.json";
+import submixTimewarp from "./definitions/submix-timewarp.json";
+import submixFaders from "./definitions/submix-faders.json";
+import submixAddtomix from "./definitions/submix-addtomix.json";
+import blurSuppress from "./definitions/blur-suppress.json";
+import blurWeave from "./definitions/blur-weave.json";
+import combineCross from "./definitions/combine-cross.json";
+import combineDiff from "./definitions/combine-diff.json";
+import combineInterleave from "./definitions/combine-interleave.json";
+import combineMax from "./definitions/combine-max.json";
+import combineMean from "./definitions/combine-mean.json";
+import combineSum from "./definitions/combine-sum.json";
+import focusAccu from "./definitions/focus-accu.json";
+import focusExag from "./definitions/focus-exag.json";
+import focusFocus from "./definitions/focus-focus.json";
+import focusFold from "./definitions/focus-fold.json";
+import focusFreeze from "./definitions/focus-freeze.json";
+import focusHold from "./definitions/focus-hold.json";
+import envelAttack from "./definitions/envel-attack.json";
+import envelCurtail from "./definitions/envel-curtail.json";
+import envelDovetail from "./definitions/envel-dovetail.json";
+import envelTremolo from "./definitions/envel-tremolo.json";
+import envelCyclic from "./definitions/envel-cyclic.json";
+import envelSwell from "./definitions/envel-swell.json";
+import envelPluck from "./definitions/envel-pluck.json";
+import envelWarp from "./definitions/envel-warp.json";
+import envelImpose from "./definitions/envel-impose.json";
+import envelReplace from "./definitions/envel-replace.json";
+import envelExtract from "./definitions/envel-extract.json";
+import envelCreate from "./definitions/envel-create.json";
+import envnuExpdecay from "./definitions/envnu-expdecay.json";
+import envnuPeakchop from "./definitions/envnu-peakchop.json";
+import flatten from "./definitions/flatten.json";
+import joinseq from "./definitions/sfedit-joinseq.json";
+import joindyn from "./definitions/sfedit-joindyn.json";
+import randchunks from "./definitions/sfedit-randchunks.json";
+import twixt from "./definitions/sfedit-twixt.json";
+import sphinx from "./definitions/sfedit-sphinx.json";
+import syllables from "./definitions/sfedit-syllables.json";
+import baktobak from "./definitions/extend-baktobak.json";
+import bounce from "./definitions/bounce.json";
+import freeze from "./definitions/extend-freeze.json";
+import iterate from "./definitions/extend-iterate.json";
+import loop from "./definitions/extend-loop.json";
 
 export const processCatalog = [
   speed,
@@ -38,6 +138,106 @@ export const processCatalog = [
   masks,
   space,
   revecho,
+  zcut,
+  zcuts,
+  excises,
+  noisecut,
+  radical,
+  convolve,
+  stack,
+  shudder,
+  scaledpan,
+  brassage,
+  sausage,
+  spaceform,
+  findpan,
+  reverb,
+  filterFixed,
+  filterLohi,
+  filterVariable,
+  filterSweeping,
+  filterPhasing,
+  filterIterated,
+  filterBank,
+  filterUserbank,
+  filterVaribank,
+  phasor,
+  blurAvrg,
+  blurBlur,
+  blurChorus,
+  blurDrunk,
+  blurNoise,
+  blurScatter,
+  blurSpread,
+  extendDrunk,
+  extendRepetitions,
+  extendScramble,
+  extendSequence,
+  extendZigzag,
+  hover,
+  hover2,
+  sfecho,
+  spectstr,
+  stretchSpectrum,
+  stretchTime,
+  submixBalance,
+  submixMerge,
+  submixMergemany,
+  submixCrossfade,
+  submixMix,
+  submixInterleave,
+  submixPan,
+  submixSpacewarp,
+  blurSuppress,
+  blurWeave,
+  blurShuffle,
+  iterline,
+  iterlinef,
+  submixInbetween,
+  submixInbetween2,
+  submixSync,
+  submixSyncattack,
+  submixTimewarp,
+  submixFaders,
+  submixAddtomix,
+  combineCross,
+  combineDiff,
+  combineInterleave,
+  combineMax,
+  combineMean,
+  combineSum,
+  focusAccu,
+  focusExag,
+  focusFocus,
+  focusFold,
+  focusFreeze,
+  focusHold,
+  envelAttack,
+  envelCurtail,
+  envelDovetail,
+  envelTremolo,
+  envelCyclic,
+  envelSwell,
+  envelPluck,
+  envelWarp,
+  envelImpose,
+  envelReplace,
+  envelExtract,
+  envelCreate,
+  envnuExpdecay,
+  envnuPeakchop,
+  flatten,
+  joinseq,
+  joindyn,
+  randchunks,
+  twixt,
+  sphinx,
+  syllables,
+  baktobak,
+  bounce,
+  freeze,
+  iterate,
+  loop,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 

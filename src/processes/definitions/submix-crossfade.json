@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-crossfade",
+  "title": "Crossfade Sounds",
+  "category": "edit-and-mix",
+  "summary": "Transition smoothly between two soundfiles.",
+  "description": "Blend two same-channel soundfiles with a linear crossfade.",
+  "useCases": ["Make transitions", "Join takes"],
+  "tags": ["mix", "crossfade", "fade"],
+  "identity": { "executable": "submix", "operation": "crossfade" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "CROSSFADE",
+    "helpCommand": ["submix", "crossfade"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "linear",
+      "cliMode": 1,
+      "title": "Linear crossfade",
+      "summary": "Crossfade with a linear curve.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "First sound fades into the second.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": 2,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-crossfade"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "crossfade" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

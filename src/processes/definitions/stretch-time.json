@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "stretch-time",
+  "title": "Spectral Time Stretch",
+  "category": "spectral",
+  "summary": "Change analysis-file duration without changing pitch.",
+  "description": "Stretch or compress a PVOC analysis file in time.",
+  "useCases": ["Lengthen a sound", "Create slow motion textures"],
+  "tags": ["stretch", "time", "analysis"],
+  "identity": { "executable": "stretch", "operation": "time" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cstretch.htm",
+    "anchor": "TIME",
+    "helpCommand": ["stretch", "time"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "render",
+      "cliMode": 1,
+      "title": "Stretch",
+      "summary": "Write a stretched analysis file.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis to stretch.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "factor",
+          "label": "Time multiplier",
+          "description": "Output duration multiplier.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.0001,
+          "max": 10000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-stretched"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "time" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "factor" }
+      ],
+      "constraints": []
+    }
+  ]
+}

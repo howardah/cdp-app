@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-spaceform",
+  "title": "Modify Spaceform",
+  "category": "time-domain",
+  "summary": "Generate a sinusoidal pan trajectory.",
+  "description": "Create breakpoint pan data for spatial movement.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["spaceform", "pan", "curve"],
+  "identity": {
+    "executable": "modify",
+    "operation": "spaceform"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "SPACEFORM",
+    "helpCommand": ["modify", "spaceform"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "curve",
+      "title": "Generate pan curve",
+      "summary": "Generate pan curve",
+      "inputs": [],
+      "parameters": [
+        {
+          "id": "cycleLength",
+          "label": "Cycle length",
+          "description": "One cycle duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "width",
+          "label": "Width",
+          "description": "Pan width.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "duration",
+          "label": "Duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "quantisation",
+          "label": "Quantisation",
+          "description": "Time step in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.01,
+          "min": 0.0001,
+          "max": 60,
+          "step": 0.01
+        },
+        {
+          "id": "phase",
+          "label": "Phase",
+          "description": "Starting phase in degrees.",
+          "required": true,
+          "advanced": false,
+          "unit": "degrees",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 360,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "text-data",
+        "extension": "txt",
+        "nameSuffix": "-spaceform"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "spaceform"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "cycleLength"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "width"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "duration"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "quantisation"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "phase"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

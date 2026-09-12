@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-excises",
+  "title": "SFEdit Excise Multiple",
+  "category": "edit-and-mix",
+  "summary": "Remove several regions from a soundfile.",
+  "description": "Close multiple marked gaps with optional splices.",
+  "useCases": ["Remove unwanted passages", "Tighten a recording"],
+  "tags": ["excise", "remove", "cuts", "edit"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "excises"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "EXCISES",
+    "helpCommand": ["sfedit", "excises"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Remove marked ranges",
+      "summary": "Remove marked ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to remove.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window in milliseconds.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excises"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excises"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "excisefile"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Remove marked ranges",
+      "summary": "Remove marked ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to remove.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window in milliseconds.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excises"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excises"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "excisefile"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "grouped-samples",
+      "cliMode": 3,
+      "title": "Remove marked ranges",
+      "summary": "Remove marked ranges",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to edit.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "excisefile",
+          "label": "Cuts data",
+          "description": "Increasing start/end pairs to remove.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice",
+          "description": "Splice window in milliseconds.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "option",
+            "flag": "-w",
+            "join": "concatenated"
+          },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-excises"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "excises"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "excisefile"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "spliceMs"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

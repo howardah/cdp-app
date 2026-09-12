@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-interleave",
+  "title": "Interleave Channels",
+  "category": "edit-and-mix",
+  "summary": "Combine mono files as channels of one output.",
+  "description": "Place each mono source into a separate channel of a multichannel soundfile.",
+  "useCases": ["Build multichannel material", "Assemble channel stems"],
+  "tags": ["mix", "channels", "interleave"],
+  "identity": { "executable": "submix", "operation": "interleave" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "INTERLEAVE",
+    "helpCommand": ["submix", "interleave"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "interleave",
+      "title": "Interleave",
+      "summary": "Combine mono sources into channels.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Mono soundfiles",
+          "description": "Sources become channels in order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-interleaved"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "interleave" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

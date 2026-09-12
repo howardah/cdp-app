@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "id": "focus-fold",
+  "title": "Fold Spectrum",
+  "category": "spectral",
+  "summary": "Fold spectral components into a chosen octave range.",
+  "description": "Octave-transpose spectral components into a specified frequency range.",
+  "useCases": ["Constrain spectral range", "Create octave textures"],
+  "tags": ["focus", "fold", "octave", "spectrum"],
+  "identity": { "executable": "focus", "operation": "fold" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cfocus.htm",
+    "anchor": "FOLD",
+    "helpCommand": ["focus", "fold"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "fold",
+      "title": "Fold",
+      "summary": "Fold components into a frequency range.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "lowFrequency",
+          "label": "Low frequency",
+          "description": "Lower bound of fold range in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 100,
+          "min": 0.001,
+          "step": 1
+        },
+        {
+          "id": "highFrequency",
+          "label": "High frequency",
+          "description": "Upper bound of fold range in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1000,
+          "min": 0.001,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-folded"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "fold" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "lowFrequency" },
+        { "kind": "parameter", "parameterId": "highFrequency" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "lowFrequency" },
+          "right": { "source": "parameter", "id": "highFrequency" },
+          "message": "Low frequency must be below high frequency."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-faders",
+  "title": "Apply Mix Faders",
+  "category": "edit-and-mix",
+  "summary": "Mix files through independent level contours.",
+  "description": "Apply fader instructions from a CDP mixfile to render a soundfile.",
+  "useCases": ["Render automated fades"],
+  "tags": ["mix", "faders", "levels"],
+  "identity": { "executable": "submix", "operation": "faders" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "FADERS",
+    "helpCommand": ["submix", "faders"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "faders",
+      "title": "Faders",
+      "summary": "Render fader contours.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile containing fader contours.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-faders"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "faders" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

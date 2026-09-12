@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-balance",
+  "title": "Balance Two Sounds",
+  "category": "edit-and-mix",
+  "summary": "Move the mix between two soundfiles.",
+  "description": "Mix two soundfiles while controlling the relative level of the first and second source.",
+  "useCases": ["Blend two takes", "Move between textures", "Create a controlled crossfade"],
+  "tags": ["balance", "mix", "blend", "crossfade", "level"],
+  "identity": { "executable": "submix", "operation": "balance" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "BALANCE",
+    "helpCommand": ["submix", "balance"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "balance",
+      "title": "Balance",
+      "summary": "Set the relative level of the two sounds.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "The first sound is scaled by Balance and the second by its inverse; channel counts may differ.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": 2,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "balance",
+          "label": "Balance",
+          "description": "Zero favors the second sound; one favors the first.",
+          "required": false,
+          "advanced": false,
+          "unit": "",
+          "cli": { "kind": "option", "flag": "-k", "join": "concatenated" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "start",
+          "label": "Start mix at",
+          "description": "Start mixing at this time in seconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-b", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "end",
+          "label": "End mix at",
+          "description": "Stop mixing at this time in seconds; zero uses the natural end.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-e", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-balanced"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "balance" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "balance" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "blur-drunk",
+  "title": "Spectral Drunken Walk",
+  "category": "spectral",
+  "summary": "Wander through analysis windows.",
+  "description": "Create changing spectral motion by taking a controlled random walk through analysis windows.",
+  "useCases": ["Animate a spectrum", "Create unstable textures"],
+  "tags": ["blur", "drunk", "random", "analysis"],
+  "identity": { "executable": "blur", "operation": "drunk" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cblur.htm",
+    "anchor": "DRUNK",
+    "helpCommand": ["blur", "drunk"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "walk",
+      "title": "Walk",
+      "summary": "Randomly walk through analysis windows.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis file.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "range",
+          "label": "Walk range",
+          "description": "Maximum random step in analysis windows.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 4,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "startTime",
+          "label": "Start time",
+          "description": "Time in the source at which to begin.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.01,
+          "step": 0.01
+        },
+        {
+          "id": "noZeroSteps",
+          "label": "Avoid repeated windows",
+          "description": "Do not allow zero-size steps.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-z" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spectral-walk"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "drunk" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "range" },
+        { "kind": "parameter", "parameterId": "startTime" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "noZeroSteps" }
+      ],
+      "constraints": []
+    }
+  ]
+}

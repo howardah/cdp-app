@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-bank",
+  "title": "Filter bank",
+  "category": "spectral",
+  "summary": "Apply bank filtering.",
+  "description": "Use the CDP bank filter to shape the frequency content.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["filter", "bank"],
+  "identity": {
+    "executable": "filter",
+    "operation": "bank"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "BANK",
+    "helpCommand": ["filter", "bank"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "bank",
+      "cliMode": 1,
+      "title": "bank",
+      "summary": "bank",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "q",
+          "label": "Q",
+          "description": "Filter tightness.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 9999,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "lowFrequency",
+          "label": "Low frequency",
+          "description": "Lower filter limit.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 100,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        },
+        {
+          "id": "highFrequency",
+          "label": "High frequency",
+          "description": "Upper filter limit.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 4000,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-bank"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "bank"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "q"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "lowFrequency"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "highFrequency"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

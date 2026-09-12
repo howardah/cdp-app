@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-sequence",
+  "title": "Sound Sequence",
+  "category": "time-domain",
+  "summary": "Build a transposed sequence from one sound.",
+  "description": "Play one source at event times and semitone transpositions listed in a sequence text file.",
+  "useCases": ["Create melodies from samples", "Build event sequences"],
+  "tags": ["sequence", "transpose", "events"],
+  "identity": { "executable": "extend", "operation": "sequence" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "SEQUENCE",
+    "helpCommand": ["extend", "sequence"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sequence",
+      "title": "Sequence",
+      "summary": "Use a sequence file to place transposed events.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source event sound.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "sequence",
+          "label": "Sequence file",
+          "description": "Text file containing output time, semitone, and level triples.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "attenuation",
+          "label": "Attenuation",
+          "description": "Overall source attenuation.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-sequence"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "sequence" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "sequence" },
+        { "kind": "parameter", "parameterId": "attenuation" }
+      ],
+      "constraints": []
+    }
+  ]
+}

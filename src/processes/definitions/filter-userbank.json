@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-userbank",
+  "title": "Filter userbank",
+  "category": "spectral",
+  "summary": "Apply userbank filtering.",
+  "description": "Use the CDP userbank filter to shape the frequency content.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["filter", "userbank"],
+  "identity": {
+    "executable": "filter",
+    "operation": "userbank"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "USERBANK",
+    "helpCommand": ["filter", "userbank"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "userbank",
+      "cliMode": 1,
+      "title": "userbank",
+      "summary": "userbank",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "data",
+          "label": "Filter data",
+          "description": "Filter pitches and amplitudes.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["text-data"]
+        },
+        {
+          "id": "q",
+          "label": "Q",
+          "description": "Filter tightness.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-userbank"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "userbank"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "data"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "q"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

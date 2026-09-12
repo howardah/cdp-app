@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-sync",
+  "title": "Synchronize Mix",
+  "category": "edit-and-mix",
+  "summary": "Align sounds in a mixfile to timing markers.",
+  "description": "Synchronize mix events using timing information in a mixfile.",
+  "useCases": ["Align a multitrack mix"],
+  "tags": ["mix", "sync", "timing"],
+  "identity": { "executable": "submix", "operation": "sync" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "SYNC",
+    "helpCommand": ["submix", "sync"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sync",
+      "title": "Synchronize",
+      "summary": "Synchronize mix events.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile containing synchronization data.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-synced"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "sync" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

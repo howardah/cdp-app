@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-max",
+  "title": "Spectral Maximum",
+  "category": "spectral",
+  "summary": "Keep the strongest value from compatible spectra.",
+  "description": "Compare spectral channels and windows and retain the maximum value.",
+  "useCases": ["Select strongest spectral features"],
+  "tags": ["combine", "maximum", "spectrum"],
+  "identity": { "executable": "combine", "operation": "max" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "MAX",
+    "helpCommand": ["combine", "max"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "maximum",
+      "title": "Maximum",
+      "summary": "Keep maximum spectral values.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Analysis files",
+          "description": "Two or more compatible PVOC analyses.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-maximum"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "max" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

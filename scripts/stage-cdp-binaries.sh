@@ -9,7 +9,7 @@ source_dir="${repo_root}/cdpr8/_cdp/_cdprogs"
 destination_dir="${repo_root}/src-tauri/binaries"
 target_suffix="-x86_64-apple-darwin"
 
-executables=(modify sfedit pvoc isolate sfprops)
+executables=(modify sfedit pvoc isolate sfprops blur bounce combine envel envnu extend filter flatten focus hover hover2 iterline iterlinef phasor reverb sfecho spectstr stretch submix)
 
 command -v file >/dev/null 2>&1 || {
   printf '%s\n' "stage-cdp-binaries: the 'file' command is required" >&2

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-merge",
+  "title": "Merge Two Sounds",
+  "category": "edit-and-mix",
+  "summary": "Mix two soundfiles with timing and level controls.",
+  "description": "Create a quick mix from two mono or stereo soundfiles, optionally delaying, trimming, or balancing the second source.",
+  "useCases": ["Layer sounds", "Add ambience", "Align a musical layer"],
+  "tags": ["mix", "merge", "layer", "stagger", "balance"],
+  "identity": { "executable": "submix", "operation": "merge" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "MERGE",
+    "helpCommand": ["submix", "merge"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "merge",
+      "title": "Merge",
+      "summary": "Mix two sounds at standard levels.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "The two mono or stereo files to mix.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": 2,
+          "ordered": true,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 2 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "stagger",
+          "label": "Stagger",
+          "description": "Delay the second sound in seconds.",
+          "required": false,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "skip",
+          "label": "Skip into second sound",
+          "description": "Start this many seconds into the second sound. Use with stagger.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-j", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "skew",
+          "label": "First sound level",
+          "description": "Multiplier for the first sound relative to the second.",
+          "required": false,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "option", "flag": "-k", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "start",
+          "label": "Start mix at",
+          "description": "Start mixing at this time in seconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-b", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "end",
+          "label": "End mix at",
+          "description": "Stop mixing at this time in seconds; zero uses the natural end.",
+          "required": false,
+          "advanced": true,
+          "unit": "s",
+          "cli": { "kind": "option", "flag": "-e", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-merged"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "merge" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "stagger" },
+        { "kind": "parameter", "parameterId": "skip" },
+        { "kind": "parameter", "parameterId": "skew" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" }
+      ],
+      "constraints": []
+    }
+  ]
+}

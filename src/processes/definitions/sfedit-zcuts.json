@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "id": "sfedit-zcuts",
+  "title": "SFEdit Zero-Crossing Cuts",
+  "category": "edit-and-mix",
+  "summary": "Extract several mono segments at zero crossings.",
+  "description": "Create numbered outputs for cleanly segmented mono material.",
+  "useCases": ["Extract samples", "Split a mono recording"],
+  "tags": ["zero-crossing", "cuts", "segments", "mono"],
+  "identity": {
+    "executable": "sfedit",
+    "operation": "zcuts"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroedit.htm",
+    "anchor": "ZCUTS",
+    "helpCommand": ["sfedit", "zcuts"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "seconds",
+      "cliMode": 1,
+      "title": "Time in seconds",
+      "summary": "Time in seconds",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 1,
+              "max": 1
+            }
+          ]
+        },
+        {
+          "id": "cuttimes",
+          "label": "Cuts data",
+          "description": "Start/end pairs for each segment.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-zcuts",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "zcuts"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "cuttimes"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "samples",
+      "cliMode": 2,
+      "title": "Sample count",
+      "summary": "Sample count",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            {
+              "kind": "channels",
+              "min": 1,
+              "max": 1
+            }
+          ]
+        },
+        {
+          "id": "cuttimes",
+          "label": "Cuts data",
+          "description": "Start/end pairs for each segment.",
+          "fileTypes": ["cuts-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-zcuts",
+        "discovery": {
+          "prefixStyle": "root-number",
+          "mayProduceRemnant": false
+        }
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "zcuts"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "cuttimes"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

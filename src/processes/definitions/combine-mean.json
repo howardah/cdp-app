@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-mean",
+  "title": "Spectral Mean",
+  "category": "spectral",
+  "summary": "Average two compatible spectra.",
+  "description": "Generate a mean spectrum from two PVOC analyses.",
+  "useCases": ["Blend spectral characteristics"],
+  "tags": ["combine", "mean", "average", "spectrum"],
+  "identity": { "executable": "combine", "operation": "mean" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "MEAN",
+    "helpCommand": ["combine", "mean"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "mean",
+      "cliMode": 1,
+      "title": "Mean",
+      "summary": "Average spectral amplitudes.",
+      "inputs": [
+        {
+          "id": "first",
+          "label": "First analysis",
+          "description": "First PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "second",
+          "label": "Second analysis",
+          "description": "Second PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "first" }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-mean"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "mean" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "first" },
+        { "kind": "input", "inputId": "second" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

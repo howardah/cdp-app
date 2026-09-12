@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "hover2",
+  "title": "Inverted Hover",
+  "category": "time-domain",
+  "summary": "Zigzag through a mono sound with inverted copies.",
+  "description": "Create symmetrical, zero-centred zigzag waveforms from a mono source.",
+  "useCases": ["Create phase-like textures", "Extend percussive sounds"],
+  "tags": ["hover", "inverted", "zigzag", "texture"],
+  "identity": { "executable": "hover2", "operation": "hover2" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "HOVER2",
+    "helpCommand": ["hover2", "hover2"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "hover",
+      "title": "Inverted hover",
+      "summary": "Read back and forth and output inverted copies.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source to read back and forth.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "frequency",
+          "label": "Read frequency",
+          "description": "Rate of forward/backward reading in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 4,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "location",
+          "label": "Source location",
+          "description": "Center position in the source in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "id": "frequencyRandom",
+          "label": "Frequency variation",
+          "description": "Random frequency variation from zero to one.",
+          "required": true,
+          "advanced": true,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "locationRandom",
+          "label": "Location variation",
+          "description": "Random location variation from zero to one.",
+          "required": true,
+          "advanced": true,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Total output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.01,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-hover2"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "hover2" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "location" },
+        { "kind": "parameter", "parameterId": "frequencyRandom" },
+        { "kind": "parameter", "parameterId": "locationRandom" },
+        { "kind": "parameter", "parameterId": "duration" }
+      ],
+      "constraints": []
+    }
+  ]
+}

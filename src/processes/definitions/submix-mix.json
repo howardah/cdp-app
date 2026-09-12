@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-mix",
+  "title": "Render Mixfile",
+  "category": "edit-and-mix",
+  "summary": "Render a CDP mixfile to a soundfile.",
+  "description": "Render sound placement and level instructions from a trusted mixfile.",
+  "useCases": ["Render an arranged mix"],
+  "tags": ["mix", "mixfile", "render"],
+  "identity": { "executable": "submix", "operation": "mix" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "MIX",
+    "helpCommand": ["submix", "mix"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "render",
+      "title": "Render",
+      "summary": "Render a mixfile.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile describing the arrangement.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-mix"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "mix" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

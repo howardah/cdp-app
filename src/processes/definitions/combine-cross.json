@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-cross",
+  "title": "Cross Spectra",
+  "category": "spectral",
+  "summary": "Replace one spectrum's amplitudes with another's.",
+  "description": "Combine compatible PVOC analyses by interpolating the second spectrum into the first.",
+  "useCases": ["Transfer spectral shape"],
+  "tags": ["combine", "cross", "spectrum"],
+  "identity": { "executable": "combine", "operation": "cross" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "CROSS",
+    "helpCommand": ["combine", "cross"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "cross",
+      "title": "Cross",
+      "summary": "Crossfade spectral amplitudes.",
+      "inputs": [
+        {
+          "id": "first",
+          "label": "First analysis",
+          "description": "Base PVOC analysis.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "second",
+          "label": "Second analysis",
+          "description": "Spectrum supplying replacement amplitudes.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "first" }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "interpolation",
+          "label": "Interpolation",
+          "description": "Degree of replacement by the second spectrum.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-i", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-cross"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "cross" },
+        { "kind": "input", "inputId": "first" },
+        { "kind": "input", "inputId": "second" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "interpolation" }
+      ],
+      "constraints": []
+    }
+  ]
+}

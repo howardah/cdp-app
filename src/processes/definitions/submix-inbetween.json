@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-inbetween",
+  "title": "Generate In-Betweens",
+  "category": "edit-and-mix",
+  "summary": "Create intermediate mixes between two sounds.",
+  "description": "Generate a sequence that moves from mostly the first sound to mostly the second.",
+  "useCases": ["Create gradual transitions", "Audition intermediate blends"],
+  "tags": ["mix", "inbetween", "intermediate", "transition"],
+  "identity": { "executable": "submix", "operation": "inbetween" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "INBETWEEN",
+    "helpCommand": ["submix", "inbetween"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "even-steps",
+      "cliMode": 1,
+      "title": "Even steps",
+      "summary": "Generate a chosen number of evenly spaced mixtures.",
+      "inputs": [
+        {
+          "id": "sourceA",
+          "label": "First soundfile",
+          "description": "Sound that dominates the start of the sequence.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "sourceB",
+          "label": "Second soundfile",
+          "description": "Sound that dominates the end of the sequence.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            { "kind": "sameSampleRate", "inputId": "sourceA" },
+            { "kind": "sameChannels", "inputId": "sourceA" }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "count",
+          "label": "Output count",
+          "description": "Number of intermediate mixtures to create.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 3,
+          "min": 1,
+          "max": 100,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-inbetween",
+        "discovery": { "prefixStyle": "root-number-padded", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "inbetween" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sourceA" },
+        { "kind": "input", "inputId": "sourceB" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "count" }
+      ],
+      "constraints": []
+    }
+  ]
+}

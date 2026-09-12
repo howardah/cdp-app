@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-cyclic",
+  "title": "Envel Cyclic",
+  "category": "time-domain",
+  "summary": "Create a repeated envelope.",
+  "description": "Generate repeated envelope cycles in a binary envelope file.",
+  "useCases": ["Shape a recording", "Sound design"],
+  "tags": ["cyclic", "envelope", "generate"],
+  "identity": {
+    "executable": "envel",
+    "operation": "cyclic"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "CYCLIC",
+    "helpCommand": ["envel", "cyclic"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "rising",
+      "cliMode": 1,
+      "title": "rising",
+      "summary": "rising",
+      "inputs": [],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Envelope window in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "totalDuration",
+          "label": "Total duration",
+          "description": "Total envelope duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "cellDuration",
+          "label": "Cell duration",
+          "description": "Cycle cell duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "phase",
+          "label": "Phase",
+          "description": "Starting phase.",
+          "required": true,
+          "advanced": false,
+          "unit": "degrees",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 360,
+          "step": 0.01
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Trough level.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "exponent",
+          "label": "Exponent",
+          "description": "Envelope exponent.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 100,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-cyclic"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cyclic"
+        },
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "windowMs"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "totalDuration"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "cellDuration"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "phase"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "trough"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "exponent"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

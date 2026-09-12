@@ -58,7 +58,10 @@
         "breakpoint",
         "cuts-data",
         "slice-data",
-        "text-data"
+        "text-data",
+        "binary-envelope",
+        "mixfile",
+        "domain-image"
       ]
     },
     "binding": {
@@ -89,7 +92,9 @@
       "additionalProperties": false,
       "required": ["kind"],
       "properties": {
-        "kind": { "enum": ["channels", "sameSampleRate", "sameChannels", "sameSampleFormat"] },
+        "kind": {
+          "enum": ["channels", "sameSampleRate", "sameChannels", "sameSampleFormat", "sameDuration"]
+        },
         "min": { "type": "number", "minimum": 0 },
         "max": { "type": "number", "minimum": 0 },
         "inputId": { "$ref": "#/definitions/id" }
@@ -237,6 +242,46 @@
               "properties": {
                 "prefixStyle": { "enum": ["root-number", "root-number-padded"] },
                 "mayProduceRemnant": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        {
+          "required": ["kind", "fileType", "extension", "nameSuffix", "discovery"],
+          "properties": {
+            "kind": { "const": "autoNamedGeneric" },
+            "fileType": { "$ref": "#/definitions/fileType" },
+            "extension": { "type": "string", "pattern": "^[a-z0-9]+$" },
+            "nameSuffix": { "type": "string", "pattern": "^[^\\u0000/\\\\]*$" },
+            "discovery": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["prefixStyle", "mayProduceRemnant"],
+              "properties": {
+                "prefixStyle": { "enum": ["root-number", "root-number-padded"] },
+                "mayProduceRemnant": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        {
+          "required": ["kind", "extension", "nameSuffix", "components"],
+          "properties": {
+            "kind": { "const": "composite" },
+            "extension": { "type": "string", "pattern": "^[a-z0-9]+$" },
+            "nameSuffix": { "type": "string", "pattern": "^[^\\u0000/\\\\]*$" },
+            "components": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["fileType", "extension", "nameSuffix"],
+                "properties": {
+                  "fileType": { "$ref": "#/definitions/fileType" },
+                  "extension": { "type": "string", "pattern": "^[a-z0-9]+$" },
+                  "nameSuffix": { "type": "string", "pattern": "^[^\\u0000/\\\\]*$" }
+                }
               }
             }
           }

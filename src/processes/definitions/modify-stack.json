@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-stack",
+  "title": "Modify Stack",
+  "category": "time-domain",
+  "summary": "Layer transposed copies into a texture.",
+  "description": "Create a stack of transposed copies of one source.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["stack", "transpose", "chord", "texture"],
+  "identity": {
+    "executable": "modify",
+    "operation": "stack"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "STACK",
+    "helpCommand": ["modify", "stack"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "stack",
+      "title": "Stack transposed copies",
+      "summary": "Stack transposed copies",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "transposition",
+          "label": "Transposition",
+          "description": "Semitone interval.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": -96,
+          "max": 96,
+          "step": 0.01
+        },
+        {
+          "id": "count",
+          "label": "Count",
+          "description": "Number of copies.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "integer",
+          "default": 4,
+          "min": 1,
+          "max": 100,
+          "step": 1
+        },
+        {
+          "id": "lean",
+          "label": "Lean",
+          "description": "Relative level of highest copy.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "attackOffset",
+          "label": "Attack offset",
+          "description": "Attack offset in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall output gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 10,
+          "step": 0.01
+        },
+        {
+          "id": "duration",
+          "label": "Duration",
+          "description": "Output duration proportion.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "showLevels",
+          "label": "Show levels",
+          "description": "Show the relative levels of the layers.",
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "required": false,
+          "advanced": true,
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "normalise",
+          "label": "Normalise output",
+          "description": "Normalise the output.",
+          "cli": { "kind": "booleanFlag", "flag": "-n" },
+          "required": false,
+          "advanced": true,
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-stack"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "stack"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "transposition"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "count"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "lean"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "attackOffset"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "gain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "duration"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "showLevels"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "normalise"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

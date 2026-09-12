@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "iterlinef",
+  "title": "Multi-Source Iteration Line",
+  "category": "time-domain",
+  "summary": "Repeat a set of 25 transposed sounds along a line.",
+  "description": "Iterate an ordered set of 25 one-semitone-spaced source files along time and transposition instructions.",
+  "useCases": ["Create rich pitched repeats"],
+  "tags": ["iterate", "transpose", "source-set"],
+  "identity": { "executable": "iterlinef", "operation": "iterlinef" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "ITERLINEF",
+    "helpCommand": ["iterlinef", "iterlinef"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "interpolate",
+      "cliMode": 1,
+      "title": "Interpolate",
+      "summary": "Interpolate between transpositions in the source set.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "25 soundfiles",
+          "description": "Exactly 25 ascending one-semitone sources of approximately equal duration.",
+          "fileTypes": ["soundfile"],
+          "minItems": 25,
+          "maxItems": 25,
+          "ordered": true,
+          "constraints": []
+        },
+        {
+          "id": "transposition",
+          "label": "Transposition line",
+          "description": "Text file of time and semitone pairs.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.01,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-iterlinef"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "iterlinef" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "transposition" },
+        { "kind": "parameter", "parameterId": "duration" }
+      ],
+      "constraints": []
+    }
+  ]
+}

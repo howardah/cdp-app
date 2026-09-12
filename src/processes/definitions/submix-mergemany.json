@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-mergemany",
+  "title": "Merge Many Sounds",
+  "category": "edit-and-mix",
+  "summary": "Combine several soundfiles into one mix.",
+  "description": "Quickly mix two or more same-channel soundfiles with clipping-aware level adjustment.",
+  "useCases": ["Layer recordings", "Build textures"],
+  "tags": ["mix", "merge", "many"],
+  "identity": { "executable": "submix", "operation": "mergemany" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "MERGEMANY",
+    "helpCommand": ["submix", "mergemany"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "merge",
+      "title": "Merge",
+      "summary": "Mix several sources.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Two or more same-channel soundfiles.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-merged"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "mergemany" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

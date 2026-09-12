@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "id": "modify-sausage",
+  "title": "Modify Sausage",
+  "category": "time-domain",
+  "summary": "Build a dense granular texture.",
+  "description": "Granulate one or more sources into a transformed texture.",
+  "useCases": ["Creative sound design", "Process a recording"],
+  "tags": ["sausage", "granular", "texture"],
+  "identity": {
+    "executable": "modify",
+    "operation": "sausage"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromody.htm",
+    "anchor": "SAUSAGE",
+    "helpCommand": ["modify", "sausage"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "sausage",
+      "title": "Granulate sources",
+      "summary": "Granulate sources",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Sources to granulate.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "velocity",
+          "label": "Velocity",
+          "description": "Relative source advance.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 100,
+          "step": 0.01
+        },
+        {
+          "id": "density",
+          "label": "Density",
+          "description": "Grain overlap.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "grainSize",
+          "label": "Grain size",
+          "description": "Grain size in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 50,
+          "min": 1,
+          "max": 10000,
+          "step": 0.01
+        },
+        {
+          "id": "pitchshift",
+          "label": "Pitch shift",
+          "description": "Semitone pitch shift.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": -96,
+          "max": 96,
+          "step": 0.01
+        },
+        {
+          "id": "amp",
+          "label": "Amplitude",
+          "description": "Grain gain.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "space",
+          "label": "Space",
+          "description": "Stereo position.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "bsplice",
+          "label": "Start splice",
+          "description": "Grain start splice.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 5,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        },
+        {
+          "id": "esplice",
+          "label": "End splice",
+          "description": "Grain end splice.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 5,
+          "min": 0,
+          "max": 500,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-sausage"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "sausage"
+        },
+        {
+          "kind": "input",
+          "inputId": "sources"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "velocity"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "density"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "grainSize"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "pitchshift"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "amp"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "space"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "bsplice"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "esplice"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

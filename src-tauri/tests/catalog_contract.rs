@@ -4,6 +4,7 @@
 //! they catch schema/serde drift before a manifest can reach the navigator.
 
 use composers_desktop_application::catalog::load_catalog;
+use composers_desktop_application::runtime::file_type_for_path;
 use composers_desktop_application::runtime::{compile_request, ParameterValue, RunProcessRequest};
 use std::collections::HashMap;
 use std::ffi::OsString;
@@ -25,6 +26,106 @@ const MANIFESTS: &[&str] = &[
     include_str!("../../src/processes/definitions/sfedit-masks.json"),
     include_str!("../../src/processes/definitions/modify-space.json"),
     include_str!("../../src/processes/definitions/modify-revecho.json"),
+    include_str!("../../src/processes/definitions/sfedit-zcut.json"),
+    include_str!("../../src/processes/definitions/sfedit-zcuts.json"),
+    include_str!("../../src/processes/definitions/sfedit-excises.json"),
+    include_str!("../../src/processes/definitions/sfedit-noisecut.json"),
+    include_str!("../../src/processes/definitions/modify-radical.json"),
+    include_str!("../../src/processes/definitions/modify-convolve.json"),
+    include_str!("../../src/processes/definitions/modify-stack.json"),
+    include_str!("../../src/processes/definitions/modify-shudder.json"),
+    include_str!("../../src/processes/definitions/modify-scaledpan.json"),
+    include_str!("../../src/processes/definitions/modify-brassage.json"),
+    include_str!("../../src/processes/definitions/modify-sausage.json"),
+    include_str!("../../src/processes/definitions/modify-spaceform.json"),
+    include_str!("../../src/processes/definitions/modify-findpan.json"),
+    include_str!("../../src/processes/definitions/reverb.json"),
+    include_str!("../../src/processes/definitions/filter-fixed.json"),
+    include_str!("../../src/processes/definitions/filter-lohi.json"),
+    include_str!("../../src/processes/definitions/filter-variable.json"),
+    include_str!("../../src/processes/definitions/filter-sweeping.json"),
+    include_str!("../../src/processes/definitions/filter-phasing.json"),
+    include_str!("../../src/processes/definitions/filter-iterated.json"),
+    include_str!("../../src/processes/definitions/filter-bank.json"),
+    include_str!("../../src/processes/definitions/filter-userbank.json"),
+    include_str!("../../src/processes/definitions/filter-varibank.json"),
+    include_str!("../../src/processes/definitions/phasor.json"),
+    include_str!("../../src/processes/definitions/blur-avrg.json"),
+    include_str!("../../src/processes/definitions/blur-blur.json"),
+    include_str!("../../src/processes/definitions/blur-chorus.json"),
+    include_str!("../../src/processes/definitions/blur-drunk.json"),
+    include_str!("../../src/processes/definitions/blur-noise.json"),
+    include_str!("../../src/processes/definitions/blur-scatter.json"),
+    include_str!("../../src/processes/definitions/blur-spread.json"),
+    include_str!("../../src/processes/definitions/extend-drunk.json"),
+    include_str!("../../src/processes/definitions/extend-repetitions.json"),
+    include_str!("../../src/processes/definitions/extend-scramble.json"),
+    include_str!("../../src/processes/definitions/extend-sequence.json"),
+    include_str!("../../src/processes/definitions/extend-zigzag.json"),
+    include_str!("../../src/processes/definitions/hover.json"),
+    include_str!("../../src/processes/definitions/hover2.json"),
+    include_str!("../../src/processes/definitions/sfecho-echo.json"),
+    include_str!("../../src/processes/definitions/spectstr.json"),
+    include_str!("../../src/processes/definitions/stretch-spectrum.json"),
+    include_str!("../../src/processes/definitions/stretch-time.json"),
+    include_str!("../../src/processes/definitions/submix-balance.json"),
+    include_str!("../../src/processes/definitions/submix-merge.json"),
+    include_str!("../../src/processes/definitions/submix-mergemany.json"),
+    include_str!("../../src/processes/definitions/submix-crossfade.json"),
+    include_str!("../../src/processes/definitions/submix-mix.json"),
+    include_str!("../../src/processes/definitions/submix-interleave.json"),
+    include_str!("../../src/processes/definitions/submix-pan.json"),
+    include_str!("../../src/processes/definitions/submix-spacewarp.json"),
+    include_str!("../../src/processes/definitions/blur-suppress.json"),
+    include_str!("../../src/processes/definitions/blur-weave.json"),
+    include_str!("../../src/processes/definitions/combine-cross.json"),
+    include_str!("../../src/processes/definitions/combine-diff.json"),
+    include_str!("../../src/processes/definitions/combine-interleave.json"),
+    include_str!("../../src/processes/definitions/combine-max.json"),
+    include_str!("../../src/processes/definitions/combine-mean.json"),
+    include_str!("../../src/processes/definitions/combine-sum.json"),
+    include_str!("../../src/processes/definitions/focus-accu.json"),
+    include_str!("../../src/processes/definitions/focus-exag.json"),
+    include_str!("../../src/processes/definitions/focus-focus.json"),
+    include_str!("../../src/processes/definitions/focus-fold.json"),
+    include_str!("../../src/processes/definitions/focus-freeze.json"),
+    include_str!("../../src/processes/definitions/focus-hold.json"),
+    include_str!("../../src/processes/definitions/blur-shuffle.json"),
+    include_str!("../../src/processes/definitions/iterline.json"),
+    include_str!("../../src/processes/definitions/iterlinef.json"),
+    include_str!("../../src/processes/definitions/submix-inbetween.json"),
+    include_str!("../../src/processes/definitions/submix-inbetween2.json"),
+    include_str!("../../src/processes/definitions/submix-sync.json"),
+    include_str!("../../src/processes/definitions/submix-syncattack.json"),
+    include_str!("../../src/processes/definitions/submix-timewarp.json"),
+    include_str!("../../src/processes/definitions/submix-faders.json"),
+    include_str!("../../src/processes/definitions/submix-addtomix.json"),
+    include_str!("../../src/processes/definitions/envel-attack.json"),
+    include_str!("../../src/processes/definitions/envel-curtail.json"),
+    include_str!("../../src/processes/definitions/envel-dovetail.json"),
+    include_str!("../../src/processes/definitions/envel-tremolo.json"),
+    include_str!("../../src/processes/definitions/envel-cyclic.json"),
+    include_str!("../../src/processes/definitions/envel-swell.json"),
+    include_str!("../../src/processes/definitions/envel-pluck.json"),
+    include_str!("../../src/processes/definitions/envel-warp.json"),
+    include_str!("../../src/processes/definitions/envel-impose.json"),
+    include_str!("../../src/processes/definitions/envel-replace.json"),
+    include_str!("../../src/processes/definitions/envel-extract.json"),
+    include_str!("../../src/processes/definitions/envel-create.json"),
+    include_str!("../../src/processes/definitions/envnu-expdecay.json"),
+    include_str!("../../src/processes/definitions/envnu-peakchop.json"),
+    include_str!("../../src/processes/definitions/flatten.json"),
+    include_str!("../../src/processes/definitions/sfedit-joinseq.json"),
+    include_str!("../../src/processes/definitions/sfedit-joindyn.json"),
+    include_str!("../../src/processes/definitions/sfedit-randchunks.json"),
+    include_str!("../../src/processes/definitions/sfedit-twixt.json"),
+    include_str!("../../src/processes/definitions/sfedit-sphinx.json"),
+    include_str!("../../src/processes/definitions/sfedit-syllables.json"),
+    include_str!("../../src/processes/definitions/extend-baktobak.json"),
+    include_str!("../../src/processes/definitions/bounce.json"),
+    include_str!("../../src/processes/definitions/extend-freeze.json"),
+    include_str!("../../src/processes/definitions/extend-iterate.json"),
+    include_str!("../../src/processes/definitions/extend-loop.json"),
 ];
 
 #[test]
@@ -33,6 +134,22 @@ fn every_shipped_manifest_deserializes_and_has_modes() {
         load_catalog(MANIFESTS).expect("all shipped manifests must be valid Rust catalog data");
     assert_eq!(catalog.len(), MANIFESTS.len());
     assert!(catalog.iter().all(|process| !process.modes.is_empty()));
+}
+
+#[test]
+fn envelope_extension_and_playability_classification_are_typed() {
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("result.evl")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryEnvelope)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("result.env")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryEnvelope)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("result.mix")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::Mixfile)
+    );
 }
 
 #[test]
@@ -287,6 +404,232 @@ fn new_processes_compile_exact_release_7_1_argument_vectors() {
             OsString::from(output("masked.wav")),
             OsString::from("mask.txt"),
             OsString::from("-w15"),
+        ]
+    );
+}
+
+#[test]
+fn submix_wave_three_processes_compile_exact_argument_vectors() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let output = |name: &str| directory.path().join(name).to_string_lossy().into_owned();
+
+    let merge = RunProcessRequest {
+        process_id: "submix-merge".into(),
+        mode_id: "merge".into(),
+        inputs: HashMap::from([("sources".into(), vec!["one.wav".into(), "two.wav".into()])]),
+        parameters: HashMap::from([
+            ("stagger".into(), ParameterValue::Number { value: 0.5 }),
+            ("skip".into(), ParameterValue::Number { value: 0.25 }),
+            ("skew".into(), ParameterValue::Number { value: 1.2 }),
+            ("start".into(), ParameterValue::Number { value: 0.0 }),
+            ("end".into(), ParameterValue::Number { value: 0.0 }),
+        ]),
+        output_path: Some(output("merge.wav")),
+    };
+    let (command, _) = compile_request(&catalog, &merge, "submix".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("merge"),
+            OsString::from("one.wav"),
+            OsString::from("two.wav"),
+            OsString::from(output("merge.wav")),
+            OsString::from("-s0.5"),
+            OsString::from("-j0.25"),
+            OsString::from("-k1.2"),
+            OsString::from("-b0"),
+            OsString::from("-e0"),
+        ]
+    );
+
+    let balance = RunProcessRequest {
+        process_id: "submix-balance".into(),
+        mode_id: "balance".into(),
+        inputs: HashMap::from([("sources".into(), vec!["one.wav".into(), "two.wav".into()])]),
+        parameters: HashMap::from([("balance".into(), ParameterValue::Number { value: 0.75 })]),
+        output_path: Some(output("balance.wav")),
+    };
+    let (command, _) = compile_request(&catalog, &balance, "submix".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("balance"),
+            OsString::from("one.wav"),
+            OsString::from("two.wav"),
+            OsString::from(output("balance.wav")),
+            OsString::from("-k0.75"),
+        ]
+    );
+}
+
+#[test]
+fn sfecho_echo_compiles_exact_argument_vector() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let output = directory.path().join("echo.wav");
+    let request = RunProcessRequest {
+        process_id: "sfecho-echo".into(),
+        mode_id: "echo".into(),
+        inputs: HashMap::from([("source".into(), vec!["source.wav".into()])]),
+        parameters: HashMap::from([
+            ("delay".into(), ParameterValue::Number { value: 6.0 }),
+            ("attenuation".into(), ParameterValue::Number { value: 0.6 }),
+            ("duration".into(), ParameterValue::Number { value: 12.0 }),
+            ("randomize".into(), ParameterValue::Number { value: 0.0 }),
+            ("cutoff".into(), ParameterValue::Number { value: -96.0 }),
+        ]),
+        output_path: Some(output.to_string_lossy().into_owned()),
+    };
+    let (command, _) = compile_request(&catalog, &request, "sfecho".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("echo"),
+            OsString::from("source.wav"),
+            output.into_os_string(),
+            OsString::from("6"),
+            OsString::from("0.6"),
+            OsString::from("12"),
+            OsString::from("-r0"),
+            OsString::from("-c-96"),
+        ]
+    );
+}
+
+#[test]
+fn extend_wave_three_processes_compile_exact_argument_vectors() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let repetitions_output = directory.path().join("repetitions.wav");
+    let repetitions = RunProcessRequest {
+        process_id: "extend-repetitions".into(),
+        mode_id: "repeat".into(),
+        inputs: HashMap::from([
+            ("source".into(), vec!["source.wav".into()]),
+            ("times".into(), vec!["times.txt".into()]),
+        ]),
+        parameters: HashMap::from([("level".into(), ParameterValue::Number { value: 0.75 })]),
+        output_path: Some(repetitions_output.to_string_lossy().into_owned()),
+    };
+    let (command, _) = compile_request(&catalog, &repetitions, "extend".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("repetitions"),
+            OsString::from("source.wav"),
+            repetitions_output.into_os_string(),
+            OsString::from("times.txt"),
+            OsString::from("0.75"),
+        ]
+    );
+
+    let zigzag_output = directory.path().join("zigzag.wav");
+    let zigzag = RunProcessRequest {
+        process_id: "extend-zigzag".into(),
+        mode_id: "random".into(),
+        inputs: HashMap::from([("source".into(), vec!["source.wav".into()])]),
+        parameters: HashMap::from([
+            ("start".into(), ParameterValue::Number { value: 0.0 }),
+            ("end".into(), ParameterValue::Number { value: 2.0 }),
+            ("duration".into(), ParameterValue::Number { value: 10.0 }),
+            ("minimumZig".into(), ParameterValue::Number { value: 0.1 }),
+            ("spliceMs".into(), ParameterValue::Number { value: 25.0 }),
+            ("maximumZig".into(), ParameterValue::Number { value: 1.0 }),
+            ("seed".into(), ParameterValue::Number { value: 7.0 }),
+        ]),
+        output_path: Some(zigzag_output.to_string_lossy().into_owned()),
+    };
+    let (command, _) = compile_request(&catalog, &zigzag, "extend".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("zigzag"),
+            OsString::from("1"),
+            OsString::from("source.wav"),
+            zigzag_output.into_os_string(),
+            OsString::from("0"),
+            OsString::from("2"),
+            OsString::from("10"),
+            OsString::from("0.1"),
+            OsString::from("-s25"),
+            OsString::from("-m1"),
+            OsString::from("-r7"),
+        ]
+    );
+}
+
+#[test]
+fn corrected_generic_processes_compile_and_resolve_output_roots() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+
+    let randchunks = RunProcessRequest {
+        process_id: "sfedit-randchunks".into(),
+        mode_id: "chunks".into(),
+        inputs: HashMap::from([(
+            "source".into(),
+            vec![directory
+                .path()
+                .join("source.wav")
+                .to_string_lossy()
+                .into_owned()],
+        )]),
+        parameters: HashMap::from([
+            ("count".into(), ParameterValue::Number { value: 2.0 }),
+            (
+                "minimumLength".into(),
+                ParameterValue::Number { value: 0.05 },
+            ),
+            (
+                "maximumLength".into(),
+                ParameterValue::Number { value: 1.0 },
+            ),
+            (
+                "evenlyDistributed".into(),
+                ParameterValue::Flag { value: false },
+            ),
+            (
+                "startAtBeginning".into(),
+                ParameterValue::Flag { value: false },
+            ),
+        ]),
+        output_path: None,
+    };
+    let (command, _) = compile_request(&catalog, &randchunks, "sfedit".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("randchunks"),
+            directory.path().join("source.wav").into_os_string(),
+            OsString::from("2"),
+            OsString::from("0.05"),
+            OsString::from("-m1"),
+        ]
+    );
+    assert_eq!(command.output, Some(directory.path().join("sourc.wav")));
+
+    let output = directory.path().join("blend.wav");
+    let inbetween = RunProcessRequest {
+        process_id: "submix-inbetween".into(),
+        mode_id: "even-steps".into(),
+        inputs: HashMap::from([
+            ("sourceA".into(), vec!["first.wav".into()]),
+            ("sourceB".into(), vec!["second.wav".into()]),
+        ]),
+        parameters: HashMap::from([("count".into(), ParameterValue::Number { value: 3.0 })]),
+        output_path: Some(output.to_string_lossy().into_owned()),
+    };
+    let (command, _) = compile_request(&catalog, &inbetween, "submix".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("inbetween"),
+            OsString::from("1"),
+            OsString::from("first.wav"),
+            OsString::from("second.wav"),
+            output.into_os_string(),
+            OsString::from("3"),
         ]
     );
 }

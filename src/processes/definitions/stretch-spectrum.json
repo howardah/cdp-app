@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "stretch-spectrum",
+  "title": "Stretch Spectrum",
+  "category": "spectral",
+  "summary": "Expand or compress spectral frequencies.",
+  "description": "Stretch frequency components above or below a chosen frequency in a PVOC analysis file.",
+  "useCases": ["Shift spectral brightness", "Create frequency expansion"],
+  "tags": ["spectrum", "frequency", "stretch"],
+  "identity": { "executable": "stretch", "operation": "spectrum" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cstretch.htm",
+    "anchor": "SPECTRUM",
+    "helpCommand": ["stretch", "spectrum"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "above",
+      "cliMode": 1,
+      "title": "Stretch above frequency",
+      "summary": "Stretch components above a frequency divide.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Analysis file",
+          "description": "PVOC analysis to process.",
+          "fileTypes": ["analysis-ana"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "frequency",
+          "label": "Frequency divide",
+          "description": "Frequency in Hz above which to stretch.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1000,
+          "min": 0.001,
+          "step": 1
+        },
+        {
+          "id": "maximumStretch",
+          "label": "Maximum stretch",
+          "description": "Frequency ratio at the top of the spectrum.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.001,
+          "step": 0.01
+        },
+        {
+          "id": "exponent",
+          "label": "Exponent",
+          "description": "Shape of the frequency stretch curve.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.01
+        },
+        {
+          "id": "depth",
+          "label": "Depth",
+          "description": "Strength of the stretch from none to full.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-d", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spectrum-stretched"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "spectrum" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "maximumStretch" },
+        { "kind": "parameter", "parameterId": "exponent" },
+        { "kind": "parameter", "parameterId": "depth" }
+      ],
+      "constraints": []
+    }
+  ]
+}

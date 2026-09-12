@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "id": "reverb",
+  "title": "Reverb",
+  "category": "edit-and-mix",
+  "summary": "Add room-like reverberation.",
+  "description": "Apply dense reverb with dry/wet balance and a controlled tail.",
+  "useCases": ["Shape a recording", "Creative sound design"],
+  "tags": ["reverb", "room", "space"],
+  "identity": {
+    "executable": "reverb",
+    "operation": "reverb"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cxreverb.htm",
+    "anchor": "REVERB",
+    "helpCommand": ["reverb", "reverb"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "reverb",
+      "title": "reverb",
+      "summary": "reverb",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "reverbGain",
+          "label": "Reverb gain",
+          "description": "Dense reverb level.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "mix",
+          "label": "Mix",
+          "description": "Dry/wet balance.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "reverbTime",
+          "label": "Reverb time",
+          "description": "Decay time in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        },
+        {
+          "id": "absorption",
+          "label": "Absorption",
+          "description": "High-frequency damping.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "lowpass",
+          "label": "Low-pass",
+          "description": "Input low-pass cutoff in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 24000,
+          "step": 0.01
+        },
+        {
+          "id": "trailerTime",
+          "label": "Trailer",
+          "description": "Added tail in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 3600,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-reverb"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "reverb"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "reverbGain"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "mix"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "reverbTime"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "absorption"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "lowpass"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "trailerTime"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}
