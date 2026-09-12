@@ -91,7 +91,7 @@ const errorId = `error-parameter-${props.parameter.id}`;
         @input="emit('setNumber', parameter, ($event.target as HTMLInputElement).value)"
         @blur="emit('touched')"
       />
-      <div v-else class="file-picker">
+      <div v-else class="flex gap-2 [&>.secondary-button]:shrink-0 [&>input]:flex-1">
         <input :id="fieldId" :value="value.path" readonly />
         <button type="button" class="secondary-button" @click="emit('chooseBreakpoint', parameter)">
           Choose…
@@ -114,3 +114,27 @@ const errorId = `error-parameter-${props.parameter.id}`;
     <p v-if="issue" :id="errorId" class="field-error">{{ issue }}</p>
   </div>
 </template>
+
+<style scoped>
+@reference "../../styles.css";
+
+.parameter-toggle {
+  @apply mb-2 flex gap-1.5;
+
+  & button {
+    @apply rounded-sm border border-muted bg-transparent px-2.5 py-1.5 text-xs text-muted;
+  }
+
+  & button.selected {
+    @apply border-primary bg-elevated text-primary;
+  }
+}
+
+.toggle {
+  @apply flex! items-center gap-2;
+
+  & input {
+    @apply accent-primary;
+  }
+}
+</style>

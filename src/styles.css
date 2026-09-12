@@ -2,8 +2,6 @@
 @import "@nuxt/ui";
 @import "./styles/theme.css";
 @import "./styles/base.css";
-@import "./styles/app-shell.css";
 @import "./styles/recipes.css";
 @import "./styles/navigator.css";
-@import "./styles/queue.css";
 @import "./styles/responsive.css";

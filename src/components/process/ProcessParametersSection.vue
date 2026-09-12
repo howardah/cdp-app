@@ -57,3 +57,20 @@ defineEmits<{
     </details>
   </section>
 </template>
+
+<style scoped>
+@reference "../../styles.css";
+
+.advanced-parameters {
+  @apply mt-4 border-t border-muted pt-3.5;
+
+  & summary {
+    @apply cursor-pointer text-sm text-primary;
+  }
+
+  & summary small {
+    @apply ml-1.5 text-[11px] text-dimmed;
+    font-family: "IBM Plex Mono", monospace;
+  }
+}
+</style>

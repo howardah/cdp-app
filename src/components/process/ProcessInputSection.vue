@@ -31,7 +31,11 @@ const emit = defineEmits<{
       <label
         >{{ input.label }} <small>{{ input.fileTypes.join(" · ") }}</small></label
       >
-      <div v-for="(_, index) in inputs[input.id]" :key="`${input.id}-${index}`" class="file-picker">
+      <div
+        v-for="(_, index) in inputs[input.id]"
+        :key="`${input.id}-${index}`"
+        class="flex gap-2 [&>.secondary-button]:shrink-0 [&>input]:flex-1"
+      >
         <input
           :id="`input-${input.id}-${index}`"
           :value="inputs[input.id][index]"
@@ -107,3 +111,26 @@ const emit = defineEmits<{
     </div>
   </section>
 </template>
+
+<style scoped>
+@reference "../../styles.css";
+
+.inspection-meta {
+  @apply mt-2 flex flex-wrap gap-2 text-[11px] text-dimmed;
+  font-family: "IBM Plex Mono", monospace;
+
+  & span + span::before {
+    @apply mr-2 text-muted;
+    content: "·";
+  }
+
+  & strong {
+    @apply basis-full text-xs text-error;
+    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  }
+
+  &.mono-warning {
+    @apply text-error;
+  }
+}
+</style>

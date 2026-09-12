@@ -13,7 +13,7 @@ defineEmits<{ "update:outputPath": [value: string]; chooseOutput: []; touched: [
     </div>
     <div class="field">
       <label for="output-path">Output path</label>
-      <div class="file-picker">
+      <div class="flex gap-2 [&>.secondary-button]:shrink-0 [&>input]:flex-1">
         <input
           id="output-path"
           :value="outputPath"

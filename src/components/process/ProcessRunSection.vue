@@ -19,3 +19,12 @@ defineEmits<{ togglePreview: [] }>();
     }}</pre>
   </section>
 </template>
+
+<style scoped>
+@reference "../../styles.css";
+
+.command-preview {
+  @apply mt-3 overflow-auto border border-muted bg-inverted p-3.5 text-xs whitespace-pre-wrap text-inverted;
+  font-family: "IBM Plex Mono", monospace;
+}
+</style>

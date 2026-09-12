@@ -31,3 +31,36 @@ defineEmits<{ preserveMode: [modeId: string] }>();
     </div>
   </section>
 </template>
+
+<style scoped>
+@reference "../../styles.css";
+
+.mode-options {
+  @apply grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-2;
+}
+
+.mode-option {
+  @apply flex cursor-pointer items-start gap-2.5 rounded-sm border border-muted p-3 text-muted;
+
+  &.selected {
+    @apply border-primary bg-elevated text-default;
+  }
+
+  & input {
+    @apply mt-1 accent-primary;
+  }
+
+  & strong,
+  & small {
+    @apply block;
+  }
+
+  & strong {
+    @apply text-sm;
+  }
+
+  & small {
+    @apply mt-1 text-xs leading-snug text-muted;
+  }
+}
+</style>

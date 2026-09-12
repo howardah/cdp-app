@@ -433,3 +433,86 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
     </button>
   </main>
 </template>
+
+<style scoped>
+@reference "../styles.css";
+
+.process-shell {
+  @apply mx-auto min-h-screen max-w-[820px] px-8 pt-7.5 pb-24;
+}
+
+.process-header {
+  @apply grid grid-cols-[auto_1fr_auto] items-start gap-6 border-b border-muted pb-6;
+
+  & h1 {
+    @apply my-1.5 text-[28px] tracking-tight;
+
+    & span {
+      @apply text-lg font-normal text-muted;
+    }
+  }
+
+  & p:last-child {
+    @apply m-0 text-sm text-muted;
+  }
+
+  & .eyebrow {
+    @apply m-0;
+  }
+}
+
+.back-button {
+  @apply border-0 bg-transparent py-1 text-sm text-primary;
+}
+
+.flow-rail {
+  @apply m-0 flex list-none justify-between border-b border-muted py-6 text-[10px] tracking-widest text-dimmed uppercase;
+  font-family: "IBM Plex Mono", monospace;
+
+  & li {
+    @apply relative;
+  }
+
+  & li.active,
+  & li.valid {
+    @apply text-primary;
+  }
+
+  & li.active::after,
+  & li.valid::after {
+    @apply absolute right-0 -bottom-[25px] left-0 h-0.5 bg-primary;
+    content: "";
+  }
+}
+
+:deep(.form-section) {
+  @apply border-b border-muted py-7;
+}
+
+:deep(.section-heading) {
+  @apply mb-5 flex items-start gap-4;
+
+  & h2 {
+    @apply mb-1 text-xl;
+  }
+
+  & p {
+    @apply m-0 text-sm text-muted;
+  }
+}
+
+:deep(.step-index) {
+  @apply pt-1 text-[11px] text-primary;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+@media (max-width: 700px) {
+  .process-shell {
+    @apply px-4.5 pt-5 pb-25;
+  }
+
+  .process-header {
+    @apply grid-cols-1 gap-2.5;
+  }
+}
+</style>
