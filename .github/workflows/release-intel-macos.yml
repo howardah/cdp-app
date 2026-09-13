@@ -39,7 +39,7 @@ jobs:
 
       - uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2.1.0
         with:
-          bun-version: 1.2.13
+          bun-version: 1.4.2
 
       - id: version
         name: Confirm a consistent version bump
@@ -122,7 +122,7 @@ jobs:
 
       - uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2.1.0
         with:
-          bun-version: 1.2.13
+          bun-version: 1.4.2
 
       - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # v1
         with:
