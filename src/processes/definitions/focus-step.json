@@ -5,12 +5,8 @@
   "category": "spectral",
   "summary": "Focus Step",
   "description": "Focus Step. inanalysisfile outanalysisfile timestep",
-  "useCases": [
-    "Process audio with CDP Release 8"
-  ],
-  "tags": [
-    "focus"
-  ],
+  "useCases": ["Process audio with CDP Release 8"],
+  "tags": ["focus"],
   "identity": {
     "executable": "focus",
     "operation": "step"
@@ -18,10 +14,7 @@
   "documentation": {
     "localPath": "cdpr8/docs/html/cfocus.htm",
     "anchor": "STEP",
-    "helpCommand": [
-      "focus",
-      "step"
-    ],
+    "helpCommand": ["focus", "step"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
@@ -34,9 +27,7 @@
           "id": "inanalysisfile",
           "label": "inanalysisfile",
           "description": "inanalysisfile input documented by CDP.",
-          "fileTypes": [
-            "analysis-ana"
-          ],
+          "fileTypes": ["analysis-ana"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,

@@ -5,12 +5,8 @@
   "category": "time-domain",
   "summary": "Extend Doublets",
   "description": "Extend Doublets. infile outfile segdur repets",
-  "useCases": [
-    "Process audio with CDP Release 8"
-  ],
-  "tags": [
-    "extend"
-  ],
+  "useCases": ["Process audio with CDP Release 8"],
+  "tags": ["extend"],
   "identity": {
     "executable": "extend",
     "operation": "doublets"
@@ -18,10 +14,7 @@
   "documentation": {
     "localPath": "cdpr8/docs/html/cgroextd.htm",
     "anchor": "DOUBLETS",
-    "helpCommand": [
-      "extend",
-      "doublets"
-    ],
+    "helpCommand": ["extend", "doublets"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
@@ -34,9 +27,7 @@
           "id": "infile",
           "label": "infile",
           "description": "infile input documented by CDP.",
-          "fileTypes": [
-            "soundfile"
-          ],
+          "fileTypes": ["soundfile"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,

@@ -5,13 +5,8 @@
   "category": "utilities",
   "summary": "Envelope Breakpoint to Binary Envelope",
   "description": "Envelope Breakpoint to Binary Envelope, as documented in the bundled CDP Release 8 reference.",
-  "useCases": [
-    "Envelope Breakpoint to Binary Envelope"
-  ],
-  "tags": [
-    "envel",
-    "brktoenv"
-  ],
+  "useCases": ["Envelope Breakpoint to Binary Envelope"],
+  "tags": ["envel", "brktoenv"],
   "identity": {
     "executable": "envel",
     "operation": "brktoenv"
@@ -19,10 +14,7 @@
   "documentation": {
     "localPath": "cdpr8/docs/html/cgroenvl.htm",
     "anchor": "BRKTOENV",
-    "helpCommand": [
-      "envel",
-      "brktoenv"
-    ],
+    "helpCommand": ["envel", "brktoenv"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
@@ -35,9 +27,7 @@
           "id": "inbrkfile",
           "label": "inbrkfile",
           "description": "CDP inbrkfile input.",
-          "fileTypes": [
-            "breakpoint"
-          ],
+          "fileTypes": ["breakpoint"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
