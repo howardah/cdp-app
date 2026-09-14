@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-findhole",
+  "title": "Sound information: findhole",
+  "category": "utilities",
+  "summary": "CDP Sound information: findhole operation.",
+  "description": "Run the documented CDP Release 8 Sound information: findhole operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "findhole", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "findhole"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "findhole"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: findhole",
+      "summary": "Run Sound information: findhole.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: findhole.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "findhole"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

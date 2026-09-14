@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-r-extend",
+  "title": "Grain r extend",
+  "category": "time-domain",
+  "summary": "CDP Grain r extend operation.",
+  "description": "Run the documented CDP Release 8 Grain r extend operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "r_extend", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "r_extend"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "r_extend"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain r extend",
+      "summary": "Run Grain r extend.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain r extend.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-r_extend"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "r_extend"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

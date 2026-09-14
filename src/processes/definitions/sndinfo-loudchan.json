@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-loudchan",
+  "title": "Sound information: loudchan",
+  "category": "utilities",
+  "summary": "CDP Sound information: loudchan operation.",
+  "description": "Run the documented CDP Release 8 Sound information: loudchan operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "loudchan", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "loudchan"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "loudchan"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: loudchan",
+      "summary": "Run Sound information: loudchan.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: loudchan.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "loudchan"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

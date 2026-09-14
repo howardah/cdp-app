@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-vowels",
+  "title": "Repitch vowels",
+  "category": "spectral",
+  "summary": "CDP Repitch vowels operation.",
+  "description": "Run the documented CDP Release 8 Repitch vowels operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "vowels", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "vowels"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "vowels"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch vowels",
+      "summary": "Run Repitch vowels.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch vowels.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-vowels"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "vowels"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

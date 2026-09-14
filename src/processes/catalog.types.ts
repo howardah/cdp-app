@@ -23,7 +23,14 @@ export type BinaryId =
   | "sfecho"
   | "spectstr"
   | "stretch"
-  | "submix";
+  | "submix"
+  | "distort"
+  | "grain"
+  | "repitch"
+  | "sndinfo"
+  | "brktopi"
+  | "ptobrk"
+  | "clip";
 export type CdpFileType =
   | "soundfile"
   | "analysis-ana"

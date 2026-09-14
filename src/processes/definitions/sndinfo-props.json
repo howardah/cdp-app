@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-props",
+  "title": "Sound information: props",
+  "category": "utilities",
+  "summary": "CDP Sound information: props operation.",
+  "description": "Run the documented CDP Release 8 Sound information: props operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "props", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "props"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "props"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: props",
+      "summary": "Run Sound information: props.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: props.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "props"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -144,6 +144,86 @@ import submixShuffle from "./definitions/submix-shuffle.json";
 import submixTest from "./definitions/submix-test.json";
 import combineMake from "./definitions/combine-make.json";
 import combineMake2 from "./definitions/combine-make2.json";
+import distortAverage from "./definitions/distort-average.json";
+import distortClip from "./definitions/distort-clip.json";
+import distortCyclecnt from "./definitions/distort-cyclecnt.json";
+import distortDelete from "./definitions/distort-delete.json";
+import distortDivide from "./definitions/distort-divide.json";
+import distortEnvel from "./definitions/distort-envel.json";
+import distortFilter from "./definitions/distort-filter.json";
+import distortFractal from "./definitions/distort-fractal.json";
+import distortHarmonic from "./definitions/distort-harmonic.json";
+import distortInteract from "./definitions/distort-interact.json";
+import distortInterpolate from "./definitions/distort-interpolate.json";
+import distortMultiply from "./definitions/distort-multiply.json";
+import distortOmit from "./definitions/distort-omit.json";
+import distortOverload from "./definitions/distort-overload.json";
+import distortPitch from "./definitions/distort-pitch.json";
+import distortPulsed from "./definitions/distort-pulsed.json";
+import distortReform from "./definitions/distort-reform.json";
+import distortRepeat from "./definitions/distort-repeat.json";
+import distortRepeat2 from "./definitions/distort-repeat2.json";
+import distortReplace from "./definitions/distort-replace.json";
+import distortReplim from "./definitions/distort-replim.json";
+import distortReverse from "./definitions/distort-reverse.json";
+import distortShuffle from "./definitions/distort-shuffle.json";
+import distortTelescope from "./definitions/distort-telescope.json";
+import grainAlign from "./definitions/grain-align.json";
+import grainAssess from "./definitions/grain-assess.json";
+import grainCount from "./definitions/grain-count.json";
+import grainDuplicate from "./definitions/grain-duplicate.json";
+import grainFind from "./definitions/grain-find.json";
+import grainGrev from "./definitions/grain-grev.json";
+import grainNoiseExtend from "./definitions/grain-noise-extend.json";
+import grainOmit from "./definitions/grain-omit.json";
+import grainRemotif from "./definitions/grain-remotif.json";
+import grainReorder from "./definitions/grain-reorder.json";
+import grainRepitch from "./definitions/grain-repitch.json";
+import grainReposition from "./definitions/grain-reposition.json";
+import grainRerhythm from "./definitions/grain-rerhythm.json";
+import grainReverse from "./definitions/grain-reverse.json";
+import grainRExtend from "./definitions/grain-r-extend.json";
+import grainTimewarp from "./definitions/grain-timewarp.json";
+import repitchAnalenv from "./definitions/repitch-analenv.json";
+import repitchApprox from "./definitions/repitch-approx.json";
+import repitchCombine from "./definitions/repitch-combine.json";
+import repitchCombineb from "./definitions/repitch-combineb.json";
+import repitchCut from "./definitions/repitch-cut.json";
+import repitchExag from "./definitions/repitch-exag.json";
+import repitchFix from "./definitions/repitch-fix.json";
+import repitchGenerate from "./definitions/repitch-generate.json";
+import repitchGetpitch from "./definitions/repitch-getpitch.json";
+import repitchInsertsil from "./definitions/repitch-insertsil.json";
+import repitchInsertzeros from "./definitions/repitch-insertzeros.json";
+import repitchInterp from "./definitions/repitch-interp.json";
+import repitchInvert from "./definitions/repitch-invert.json";
+import repitchNoisetosil from "./definitions/repitch-noisetosil.json";
+import repitchPchshift from "./definitions/repitch-pchshift.json";
+import repitchPchtotext from "./definitions/repitch-pchtotext.json";
+import repitchPitchtosil from "./definitions/repitch-pitchtosil.json";
+import repitchQuantise from "./definitions/repitch-quantise.json";
+import repitchRandomise from "./definitions/repitch-randomise.json";
+import repitchSmooth from "./definitions/repitch-smooth.json";
+import repitchSynth from "./definitions/repitch-synth.json";
+import repitchTranspose from "./definitions/repitch-transpose.json";
+import repitchTransposef from "./definitions/repitch-transposef.json";
+import repitchVibrato from "./definitions/repitch-vibrato.json";
+import repitchVowels from "./definitions/repitch-vowels.json";
+import sndinfoProps from "./definitions/sndinfo-props.json";
+import sndinfoLen from "./definitions/sndinfo-len.json";
+import sndinfoLens from "./definitions/sndinfo-lens.json";
+import sndinfoSumlen from "./definitions/sndinfo-sumlen.json";
+import sndinfoTimediff from "./definitions/sndinfo-timediff.json";
+import sndinfoSmptime from "./definitions/sndinfo-smptime.json";
+import sndinfoTimesmp from "./definitions/sndinfo-timesmp.json";
+import sndinfoMaxsamp from "./definitions/sndinfo-maxsamp.json";
+import sndinfoMaxsamp2 from "./definitions/sndinfo-maxsamp2.json";
+import sndinfoLoudchan from "./definitions/sndinfo-loudchan.json";
+import sndinfoFindhole from "./definitions/sndinfo-findhole.json";
+import sndinfoDiff from "./definitions/sndinfo-diff.json";
+import sndinfoChandiff from "./definitions/sndinfo-chandiff.json";
+import brktopi from "./definitions/brktopi.json";
+import ptobrkWithzeros from "./definitions/ptobrk-withzeros.json";
 
 export const processCatalog = [
   speed,
@@ -286,6 +366,86 @@ export const processCatalog = [
   submixTest,
   combineMake,
   combineMake2,
+  distortAverage,
+  distortClip,
+  distortCyclecnt,
+  distortDelete,
+  distortDivide,
+  distortEnvel,
+  distortFilter,
+  distortFractal,
+  distortHarmonic,
+  distortInteract,
+  distortInterpolate,
+  distortMultiply,
+  distortOmit,
+  distortOverload,
+  distortPitch,
+  distortPulsed,
+  distortReform,
+  distortRepeat,
+  distortRepeat2,
+  distortReplace,
+  distortReplim,
+  distortReverse,
+  distortShuffle,
+  distortTelescope,
+  grainAlign,
+  grainAssess,
+  grainCount,
+  grainDuplicate,
+  grainFind,
+  grainGrev,
+  grainNoiseExtend,
+  grainOmit,
+  grainRemotif,
+  grainReorder,
+  grainRepitch,
+  grainReposition,
+  grainRerhythm,
+  grainReverse,
+  grainRExtend,
+  grainTimewarp,
+  repitchAnalenv,
+  repitchApprox,
+  repitchCombine,
+  repitchCombineb,
+  repitchCut,
+  repitchExag,
+  repitchFix,
+  repitchGenerate,
+  repitchGetpitch,
+  repitchInsertsil,
+  repitchInsertzeros,
+  repitchInterp,
+  repitchInvert,
+  repitchNoisetosil,
+  repitchPchshift,
+  repitchPchtotext,
+  repitchPitchtosil,
+  repitchQuantise,
+  repitchRandomise,
+  repitchSmooth,
+  repitchSynth,
+  repitchTranspose,
+  repitchTransposef,
+  repitchVibrato,
+  repitchVowels,
+  sndinfoProps,
+  sndinfoLen,
+  sndinfoLens,
+  sndinfoSumlen,
+  sndinfoTimediff,
+  sndinfoSmptime,
+  sndinfoTimesmp,
+  sndinfoMaxsamp,
+  sndinfoMaxsamp2,
+  sndinfoLoudchan,
+  sndinfoFindhole,
+  sndinfoDiff,
+  sndinfoChandiff,
+  brktopi,
+  ptobrkWithzeros,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 

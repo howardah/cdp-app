@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-noise-extend",
+  "title": "Grain noise extend",
+  "category": "time-domain",
+  "summary": "CDP Grain noise extend operation.",
+  "description": "Run the documented CDP Release 8 Grain noise extend operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "noise_extend", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "noise_extend"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "noise_extend"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain noise extend",
+      "summary": "Run Grain noise extend.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain noise extend.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "duration",
+          "label": "Output duration",
+          "description": "Duration of the noise-stretched output in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.01
+        },
+        {
+          "id": "minimumFrequency",
+          "label": "Minimum frequency",
+          "description": "Lowest noise frequency to retain in Hz.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "minimumDuration",
+          "label": "Minimum grain duration",
+          "description": "Shortest accepted noise grain duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.01,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "maximumDuration",
+          "label": "Maximum grain duration",
+          "description": "Longest accepted noise grain duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-noise_extend"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "noise_extend"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "minimumFrequency" },
+        { "kind": "parameter", "parameterId": "minimumDuration" },
+        { "kind": "parameter", "parameterId": "maximumDuration" }
+      ],
+      "constraints": []
+    }
+  ]
+}

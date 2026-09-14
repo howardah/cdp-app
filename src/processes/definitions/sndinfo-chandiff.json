@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-chandiff",
+  "title": "Sound information: chandiff",
+  "category": "utilities",
+  "summary": "CDP Sound information: chandiff operation.",
+  "description": "Run the documented CDP Release 8 Sound information: chandiff operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "chandiff", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "chandiff"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "chandiff"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: chandiff",
+      "summary": "Run Sound information: chandiff.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: chandiff.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "chandiff"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

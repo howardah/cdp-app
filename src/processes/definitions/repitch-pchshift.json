@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-pchshift",
+  "title": "Repitch pchshift",
+  "category": "spectral",
+  "summary": "CDP Repitch pchshift operation.",
+  "description": "Run the documented CDP Release 8 Repitch pchshift operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "pchshift", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "pchshift"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "pchshift"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch pchshift",
+      "summary": "Run Repitch pchshift.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch pchshift.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "transposition",
+          "label": "Transposition",
+          "description": "Pitch-shift value passed to CDP pchshift.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-pchshift"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "pchshift"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "transposition" }
+      ],
+      "constraints": []
+    }
+  ]
+}

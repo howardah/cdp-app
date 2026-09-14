@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-timewarp",
+  "title": "Grain timewarp",
+  "category": "time-domain",
+  "summary": "CDP Grain timewarp operation.",
+  "description": "Run the documented CDP Release 8 Grain timewarp operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "timewarp", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "timewarp"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "timewarp"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain timewarp",
+      "summary": "Run Grain timewarp.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain timewarp.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "ratio",
+          "label": "Time-stretch ratio",
+          "description": "Output duration ratio; values above one stretch time.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-timewarp"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "timewarp"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "ratio" }
+      ],
+      "constraints": []
+    }
+  ]
+}

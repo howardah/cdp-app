@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-randomise",
+  "title": "Repitch randomise",
+  "category": "spectral",
+  "summary": "CDP Repitch randomise operation.",
+  "description": "Run the documented CDP Release 8 Repitch randomise operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "randomise", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "randomise"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "randomise"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch randomise",
+      "summary": "Run Repitch randomise.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch randomise.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-randomise"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "randomise"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

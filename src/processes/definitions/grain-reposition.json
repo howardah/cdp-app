@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-reposition",
+  "title": "Grain reposition",
+  "category": "time-domain",
+  "summary": "CDP Grain reposition operation.",
+  "description": "Run the documented CDP Release 8 Grain reposition operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "reposition", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "reposition"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "reposition"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain reposition",
+      "summary": "Run Grain reposition.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain reposition.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "times",
+          "label": "Reposition times",
+          "description": "Text file containing the destination grain-onset times.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["text-data"]
+        },
+        {
+          "id": "offset",
+          "label": "Offset",
+          "description": "Time offset added to the reposition data in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-reposition"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "reposition"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "times" },
+        { "kind": "parameter", "parameterId": "offset" }
+      ],
+      "constraints": []
+    }
+  ]
+}

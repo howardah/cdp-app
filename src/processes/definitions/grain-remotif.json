@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-remotif",
+  "title": "Grain remotif",
+  "category": "time-domain",
+  "summary": "CDP Grain remotif operation.",
+  "description": "Run the documented CDP Release 8 Grain remotif operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "remotif", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "remotif"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "remotif"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain remotif",
+      "summary": "Run Grain remotif.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain remotif.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-remotif"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "remotif"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

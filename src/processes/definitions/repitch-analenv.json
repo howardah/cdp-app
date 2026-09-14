@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-analenv",
+  "title": "Repitch analenv",
+  "category": "spectral",
+  "summary": "CDP Repitch analenv operation.",
+  "description": "Run the documented CDP Release 8 Repitch analenv operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "analenv", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "analenv"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "analenv"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch analenv",
+      "summary": "Run Repitch analenv.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch analenv.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-analenv"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "analenv"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

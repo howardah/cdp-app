@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-rerhythm",
+  "title": "Grain rerhythm",
+  "category": "time-domain",
+  "summary": "CDP Grain rerhythm operation.",
+  "description": "Run the documented CDP Release 8 Grain rerhythm operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "rerhythm", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "rerhythm"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "rerhythm"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain rerhythm",
+      "summary": "Run Grain rerhythm.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain rerhythm.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-rerhythm"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "rerhythm"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-getpitch",
+  "title": "Repitch getpitch",
+  "category": "spectral",
+  "summary": "CDP Repitch getpitch operation.",
+  "description": "Run the documented CDP Release 8 Repitch getpitch operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "getpitch", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "getpitch"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "getpitch"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch getpitch",
+      "summary": "Run Repitch getpitch.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch getpitch.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-getpitch"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "getpitch"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-grev",
+  "title": "Grain grev",
+  "category": "time-domain",
+  "summary": "CDP Grain grev operation.",
+  "description": "Run the documented CDP Release 8 Grain grev operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "grev", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "grev"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "grev"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain grev",
+      "summary": "Run Grain grev.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain grev.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "grev"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

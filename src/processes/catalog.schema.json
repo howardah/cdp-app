@@ -30,7 +30,41 @@
       "additionalProperties": false,
       "required": ["executable"],
       "properties": {
-        "executable": { "enum": ["modify", "sfedit", "pvoc", "isolate", "sfprops"] },
+        "executable": {
+          "enum": [
+            "modify",
+            "sfedit",
+            "pvoc",
+            "isolate",
+            "sfprops",
+            "blur",
+            "bounce",
+            "combine",
+            "envel",
+            "envnu",
+            "extend",
+            "filter",
+            "flatten",
+            "focus",
+            "hover",
+            "hover2",
+            "iterline",
+            "iterlinef",
+            "phasor",
+            "reverb",
+            "sfecho",
+            "spectstr",
+            "stretch",
+            "submix",
+            "distort",
+            "grain",
+            "repitch",
+            "sndinfo",
+            "brktopi",
+            "ptobrk",
+            "clip"
+          ]
+        },
         "operation": { "$ref": "#/definitions/id" }
       }
     },

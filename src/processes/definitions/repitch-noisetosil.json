@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-noisetosil",
+  "title": "Repitch noisetosil",
+  "category": "spectral",
+  "summary": "CDP Repitch noisetosil operation.",
+  "description": "Run the documented CDP Release 8 Repitch noisetosil operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "noisetosil", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "noisetosil"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "noisetosil"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch noisetosil",
+      "summary": "Run Repitch noisetosil.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch noisetosil.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-noisetosil"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "noisetosil"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-combineb",
+  "title": "Repitch combineb",
+  "category": "spectral",
+  "summary": "CDP Repitch combineb operation.",
+  "description": "Run the documented CDP Release 8 Repitch combineb operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "combineb", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "combineb"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "combineb"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch combineb",
+      "summary": "Run Repitch combineb.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch combineb.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-combineb"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "combineb"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

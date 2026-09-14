@@ -27,6 +27,13 @@ pub enum BinaryId {
     Spectstr,
     Stretch,
     Submix,
+    Distort,
+    Grain,
+    Repitch,
+    Sndinfo,
+    Brktopi,
+    Ptobrk,
+    Clip,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]

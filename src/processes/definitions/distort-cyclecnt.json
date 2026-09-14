@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-cyclecnt",
+  "title": "Distort cyclecnt",
+  "category": "time-domain",
+  "summary": "CDP Distort cyclecnt operation.",
+  "description": "Run the documented CDP Release 8 Distort cyclecnt operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "cyclecnt", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "cyclecnt"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "cyclecnt"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort cyclecnt",
+      "summary": "Run Distort cyclecnt.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort cyclecnt.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-cyclecnt"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cyclecnt"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

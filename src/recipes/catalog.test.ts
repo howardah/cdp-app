@@ -2,10 +2,14 @@ import { describe, expect, it } from "vitest";
 import { findRecipe, recipeCatalog, searchRecipes, validateRecipes } from "./index";
 
 describe("recipe catalog", () => {
-  it("contains four unique, searchable guided recipes", () => {
-    expect(recipeCatalog).toHaveLength(4);
-    expect(new Set(recipeCatalog.map((recipe) => recipe.id)).size).toBe(4);
-    expect(searchRecipes("spectral").map((recipe) => recipe.id)).toEqual(["spectral-round-trip"]);
+  it("contains eight unique, searchable guided recipes", () => {
+    expect(recipeCatalog).toHaveLength(8);
+    expect(new Set(recipeCatalog.map((recipe) => recipe.id)).size).toBe(8);
+    expect(searchRecipes("spectral").map((recipe) => recipe.id)).toEqual([
+      "spectral-round-trip",
+      "smooth-and-exaggerate-spectrum",
+    ]);
+    expect(searchRecipes("mixfile").map((recipe) => recipe.id)).toEqual(["step-pan-render"]);
   });
 
   it("references compatible process modes", () => {

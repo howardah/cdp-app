@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "ptobrk-withzeros",
+  "title": "Convert binary pitch to breakpoint text",
+  "category": "utilities",
+  "summary": "CDP Convert binary pitch to breakpoint text operation.",
+  "description": "Run the documented CDP Release 8 Convert binary pitch to breakpoint text operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["ptobrk", "withzeros", "cdp-release-8"],
+  "identity": {
+    "executable": "ptobrk",
+    "operation": "withzeros"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["ptobrk", "withzeros"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Convert binary pitch to breakpoint text",
+      "summary": "Run Convert binary pitch to breakpoint text.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Convert binary pitch to breakpoint text.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "breakpoint",
+        "extension": "txt",
+        "nameSuffix": "-withzeros"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "withzeros"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

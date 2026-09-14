@@ -55,7 +55,14 @@
       "binaries/sfecho",
       "binaries/spectstr",
       "binaries/stretch",
-      "binaries/submix"
+      "binaries/submix",
+      "binaries/distort",
+      "binaries/grain",
+      "binaries/repitch",
+      "binaries/sndinfo",
+      "binaries/brktopi",
+      "binaries/ptobrk",
+      "binaries/clip"
     ],
     "icon": [
       "icons/32x32.png",

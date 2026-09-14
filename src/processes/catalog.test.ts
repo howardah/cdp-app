@@ -21,7 +21,7 @@ describe("process catalog", () => {
   });
 
   it("contains the newly shipped process entries", () => {
-    expect(processCatalog).toHaveLength(140);
+    expect(processCatalog).toHaveLength(220);
     expect(searchCatalog("mask").map((process) => process.id)).toContain("sfedit-masks");
     expect(searchCatalog("echo").map((process) => process.id)).toContain("modify-revecho");
     expect(searchCatalog("narrow").map((process) => process.id)).toContain("modify-space");

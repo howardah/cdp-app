@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-multiply",
+  "title": "Distort multiply",
+  "category": "time-domain",
+  "summary": "CDP Distort multiply operation.",
+  "description": "Run the documented CDP Release 8 Distort multiply operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "multiply", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "multiply"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "multiply"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort multiply",
+      "summary": "Run Distort multiply.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort multiply.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "multiplier",
+          "label": "Multiplication factor",
+          "description": "Number of waveform repetitions per source waveset.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-multiply"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "multiply"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "multiplier"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-generate",
+  "title": "Repitch generate",
+  "category": "spectral",
+  "summary": "CDP Repitch generate operation.",
+  "description": "Run the documented CDP Release 8 Repitch generate operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "generate", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "generate"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "generate"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch generate",
+      "summary": "Run Repitch generate.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch generate.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-generate"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "generate"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

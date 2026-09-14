@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-cut",
+  "title": "Repitch cut",
+  "category": "spectral",
+  "summary": "CDP Repitch cut operation.",
+  "description": "Run the documented CDP Release 8 Repitch cut operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "cut", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "cut"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "cut"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch cut",
+      "summary": "Run Repitch cut.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch cut.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-cut"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "cut"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}
