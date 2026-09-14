@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-attenuate",
+  "title": "Adjust Mixfile Level",
+  "category": "edit-and-mix",
+  "summary": "Scale the overall level of an existing mixfile.",
+  "description": "Apply one gain multiplier to the complete mix description.",
+  "useCases": ["Prevent a mix from clipping"],
+  "tags": ["mix", "gain", "level"],
+  "identity": { "executable": "submix", "operation": "attenuate" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "ATTENUATE",
+    "helpCommand": ["submix", "attenuate"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "adjust",
+      "title": "Adjust level",
+      "summary": "Multiply all mix levels by one gain value.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to adjust.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gain",
+          "label": "Gain",
+          "description": "Overall multiplier; 1 leaves levels unchanged.",
+          "required": true,
+          "advanced": false,
+          "unit": "×",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.8,
+          "min": 0.000001,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-level"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "attenuate" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "gain" }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -130,6 +130,26 @@ const MANIFESTS: &[&str] = &[
     include_str!("../../src/processes/definitions/envel-dbtoenv.json"),
     include_str!("../../src/processes/definitions/extend-doublets.json"),
     include_str!("../../src/processes/definitions/focus-step.json"),
+    include_str!("../../src/processes/definitions/envel-dbtogain.json"),
+    include_str!("../../src/processes/definitions/envel-envtobrk.json"),
+    include_str!("../../src/processes/definitions/envel-envtodb.json"),
+    include_str!("../../src/processes/definitions/envel-gaintodb.json"),
+    include_str!("../../src/processes/definitions/envel-reshape.json"),
+    include_str!("../../src/processes/definitions/envel-replot.json"),
+    include_str!("../../src/processes/definitions/envel-scaled.json"),
+    include_str!("../../src/processes/definitions/envel-timegrid.json"),
+    include_str!("../../src/processes/definitions/filter-bankfrqs.json"),
+    include_str!("../../src/processes/definitions/filter-vfilters.json"),
+    include_str!("../../src/processes/definitions/submix-atstep.json"),
+    include_str!("../../src/processes/definitions/submix-attenuate.json"),
+    include_str!("../../src/processes/definitions/submix-dummy.json"),
+    include_str!("../../src/processes/definitions/submix-getlevel.json"),
+    include_str!("../../src/processes/definitions/submix-model.json"),
+    include_str!("../../src/processes/definitions/submix-ongrid.json"),
+    include_str!("../../src/processes/definitions/submix-shuffle.json"),
+    include_str!("../../src/processes/definitions/submix-test.json"),
+    include_str!("../../src/processes/definitions/combine-make.json"),
+    include_str!("../../src/processes/definitions/combine-make2.json"),
 ];
 
 #[test]
@@ -153,6 +173,14 @@ fn envelope_extension_and_playability_classification_are_typed() {
     assert_eq!(
         file_type_for_path(std::path::Path::new("result.mix")),
         Some(composers_desktop_application::catalog::types::CdpFileType::Mixfile)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("pitch.frq")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryPitch)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("formants.for")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryFormant)
     );
 }
 
@@ -634,6 +662,99 @@ fn corrected_generic_processes_compile_and_resolve_output_roots() {
             OsString::from("second.wav"),
             output.into_os_string(),
             OsString::from("3"),
+        ]
+    );
+}
+
+#[test]
+fn next_catalog_wave_compiles_documented_argument_vectors() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let output = |name: &str| directory.path().join(name).to_string_lossy().into_owned();
+
+    let dbtogain = RunProcessRequest {
+        process_id: "envel-dbtogain".into(),
+        mode_id: "convert".into(),
+        inputs: HashMap::from([("envelope".into(), vec!["level.brk".into()])]),
+        parameters: HashMap::new(),
+        output_path: Some(output("gain.brk")),
+    };
+    let (command, _) = compile_request(&catalog, &dbtogain, "envel".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("dbtogain"),
+            OsString::from("level.brk"),
+            OsString::from(output("gain.brk")),
+        ]
+    );
+
+    let timegrid = RunProcessRequest {
+        process_id: "envel-timegrid".into(),
+        mode_id: "grid".into(),
+        inputs: HashMap::from([("source".into(), vec!["source.wav".into()])]),
+        parameters: HashMap::from([
+            ("grid-count".into(), ParameterValue::Number { value: 3.0 }),
+            ("grid-width".into(), ParameterValue::Number { value: 0.25 }),
+            ("splice-ms".into(), ParameterValue::Number { value: 12.0 }),
+        ]),
+        output_path: Some(output("grid.wav")),
+    };
+    let (command, _) = compile_request(&catalog, &timegrid, "envel".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("timegrid"),
+            OsString::from("source.wav"),
+            OsString::from(output("grid.wav")),
+            OsString::from("3"),
+            OsString::from("0.25"),
+            OsString::from("12"),
+        ]
+    );
+
+    let dummy = RunProcessRequest {
+        process_id: "submix-dummy".into(),
+        mode_id: "sequential".into(),
+        inputs: HashMap::from([(
+            "sources".into(),
+            vec!["first.wav".into(), "second.wav".into()],
+        )]),
+        parameters: HashMap::new(),
+        output_path: Some(output("sequence.mix")),
+    };
+    let (command, _) = compile_request(&catalog, &dummy, "submix".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("dummy"),
+            OsString::from("2"),
+            OsString::from("first.wav"),
+            OsString::from("second.wav"),
+            OsString::from(output("sequence.mix")),
+        ]
+    );
+
+    let make2 = RunProcessRequest {
+        process_id: "combine-make2".into(),
+        mode_id: "build".into(),
+        inputs: HashMap::from([
+            ("pitch".into(), vec!["pitch.frq".into()]),
+            ("formants".into(), vec!["formants.for".into()]),
+            ("envelope".into(), vec!["shape.evl".into()]),
+        ]),
+        parameters: HashMap::new(),
+        output_path: Some(output("rebuilt.ana")),
+    };
+    let (command, _) = compile_request(&catalog, &make2, "combine".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("make2"),
+            OsString::from("pitch.frq"),
+            OsString::from("formants.for"),
+            OsString::from("shape.evl"),
+            OsString::from(output("rebuilt.ana")),
         ]
     );
 }

@@ -1,6 +1,6 @@
 # CDP Release 8 process implementation status
 
-Last audited: 2026-09-13
+Last audited: 2026-09-14
 
 This document compares the processes exposed by the CDP Release 8 distribution in `cdpr8` with the process definitions currently exposed in the Composers Desktop GUI.
 
@@ -15,11 +15,11 @@ This document compares the processes exposed by the CDP Release 8 distribution i
 
 | Measure | Count |
 | --- | ---: |
-| GUI process definitions | 120 |
+| GUI process definitions | 140 |
 | CDP executable files in the bundled Release 8 folder | 230 |
 | Available entries in the grouped CDP process index | 539 |
-| Indexed rows matched to GUI definitions | 120 |
-| Distinct GUI definitions found in the CDP index | 120 |
+| Indexed rows matched to GUI definitions | 140 |
+| Distinct GUI definitions found in the CDP index | 140 |
 
 The index count is not a unique-process denominator. CDP repeats some cross-references in multiple groups and lists some modes as separate rows (for example RETIME and SPECFNU). The withdrawn `(ALIAS)` entry is excluded. The authoritative GUI count is the 120 manifest files.
 
@@ -147,6 +147,26 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `submix-sync` | Synchronize Mix | `submix sync` | Synchronize |
 | `submix-syncattack` | Synchronize Attacks | `submix syncattack` | Synchronize attacks |
 | `submix-timewarp` | Warp Mix Timing | `submix timewarp` | Time warp |
+| `combine-make` | Build Spectrum from Pitch and Formants | `combine make` | Build analysis |
+| `combine-make2` | Build Spectrum with Envelope | `combine make2` | Build analysis |
+| `envel-dbtogain` | Convert Envelope dB to Gain | `envel dbtogain` | Convert to gain |
+| `envel-envtobrk` | Convert Binary Envelope to Breakpoints | `envel envtobrk` | Export breakpoints |
+| `envel-envtodb` | Convert Binary Envelope to dB Breakpoints | `envel envtodb` | Export dB breakpoints |
+| `envel-gaintodb` | Convert Envelope Gain to dB | `envel gaintodb` | Convert to dB |
+| `envel-reshape` | Normalise Binary Envelope | `envel reshape` | Normalise |
+| `envel-replot` | Normalise Breakpoint Envelope | `envel replot` | Normalise |
+| `envel-scaled` | Impose Scaled Breakpoint Envelope | `envel scaled` | Apply envelope |
+| `envel-timegrid` | Partition Sound into Time Grids | `envel timegrid` | Create grids |
+| `filter-bankfrqs` | Generate Harmonic Filter Frequencies | `filter bankfrqs` | Harmonic series |
+| `filter-vfilters` | Create Fixed-Pitch Varibank Files | `filter vfilters` | Create filter files |
+| `submix-atstep` | Create Stepped Mixfile | `submix atstep` | Create stepped mix |
+| `submix-attenuate` | Adjust Mixfile Level | `submix attenuate` | Adjust level |
+| `submix-dummy` | Create Basic Mixfile | `submix dummy` | Start together; Place sequentially |
+| `submix-getlevel` | Check Mix Peak Level | `submix getlevel` | Report peak |
+| `submix-model` | Replace Mixfile Sources | `submix model` | Replace sources |
+| `submix-ongrid` | Create Grid Mixfile | `submix ongrid` | Create grid mix |
+| `submix-shuffle` | Duplicate Mix Entries | `submix shuffle` | Duplicate entries |
+| `submix-test` | Validate Mixfile | `submix test` | Validate syntax |
 
 ## Full CDP process index
 
@@ -158,7 +178,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### COMBINE (11)
 
-✅ COMBINE CROSS · ✅ COMBINE DIFF · ✅ COMBINE INTERLEAVE · ⬜ COMBINE MAKE · ⬜ COMBINE MAKE2 · ✅ COMBINE MAX · ✅ COMBINE MEAN · ⬜ SPECROSS · ⬜ SPECSPHINX · ⬜ SPECTWIN · ✅ COMBINE SUM
+✅ COMBINE CROSS · ✅ COMBINE DIFF · ✅ COMBINE INTERLEAVE · ✅ COMBINE MAKE · ✅ COMBINE MAKE2 · ✅ COMBINE MAX · ✅ COMBINE MEAN · ⬜ SPECROSS · ⬜ SPECSPHINX · ⬜ SPECTWIN · ✅ COMBINE SUM
 
 ### DISTORT (38)
 
@@ -166,7 +186,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### ENVEL (27)
 
-✅ ENVEL ATTACK · ✅ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ✅ ENVEL DBTOENV · ⬜ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ⬜ ENVEL ENVTOBRK · ⬜ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ⬜ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ⬜ ENVEL RESHAPE · ⬜ ENVEL REPLOT · ⬜ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ⬜ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
+✅ ENVEL ATTACK · ✅ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ✅ ENVEL DBTOENV · ✅ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ✅ ENVEL ENVTOBRK · ✅ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ✅ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ✅ ENVEL RESHAPE · ✅ ENVEL REPLOT · ✅ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ✅ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
 
 ### ENVNU (2)
 
@@ -178,7 +198,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### FILTER (13)
 
-✅ FILTER BANK · ⬜ FILTER BANKFRQS · ⬜ FILTRAGE · ✅ FILTER FIXED · ✅ FILTER ITERATED · ✅ FILTER LOHI · ✅ FILTER PHASING · ✅ PHASOR · ✅ FILTER SWEEPING · ✅ FILTER USERBANK · ✅ FILTER VARIABLE · ✅ FILTER VARIBANK/2 · ⬜ FILTER VFILTERS
+✅ FILTER BANK · ✅ FILTER BANKFRQS · ⬜ FILTRAGE · ✅ FILTER FIXED · ✅ FILTER ITERATED · ✅ FILTER LOHI · ✅ FILTER PHASING · ✅ PHASOR · ✅ FILTER SWEEPING · ✅ FILTER USERBANK · ✅ FILTER VARIABLE · ✅ FILTER VARIBANK/2 · ✅ FILTER VFILTERS
 
 ### FOCUS (9)
 
@@ -282,7 +302,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### SUBMIX (24)
 
-✅ SUBMIX ADDTOMIX · ⬜ SUBMIX ATSTEP · ⬜ SUBMIX ATTENUATE · ✅ SUBMIX BALANCE · ✅ SUBMIX CROSSFADE · ⬜ SUBMIX DUMMY · ✅ SUBMIX FADERS · ⬜ SUBMIX FILEFORMAT · ⬜ SUBMIX GETLEVEL · ✅ SUBMIX INBETWEEN · ✅ SUBMIX INBETWEEN2 · ✅ SUBMIX INTERLEAVE · ✅ SUBMIX MERGE · ✅ SUBMIX MERGEMANY · ✅ SUBMIX MIX · ⬜ SUBMIX MODEL · ⬜ SUBMIX ONGRID · ✅ SUBMIX PAN · ⬜ SUBMIX SHUFFLE · ✅ SUBMIX SPACEWARP · ✅ SUBMIX SYNC · ✅ SUBMIX SYNCATTACK · ⬜ SUBMIX TEST · ✅ SUBMIX TIMEWARP
+✅ SUBMIX ADDTOMIX · ✅ SUBMIX ATSTEP · ✅ SUBMIX ATTENUATE · ✅ SUBMIX BALANCE · ✅ SUBMIX CROSSFADE · ✅ SUBMIX DUMMY · ✅ SUBMIX FADERS · ⬜ SUBMIX FILEFORMAT · ✅ SUBMIX GETLEVEL · ✅ SUBMIX INBETWEEN · ✅ SUBMIX INBETWEEN2 · ✅ SUBMIX INTERLEAVE · ✅ SUBMIX MERGE · ✅ SUBMIX MERGEMANY · ✅ SUBMIX MIX · ✅ SUBMIX MODEL · ✅ SUBMIX ONGRID · ✅ SUBMIX PAN · ✅ SUBMIX SHUFFLE · ✅ SUBMIX SPACEWARP · ✅ SUBMIX SYNC · ✅ SUBMIX SYNCATTACK · ✅ SUBMIX TEST · ✅ SUBMIX TIMEWARP
 
 ### SYNTH (18)
 

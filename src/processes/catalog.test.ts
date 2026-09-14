@@ -20,8 +20,8 @@ describe("process catalog", () => {
     ).toBe(true);
   });
 
-  it("contains the ten newly shipped process entries", () => {
-    expect(processCatalog).toHaveLength(120);
+  it("contains the newly shipped process entries", () => {
+    expect(processCatalog).toHaveLength(140);
     expect(searchCatalog("mask").map((process) => process.id)).toContain("sfedit-masks");
     expect(searchCatalog("echo").map((process) => process.id)).toContain("modify-revecho");
     expect(searchCatalog("narrow").map((process) => process.id)).toContain("modify-space");

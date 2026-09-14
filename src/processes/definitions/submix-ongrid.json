@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-ongrid",
+  "title": "Create Grid Mixfile",
+  "category": "edit-and-mix",
+  "summary": "Place listed sounds on times supplied in a grid file.",
+  "description": "Create an editable mixfile by pairing each source with a grid time.",
+  "useCases": ["Lay out sounds on a custom timeline"],
+  "tags": ["mix", "grid", "timing"],
+  "identity": { "executable": "submix", "operation": "ongrid" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "ONGRID",
+    "helpCommand": ["submix", "ongrid"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "create",
+      "title": "Create grid mix",
+      "summary": "Place each listed source on the supplied timeline.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Soundfiles in grid order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        },
+        {
+          "id": "grid",
+          "label": "Grid file",
+          "description": "Text file containing one placement time per source.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-grid"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "ongrid" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "grid" }
+      ],
+      "constraints": []
+    }
+  ]
+}

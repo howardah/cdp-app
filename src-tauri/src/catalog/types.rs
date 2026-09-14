@@ -42,6 +42,8 @@ pub enum CdpFileType {
     Soundfile,
     AnalysisAna,
     AnalysisPvx,
+    BinaryPitch,
+    BinaryFormant,
     Breakpoint,
     CutsData,
     SliceData,

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-timegrid",
+  "title": "Partition Sound into Time Grids",
+  "category": "time-domain",
+  "summary": "Create staggered window grids from a sound.",
+  "description": "Make several output files containing source windows separated by silence.",
+  "useCases": ["Create rhythmic source grids"],
+  "tags": ["slice", "grid", "windows"],
+  "identity": { "executable": "envel", "operation": "timegrid" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "TIMEGRID",
+    "helpCommand": ["envel", "timegrid"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "grid",
+      "title": "Create grids",
+      "summary": "Partition a sound into staggered grids.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source sound to partition.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "grid-count",
+          "label": "Grid count",
+          "description": "Number of output grids.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1
+        },
+        {
+          "id": "grid-width",
+          "label": "Grid window",
+          "description": "Duration of each source window.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "splice-ms",
+          "label": "Splice length",
+          "description": "Fade length at window boundaries.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 10,
+          "min": 0,
+          "step": 0.1
+        }
+      ],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grid",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "timegrid" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "grid-count" },
+        { "kind": "parameter", "parameterId": "grid-width" },
+        { "kind": "parameter", "parameterId": "splice-ms" }
+      ],
+      "constraints": []
+    }
+  ]
+}

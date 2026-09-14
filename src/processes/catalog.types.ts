@@ -28,6 +28,8 @@ export type CdpFileType =
   | "soundfile"
   | "analysis-ana"
   | "analysis-pvx"
+  | "binary-pitch"
+  | "binary-formant"
   | "breakpoint"
   | "cuts-data"
   | "slice-data"

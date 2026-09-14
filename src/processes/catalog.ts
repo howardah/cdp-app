@@ -124,6 +124,26 @@ import envelBrktoenv from "./definitions/envel-brktoenv.json";
 import envelDbtoenv from "./definitions/envel-dbtoenv.json";
 import extendDoublets from "./definitions/extend-doublets.json";
 import focusStep from "./definitions/focus-step.json";
+import envelDbtogain from "./definitions/envel-dbtogain.json";
+import envelEnvtobrk from "./definitions/envel-envtobrk.json";
+import envelEnvtodb from "./definitions/envel-envtodb.json";
+import envelGaintodb from "./definitions/envel-gaintodb.json";
+import envelReshape from "./definitions/envel-reshape.json";
+import envelReplot from "./definitions/envel-replot.json";
+import envelScaled from "./definitions/envel-scaled.json";
+import envelTimegrid from "./definitions/envel-timegrid.json";
+import filterBankfrqs from "./definitions/filter-bankfrqs.json";
+import filterVfilters from "./definitions/filter-vfilters.json";
+import submixAtstep from "./definitions/submix-atstep.json";
+import submixAttenuate from "./definitions/submix-attenuate.json";
+import submixDummy from "./definitions/submix-dummy.json";
+import submixGetlevel from "./definitions/submix-getlevel.json";
+import submixModel from "./definitions/submix-model.json";
+import submixOngrid from "./definitions/submix-ongrid.json";
+import submixShuffle from "./definitions/submix-shuffle.json";
+import submixTest from "./definitions/submix-test.json";
+import combineMake from "./definitions/combine-make.json";
+import combineMake2 from "./definitions/combine-make2.json";
 
 export const processCatalog = [
   speed,
@@ -246,6 +266,26 @@ export const processCatalog = [
   envelDbtoenv,
   extendDoublets,
   focusStep,
+  envelDbtogain,
+  envelEnvtobrk,
+  envelEnvtodb,
+  envelGaintodb,
+  envelReshape,
+  envelReplot,
+  envelScaled,
+  envelTimegrid,
+  filterBankfrqs,
+  filterVfilters,
+  submixAtstep,
+  submixAttenuate,
+  submixDummy,
+  submixGetlevel,
+  submixModel,
+  submixOngrid,
+  submixShuffle,
+  submixTest,
+  combineMake,
+  combineMake2,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-model",
+  "title": "Replace Mixfile Sources",
+  "category": "edit-and-mix",
+  "summary": "Replace the soundfiles referenced by an existing mixfile.",
+  "description": "Keep mix timing and level data while supplying a new ordered sound set.",
+  "useCases": ["Reuse a mix layout with new recordings"],
+  "tags": ["mix", "replace", "sources"],
+  "identity": { "executable": "submix", "operation": "model" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "MODEL",
+    "helpCommand": ["submix", "model"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "replace",
+      "title": "Replace sources",
+      "summary": "Replace mixfile sound references in order.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "Existing CDP mixfile.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "sources",
+          "label": "Replacement soundfiles",
+          "description": "New soundfiles in the mixfile's source order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-modelled"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "model" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

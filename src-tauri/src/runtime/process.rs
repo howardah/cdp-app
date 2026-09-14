@@ -163,6 +163,8 @@ pub fn file_type_for_path(path: &Path) -> Option<CdpFileType> {
         "wav" | "aif" | "aiff" => Some(CdpFileType::Soundfile),
         "ana" => Some(CdpFileType::AnalysisAna),
         "pvx" => Some(CdpFileType::AnalysisPvx),
+        "frq" => Some(CdpFileType::BinaryPitch),
+        "for" => Some(CdpFileType::BinaryFormant),
         "brk" | "bpf" => Some(CdpFileType::Breakpoint),
         "env" | "evl" => Some(CdpFileType::BinaryEnvelope),
         "mix" => Some(CdpFileType::Mixfile),
