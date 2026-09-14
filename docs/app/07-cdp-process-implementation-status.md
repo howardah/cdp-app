@@ -1,6 +1,6 @@
 # CDP Release 8 process implementation status
 
-Last audited: 2026-09-12
+Last audited: 2026-09-13
 
 This document compares the processes exposed by the CDP Release 8 distribution in `cdpr8` with the process definitions currently exposed in the Composers Desktop GUI.
 
@@ -15,13 +15,13 @@ This document compares the processes exposed by the CDP Release 8 distribution i
 
 | Measure | Count |
 | --- | ---: |
-| GUI process definitions | 116 |
+| GUI process definitions | 120 |
 | CDP executable files in the bundled Release 8 folder | 230 |
 | Available entries in the grouped CDP process index | 539 |
-| Indexed rows matched to GUI definitions | 116 |
-| Distinct GUI definitions found in the CDP index | 116 |
+| Indexed rows matched to GUI definitions | 120 |
+| Distinct GUI definitions found in the CDP index | 120 |
 
-The index count is not a unique-process denominator. CDP repeats some cross-references in multiple groups and lists some modes as separate rows (for example RETIME and SPECFNU). The withdrawn `(ALIAS)` entry is excluded. The authoritative GUI count is the 116 manifest files.
+The index count is not a unique-process denominator. CDP repeats some cross-references in multiple groups and lists some modes as separate rows (for example RETIME and SPECFNU). The withdrawn `(ALIAS)` entry is excluded. The authoritative GUI count is the 120 manifest files.
 
 ## Implemented GUI catalog
 
@@ -45,9 +45,11 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `combine-mean` | Spectral Mean | `combine mean` | Mean |
 | `combine-sum` | Sum Spectra | `combine sum` | Sum |
 | `envel-attack` | Envel Attack | `envel attack` | attack |
+| `envel-brktoenv` | Envelope Breakpoint to Binary Envelope | `envel brktoenv` | brktoenv |
 | `envel-create` | Envel Create | `envel create` | binary |
 | `envel-curtail` | Envel Curtail | `envel curtail` | fade |
 | `envel-cyclic` | Envel Cyclic | `envel cyclic` | rising |
+| `envel-dbtoenv` | Envelope dB Breakpoint to Binary Envelope | `envel dbtoenv` | dbtoenv |
 | `envel-dovetail` | Envel Dovetail | `envel dovetail` | fade |
 | `envel-extract` | Envel Extract | `envel extract` | binary |
 | `envel-impose` | Envel Impose | `envel impose` | binary |
@@ -59,6 +61,7 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `envnu-expdecay` | Envnu Exponential Decay | `envnu expdecay` | decay |
 | `envnu-peakchop` | Envnu Peak Chop | `envnu peakchop` | envelope |
 | `extend-baktobak` | Extend Back-to-Back | `extend baktobak` | baktobak |
+| `extend-doublets` | Extend Doublets | `extend doublets` | Default |
 | `extend-drunk` | Drunken Time Walk | `extend drunk` | Drunken walk |
 | `extend-freeze` | Extend Freeze | `extend freeze` | duration |
 | `extend-iterate` | Extend Iterate | `extend iterate` | duration |
@@ -83,6 +86,7 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `focus-fold` | Fold Spectrum | `focus fold` | Fold |
 | `focus-freeze` | Freeze Spectral Characteristics | `focus freeze` | Freeze amplitudes |
 | `focus-hold` | Hold Spectrum | `focus hold` | Hold |
+| `focus-step` | Focus Step | `focus step` | Default |
 | `hover` | Hover | `hover hover` | Hover |
 | `hover2` | Inverted Hover | `hover2 hover2` | Inverted hover |
 | `isolate` | Isolate | `isolate` | One segment per output; Grouped segments; Level threshold; Slice file; Dovetail slices |
@@ -162,7 +166,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### ENVEL (27)
 
-✅ ENVEL ATTACK · ⬜ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ⬜ ENVEL DBTOENV · ⬜ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ⬜ ENVEL ENVTOBRK · ⬜ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ⬜ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ⬜ ENVEL RESHAPE · ⬜ ENVEL REPLOT · ⬜ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ⬜ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
+✅ ENVEL ATTACK · ✅ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ✅ ENVEL DBTOENV · ⬜ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ⬜ ENVEL ENVTOBRK · ⬜ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ⬜ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ⬜ ENVEL RESHAPE · ⬜ ENVEL REPLOT · ⬜ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ⬜ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
 
 ### ENVNU (2)
 
@@ -170,7 +174,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### EXTEND (31)
 
-✅ EXTEND BAKTOBAK · ✅ BOUNCE · ⬜ CERACU · ⬜ EXTEND DOUBLETS · ✅ EXTEND DRUNK · ⬜ DVDWIND · ✅ SFECHO ECHO · ⬜ ENVSPEAK · ✅ EXTEND FREEZE · ✅ HOVER · ✅ HOVER2 · ✅ EXTEND ITERATE · ✅ ITERLINE · ✅ ITERLINEF · ✅ EXTEND LOOP · ⬜ MADRID · ⬜ MOTOR · ⬜ PULSER · ⬜ PULSER MULTI · ⬜ REPEATER · ✅ EXTEND REPETITIONS · ⬜ ROTOR · ✅ EXTEND SCRAMBLE · ✅ EXTEND SEQUENCE · ⬜ EXTEND SEQUENCE2 · ⬜ SHIFTER · ⬜ SHRINK · ⬜ SORTER · ⬜ STUTTER · ⬜ TESSELATE · ✅ EXTEND ZIGZAG
+✅ EXTEND BAKTOBAK · ✅ BOUNCE · ⬜ CERACU · ✅ EXTEND DOUBLETS · ✅ EXTEND DRUNK · ⬜ DVDWIND · ✅ SFECHO ECHO · ⬜ ENVSPEAK · ✅ EXTEND FREEZE · ✅ HOVER · ✅ HOVER2 · ✅ EXTEND ITERATE · ✅ ITERLINE · ✅ ITERLINEF · ✅ EXTEND LOOP · ⬜ MADRID · ⬜ MOTOR · ⬜ PULSER · ⬜ PULSER MULTI · ⬜ REPEATER · ✅ EXTEND REPETITIONS · ⬜ ROTOR · ✅ EXTEND SCRAMBLE · ✅ EXTEND SEQUENCE · ⬜ EXTEND SEQUENCE2 · ⬜ SHIFTER · ⬜ SHRINK · ⬜ SORTER · ⬜ STUTTER · ⬜ TESSELATE · ✅ EXTEND ZIGZAG
 
 ### FILTER (13)
 
@@ -178,7 +182,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### FOCUS (9)
 
-✅ FOCUS ACCU · ✅ FOCUS EXAG · ✅ FOCUS FOCUS · ✅ FOCUS FOLD · ✅ FOCUS FREEZE · ✅ FOCUS HOLD · ⬜ SPECFOLD · ⬜ FOCUS STEP · ⬜ SUPERACCU
+✅ FOCUS ACCU · ✅ FOCUS EXAG · ✅ FOCUS FOCUS · ✅ FOCUS FOLD · ✅ FOCUS FREEZE · ✅ FOCUS HOLD · ⬜ SPECFOLD · ✅ FOCUS STEP · ⬜ SUPERACCU
 
 ### FORMANTS (8)
 

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-dbtoenv",
+  "title": "Envelope dB Breakpoint to Binary Envelope",
+  "category": "utilities",
+  "summary": "Envelope dB Breakpoint to Binary Envelope",
+  "description": "Envelope dB Breakpoint to Binary Envelope, as documented in the bundled CDP Release 8 reference.",
+  "useCases": [
+    "Envelope dB Breakpoint to Binary Envelope"
+  ],
+  "tags": [
+    "envel",
+    "dbtoenv"
+  ],
+  "identity": {
+    "executable": "envel",
+    "operation": "dbtoenv"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "DBTOENV",
+    "helpCommand": [
+      "envel",
+      "dbtoenv"
+    ],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "dbtoenv",
+      "title": "Envelope dB Breakpoint to Binary Envelope",
+      "summary": "Envelope dB Breakpoint to Binary Envelope",
+      "inputs": [
+        {
+          "id": "db-brkfile",
+          "label": "db_brkfile",
+          "description": "CDP db_brkfile input.",
+          "fileTypes": [
+            "breakpoint"
+          ],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "wsize",
+          "label": "wsize",
+          "description": "Required CDP wsize value.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 5,
+          "min": 5
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-envel-dbtoenv"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "dbtoenv"
+        },
+        {
+          "kind": "input",
+          "inputId": "db-brkfile"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "wsize"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

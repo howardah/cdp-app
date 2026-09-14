@@ -126,6 +126,10 @@ const MANIFESTS: &[&str] = &[
     include_str!("../../src/processes/definitions/extend-freeze.json"),
     include_str!("../../src/processes/definitions/extend-iterate.json"),
     include_str!("../../src/processes/definitions/extend-loop.json"),
+    include_str!("../../src/processes/definitions/envel-brktoenv.json"),
+    include_str!("../../src/processes/definitions/envel-dbtoenv.json"),
+    include_str!("../../src/processes/definitions/extend-doublets.json"),
+    include_str!("../../src/processes/definitions/focus-step.json"),
 ];
 
 #[test]

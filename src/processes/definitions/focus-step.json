@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "focus-step",
+  "title": "Focus Step",
+  "category": "spectral",
+  "summary": "Focus Step",
+  "description": "Focus Step. inanalysisfile outanalysisfile timestep",
+  "useCases": [
+    "Process audio with CDP Release 8"
+  ],
+  "tags": [
+    "focus"
+  ],
+  "identity": {
+    "executable": "focus",
+    "operation": "step"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cfocus.htm",
+    "anchor": "STEP",
+    "helpCommand": [
+      "focus",
+      "step"
+    ],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "default",
+      "title": "Default",
+      "summary": "inanalysisfile outanalysisfile timestep",
+      "inputs": [
+        {
+          "id": "inanalysisfile",
+          "label": "inanalysisfile",
+          "description": "inanalysisfile input documented by CDP.",
+          "fileTypes": [
+            "analysis-ana"
+          ],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "timestep",
+          "label": "timestep",
+          "description": "timestep parameter documented by CDP.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-processed"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "step"
+        },
+        {
+          "kind": "input",
+          "inputId": "inanalysisfile"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "timestep"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

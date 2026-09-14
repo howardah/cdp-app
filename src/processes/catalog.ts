@@ -120,6 +120,10 @@ import bounce from "./definitions/bounce.json";
 import freeze from "./definitions/extend-freeze.json";
 import iterate from "./definitions/extend-iterate.json";
 import loop from "./definitions/extend-loop.json";
+import envelBrktoenv from "./definitions/envel-brktoenv.json";
+import envelDbtoenv from "./definitions/envel-dbtoenv.json";
+import extendDoublets from "./definitions/extend-doublets.json";
+import focusStep from "./definitions/focus-step.json";
 
 export const processCatalog = [
   speed,
@@ -238,6 +242,10 @@ export const processCatalog = [
   freeze,
   iterate,
   loop,
+  envelBrktoenv,
+  envelDbtoenv,
+  extendDoublets,
+  focusStep,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 
