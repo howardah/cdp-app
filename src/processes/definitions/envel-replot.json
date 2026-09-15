@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-replot",
+  "title": "Normalise Breakpoint Envelope",
+  "category": "utilities",
+  "summary": "Raise a breakpoint envelope so its highest point reaches full scale.",
+  "description": "Normalise a text breakpoint envelope while retaining an editable result.",
+  "useCases": ["Prepare an envelope for reuse"],
+  "tags": ["envelope", "normalise", "breakpoints"],
+  "identity": { "executable": "envel", "operation": "replot" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "REPLOT",
+    "helpCommand": ["envel", "replot", "normalise"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "normalise",
+      "cliMode": 1,
+      "title": "Normalise",
+      "summary": "Expand the envelope to its maximum possible peak.",
+      "inputs": [
+        {
+          "id": "envelope",
+          "label": "Breakpoint file",
+          "description": "A time/value breakpoint envelope.",
+          "fileTypes": ["breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "window-ms",
+          "label": "Envelope window",
+          "description": "Analysis window used when replotting.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 50,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "breakpoint",
+        "extension": "brk",
+        "nameSuffix": "-normalised"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "replot" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "window-ms" }
+      ],
+      "constraints": []
+    }
+  ]
+}

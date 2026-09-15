@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-shuffle",
+  "title": "Duplicate Mix Entries",
+  "category": "edit-and-mix",
+  "summary": "Duplicate every entry in a mixfile.",
+  "description": "Create a new mixfile with each input line duplicated.",
+  "useCases": ["Double a mix arrangement"],
+  "tags": ["mix", "duplicate", "arrangement"],
+  "identity": { "executable": "submix", "operation": "shuffle" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "SHUFFLE",
+    "helpCommand": ["submix", "shuffle"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "duplicate",
+      "cliMode": 1,
+      "title": "Duplicate entries",
+      "summary": "Duplicate each line in the mixfile.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to duplicate.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-doubled"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "shuffle" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "mixfile" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

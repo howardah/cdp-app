@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-synth",
+  "title": "Repitch synth",
+  "category": "spectral",
+  "summary": "CDP Repitch synth operation.",
+  "description": "Run the documented CDP Release 8 Repitch synth operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "synth", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "synth"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "synth"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch synth",
+      "summary": "Run Repitch synth.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch synth.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "harmonics",
+          "label": "Harmonics data",
+          "description": "Text file listing harmonic amplitudes from the first harmonic upward.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-synth"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "synth"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "harmonics"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

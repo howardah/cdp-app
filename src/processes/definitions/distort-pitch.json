@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-pitch",
+  "title": "Distort pitch",
+  "category": "time-domain",
+  "summary": "CDP Distort pitch operation.",
+  "description": "Run the documented CDP Release 8 Distort pitch operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "pitch", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "pitch"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "pitch"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort pitch",
+      "summary": "Run Distort pitch.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort pitch.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "octaveVariation",
+          "label": "Octave variation",
+          "description": "Maximum random transposition up or down in octaves (greater than zero, up to eight).",
+          "required": true,
+          "advanced": false,
+          "unit": "octaves",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 8,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-pitch"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "pitch"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "octaveVariation" }
+      ],
+      "constraints": []
+    }
+  ]
+}

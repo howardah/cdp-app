@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-test",
+  "title": "Validate Mixfile",
+  "category": "utilities",
+  "summary": "Check a CDP mixfile for syntax errors.",
+  "description": "Run CDP's mixfile syntax validation and return its report.",
+  "useCases": ["Validate a mix before rendering"],
+  "tags": ["mix", "validate", "report"],
+  "identity": { "executable": "submix", "operation": "test" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "TEST",
+    "helpCommand": ["submix", "test"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "validate",
+      "title": "Validate syntax",
+      "summary": "Report whether a mixfile has valid CDP syntax.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to validate.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": { "kind": "stdoutReport" },
+      "argumentOrder": [
+        { "kind": "literal", "value": "test" },
+        { "kind": "input", "inputId": "mixfile" }
+      ],
+      "constraints": []
+    }
+  ]
+}

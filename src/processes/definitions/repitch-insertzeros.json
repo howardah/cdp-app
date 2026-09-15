@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-insertzeros",
+  "title": "Repitch insertzeros",
+  "category": "spectral",
+  "summary": "CDP Repitch insertzeros operation.",
+  "description": "Run the documented CDP Release 8 Repitch insertzeros operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "insertzeros", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "insertzeros"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "insertzeros"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch insertzeros",
+      "summary": "Run Repitch insertzeros.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch insertzeros.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "zerosData",
+          "label": "Unpitched data",
+          "description": "Text file of paired start and end times for unpitched markers.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-insertzeros"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "insertzeros"
+        },
+        { "kind": "literal", "value": "1" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "input", "inputId": "zerosData" }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-make2",
+  "title": "Build Spectrum with Envelope",
+  "category": "spectral",
+  "summary": "Create analysis data from pitch, formant, and envelope files.",
+  "description": "Reconstruct a CDP analysis file with an explicit amplitude envelope.",
+  "useCases": ["Resynthesise pitch data with controlled dynamics"],
+  "tags": ["spectral", "pitch", "formants", "envelope"],
+  "identity": { "executable": "combine", "operation": "make2" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "MAKE2",
+    "helpCommand": ["combine", "make2"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "build",
+      "title": "Build analysis",
+      "summary": "Combine pitch, formant, and envelope data into an analysis file.",
+      "inputs": [
+        {
+          "id": "pitch",
+          "label": "Binary pitch file",
+          "description": "CDP binary pitch data (.frq).",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "formants",
+          "label": "Binary formant file",
+          "description": "CDP binary formant data (.for).",
+          "fileTypes": ["binary-formant"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "envelope",
+          "label": "Binary envelope",
+          "description": "Amplitude envelope derived from analysis data.",
+          "fileTypes": ["binary-envelope"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spectrum"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "make2" },
+        { "kind": "input", "inputId": "pitch" },
+        { "kind": "input", "inputId": "formants" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

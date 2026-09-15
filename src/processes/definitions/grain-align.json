@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-align",
+  "title": "Grain align",
+  "category": "time-domain",
+  "summary": "CDP Grain align operation.",
+  "description": "Run the documented CDP Release 8 Grain align operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "align", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "align"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "align"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain align",
+      "summary": "Run Grain align.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain align.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "target",
+          "label": "Second grainy soundfile",
+          "description": "The grainy sound whose onsets are aligned to the source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "source" }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "offset",
+          "label": "Offset",
+          "description": "Offset applied while aligning grain onsets.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "step": 0.001
+        },
+        {
+          "id": "gate",
+          "label": "Second-file gate",
+          "description": "Gate level used to detect grains in the second sound.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-align"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "align"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        { "kind": "input", "inputId": "target" },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "offset" },
+        { "kind": "parameter", "parameterId": "gate" }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-replim",
+  "title": "Distort replim",
+  "category": "time-domain",
+  "summary": "CDP Distort replim operation.",
+  "description": "Run the documented CDP Release 8 Distort replim operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "replim", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "replim"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "replim"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort replim",
+      "summary": "Run Distort replim.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort replim.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "multiplier",
+          "label": "Repeat multiplier",
+          "description": "Number of repetitions for each eligible wavecycle group.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "frequencyLimit",
+          "label": "Frequency limit",
+          "description": "Only wavecycles below this frequency in Hz are repeated.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "option", "flag": "-f", "join": "concatenated" },
+          "kind": "number",
+          "default": 1000,
+          "min": 0.001,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-replim"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "replim"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "multiplier" },
+        { "kind": "parameter", "parameterId": "frequencyLimit" }
+      ],
+      "constraints": []
+    }
+  ]
+}

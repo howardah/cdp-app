@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-reshape",
+  "title": "Normalise Binary Envelope",
+  "category": "utilities",
+  "summary": "Raise a binary envelope so its highest point reaches full scale.",
+  "description": "Normalise a binary envelope without changing its timing.",
+  "useCases": ["Maximise an envelope before imposing it"],
+  "tags": ["envelope", "normalise", "reshape"],
+  "identity": { "executable": "envel", "operation": "reshape" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "RESHAPE",
+    "helpCommand": ["envel", "reshape", "normalise"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "normalise",
+      "cliMode": 1,
+      "title": "Normalise",
+      "summary": "Expand the envelope to its maximum possible peak.",
+      "inputs": [
+        {
+          "id": "envelope",
+          "label": "Binary envelope",
+          "description": "A CDP binary envelope.",
+          "fileTypes": ["binary-envelope"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-normalised"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reshape" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

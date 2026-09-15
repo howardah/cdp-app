@@ -126,12 +126,117 @@ const MANIFESTS: &[&str] = &[
     include_str!("../../src/processes/definitions/extend-freeze.json"),
     include_str!("../../src/processes/definitions/extend-iterate.json"),
     include_str!("../../src/processes/definitions/extend-loop.json"),
+    include_str!("../../src/processes/definitions/envel-brktoenv.json"),
+    include_str!("../../src/processes/definitions/envel-dbtoenv.json"),
+    include_str!("../../src/processes/definitions/extend-doublets.json"),
+    include_str!("../../src/processes/definitions/focus-step.json"),
+    include_str!("../../src/processes/definitions/envel-dbtogain.json"),
+    include_str!("../../src/processes/definitions/envel-envtobrk.json"),
+    include_str!("../../src/processes/definitions/envel-envtodb.json"),
+    include_str!("../../src/processes/definitions/envel-gaintodb.json"),
+    include_str!("../../src/processes/definitions/envel-reshape.json"),
+    include_str!("../../src/processes/definitions/envel-replot.json"),
+    include_str!("../../src/processes/definitions/envel-scaled.json"),
+    include_str!("../../src/processes/definitions/envel-timegrid.json"),
+    include_str!("../../src/processes/definitions/filter-bankfrqs.json"),
+    include_str!("../../src/processes/definitions/filter-vfilters.json"),
+    include_str!("../../src/processes/definitions/submix-atstep.json"),
+    include_str!("../../src/processes/definitions/submix-attenuate.json"),
+    include_str!("../../src/processes/definitions/submix-dummy.json"),
+    include_str!("../../src/processes/definitions/submix-getlevel.json"),
+    include_str!("../../src/processes/definitions/submix-model.json"),
+    include_str!("../../src/processes/definitions/submix-ongrid.json"),
+    include_str!("../../src/processes/definitions/submix-shuffle.json"),
+    include_str!("../../src/processes/definitions/submix-test.json"),
+    include_str!("../../src/processes/definitions/combine-make.json"),
+    include_str!("../../src/processes/definitions/combine-make2.json"),
+    include_str!("../../src/processes/definitions/distort-average.json"),
+    include_str!("../../src/processes/definitions/distort-clip.json"),
+    include_str!("../../src/processes/definitions/distort-cyclecnt.json"),
+    include_str!("../../src/processes/definitions/distort-delete.json"),
+    include_str!("../../src/processes/definitions/distort-divide.json"),
+    include_str!("../../src/processes/definitions/distort-envel.json"),
+    include_str!("../../src/processes/definitions/distort-filter.json"),
+    include_str!("../../src/processes/definitions/distort-fractal.json"),
+    include_str!("../../src/processes/definitions/distort-harmonic.json"),
+    include_str!("../../src/processes/definitions/distort-interact.json"),
+    include_str!("../../src/processes/definitions/distort-interpolate.json"),
+    include_str!("../../src/processes/definitions/distort-multiply.json"),
+    include_str!("../../src/processes/definitions/distort-omit.json"),
+    include_str!("../../src/processes/definitions/distort-overload.json"),
+    include_str!("../../src/processes/definitions/distort-pitch.json"),
+    include_str!("../../src/processes/definitions/distort-pulsed.json"),
+    include_str!("../../src/processes/definitions/distort-reform.json"),
+    include_str!("../../src/processes/definitions/distort-repeat.json"),
+    include_str!("../../src/processes/definitions/distort-repeat2.json"),
+    include_str!("../../src/processes/definitions/distort-replace.json"),
+    include_str!("../../src/processes/definitions/distort-replim.json"),
+    include_str!("../../src/processes/definitions/distort-reverse.json"),
+    include_str!("../../src/processes/definitions/distort-shuffle.json"),
+    include_str!("../../src/processes/definitions/distort-telescope.json"),
+    include_str!("../../src/processes/definitions/grain-align.json"),
+    include_str!("../../src/processes/definitions/grain-assess.json"),
+    include_str!("../../src/processes/definitions/grain-count.json"),
+    include_str!("../../src/processes/definitions/grain-duplicate.json"),
+    include_str!("../../src/processes/definitions/grain-find.json"),
+    include_str!("../../src/processes/definitions/grain-grev.json"),
+    include_str!("../../src/processes/definitions/grain-noise-extend.json"),
+    include_str!("../../src/processes/definitions/grain-omit.json"),
+    include_str!("../../src/processes/definitions/grain-remotif.json"),
+    include_str!("../../src/processes/definitions/grain-reorder.json"),
+    include_str!("../../src/processes/definitions/grain-repitch.json"),
+    include_str!("../../src/processes/definitions/grain-reposition.json"),
+    include_str!("../../src/processes/definitions/grain-rerhythm.json"),
+    include_str!("../../src/processes/definitions/grain-reverse.json"),
+    include_str!("../../src/processes/definitions/grain-r-extend.json"),
+    include_str!("../../src/processes/definitions/grain-timewarp.json"),
+    include_str!("../../src/processes/definitions/repitch-analenv.json"),
+    include_str!("../../src/processes/definitions/repitch-approx.json"),
+    include_str!("../../src/processes/definitions/repitch-combine.json"),
+    include_str!("../../src/processes/definitions/repitch-combineb.json"),
+    include_str!("../../src/processes/definitions/repitch-cut.json"),
+    include_str!("../../src/processes/definitions/repitch-exag.json"),
+    include_str!("../../src/processes/definitions/repitch-fix.json"),
+    include_str!("../../src/processes/definitions/repitch-generate.json"),
+    include_str!("../../src/processes/definitions/repitch-getpitch.json"),
+    include_str!("../../src/processes/definitions/repitch-insertsil.json"),
+    include_str!("../../src/processes/definitions/repitch-insertzeros.json"),
+    include_str!("../../src/processes/definitions/repitch-interp.json"),
+    include_str!("../../src/processes/definitions/repitch-invert.json"),
+    include_str!("../../src/processes/definitions/repitch-noisetosil.json"),
+    include_str!("../../src/processes/definitions/repitch-pchshift.json"),
+    include_str!("../../src/processes/definitions/repitch-pchtotext.json"),
+    include_str!("../../src/processes/definitions/repitch-pitchtosil.json"),
+    include_str!("../../src/processes/definitions/repitch-quantise.json"),
+    include_str!("../../src/processes/definitions/repitch-randomise.json"),
+    include_str!("../../src/processes/definitions/repitch-smooth.json"),
+    include_str!("../../src/processes/definitions/repitch-synth.json"),
+    include_str!("../../src/processes/definitions/repitch-transpose.json"),
+    include_str!("../../src/processes/definitions/repitch-transposef.json"),
+    include_str!("../../src/processes/definitions/repitch-vibrato.json"),
+    include_str!("../../src/processes/definitions/repitch-vowels.json"),
+    include_str!("../../src/processes/definitions/sndinfo-props.json"),
+    include_str!("../../src/processes/definitions/sndinfo-len.json"),
+    include_str!("../../src/processes/definitions/sndinfo-lens.json"),
+    include_str!("../../src/processes/definitions/sndinfo-sumlen.json"),
+    include_str!("../../src/processes/definitions/sndinfo-timediff.json"),
+    include_str!("../../src/processes/definitions/sndinfo-smptime.json"),
+    include_str!("../../src/processes/definitions/sndinfo-timesmp.json"),
+    include_str!("../../src/processes/definitions/sndinfo-maxsamp.json"),
+    include_str!("../../src/processes/definitions/sndinfo-maxsamp2.json"),
+    include_str!("../../src/processes/definitions/sndinfo-loudchan.json"),
+    include_str!("../../src/processes/definitions/sndinfo-findhole.json"),
+    include_str!("../../src/processes/definitions/sndinfo-diff.json"),
+    include_str!("../../src/processes/definitions/sndinfo-chandiff.json"),
+    include_str!("../../src/processes/definitions/brktopi.json"),
+    include_str!("../../src/processes/definitions/ptobrk-withzeros.json"),
 ];
 
 #[test]
 fn every_shipped_manifest_deserializes_and_has_modes() {
     let catalog =
         load_catalog(MANIFESTS).expect("all shipped manifests must be valid Rust catalog data");
+    assert_eq!(catalog.len(), 220);
     assert_eq!(catalog.len(), MANIFESTS.len());
     assert!(catalog.iter().all(|process| !process.modes.is_empty()));
 }
@@ -149,6 +254,14 @@ fn envelope_extension_and_playability_classification_are_typed() {
     assert_eq!(
         file_type_for_path(std::path::Path::new("result.mix")),
         Some(composers_desktop_application::catalog::types::CdpFileType::Mixfile)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("pitch.frq")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryPitch)
+    );
+    assert_eq!(
+        file_type_for_path(std::path::Path::new("formants.for")),
+        Some(composers_desktop_application::catalog::types::CdpFileType::BinaryFormant)
     );
 }
 
@@ -630,6 +743,99 @@ fn corrected_generic_processes_compile_and_resolve_output_roots() {
             OsString::from("second.wav"),
             output.into_os_string(),
             OsString::from("3"),
+        ]
+    );
+}
+
+#[test]
+fn next_catalog_wave_compiles_documented_argument_vectors() {
+    let catalog = load_catalog(MANIFESTS).expect("catalog should load");
+    let directory = tempfile::tempdir().expect("temporary output directory");
+    let output = |name: &str| directory.path().join(name).to_string_lossy().into_owned();
+
+    let dbtogain = RunProcessRequest {
+        process_id: "envel-dbtogain".into(),
+        mode_id: "convert".into(),
+        inputs: HashMap::from([("envelope".into(), vec!["level.brk".into()])]),
+        parameters: HashMap::new(),
+        output_path: Some(output("gain.brk")),
+    };
+    let (command, _) = compile_request(&catalog, &dbtogain, "envel".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("dbtogain"),
+            OsString::from("level.brk"),
+            OsString::from(output("gain.brk")),
+        ]
+    );
+
+    let timegrid = RunProcessRequest {
+        process_id: "envel-timegrid".into(),
+        mode_id: "grid".into(),
+        inputs: HashMap::from([("source".into(), vec!["source.wav".into()])]),
+        parameters: HashMap::from([
+            ("grid-count".into(), ParameterValue::Number { value: 3.0 }),
+            ("grid-width".into(), ParameterValue::Number { value: 0.25 }),
+            ("splice-ms".into(), ParameterValue::Number { value: 12.0 }),
+        ]),
+        output_path: Some(output("grid.wav")),
+    };
+    let (command, _) = compile_request(&catalog, &timegrid, "envel".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("timegrid"),
+            OsString::from("source.wav"),
+            OsString::from(output("grid.wav")),
+            OsString::from("3"),
+            OsString::from("0.25"),
+            OsString::from("12"),
+        ]
+    );
+
+    let dummy = RunProcessRequest {
+        process_id: "submix-dummy".into(),
+        mode_id: "sequential".into(),
+        inputs: HashMap::from([(
+            "sources".into(),
+            vec!["first.wav".into(), "second.wav".into()],
+        )]),
+        parameters: HashMap::new(),
+        output_path: Some(output("sequence.mix")),
+    };
+    let (command, _) = compile_request(&catalog, &dummy, "submix".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("dummy"),
+            OsString::from("2"),
+            OsString::from("first.wav"),
+            OsString::from("second.wav"),
+            OsString::from(output("sequence.mix")),
+        ]
+    );
+
+    let make2 = RunProcessRequest {
+        process_id: "combine-make2".into(),
+        mode_id: "build".into(),
+        inputs: HashMap::from([
+            ("pitch".into(), vec!["pitch.frq".into()]),
+            ("formants".into(), vec!["formants.for".into()]),
+            ("envelope".into(), vec!["shape.evl".into()]),
+        ]),
+        parameters: HashMap::new(),
+        output_path: Some(output("rebuilt.ana")),
+    };
+    let (command, _) = compile_request(&catalog, &make2, "combine".into()).unwrap();
+    assert_eq!(
+        command.args,
+        vec![
+            OsString::from("make2"),
+            OsString::from("pitch.frq"),
+            OsString::from("formants.for"),
+            OsString::from("shape.evl"),
+            OsString::from(output("rebuilt.ana")),
         ]
     );
 }

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-chandiff",
+  "title": "Sound information: chandiff",
+  "category": "utilities",
+  "summary": "CDP Sound information: chandiff operation.",
+  "description": "Run the documented CDP Release 8 Sound information: chandiff operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "chandiff", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "chandiff"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "chandiff"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: chandiff",
+      "summary": "Run Sound information: chandiff.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: chandiff.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 2, "max": 2 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "threshold",
+          "label": "Difference threshold",
+          "description": "Maximum permitted sample difference.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.000001
+        },
+        {
+          "id": "maximumDifferences",
+          "label": "Maximum differences",
+          "description": "Stop after this many differences.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-n", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "chandiff"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        { "kind": "parameter", "parameterId": "threshold" },
+        { "kind": "parameter", "parameterId": "maximumDifferences" }
+      ],
+      "constraints": []
+    }
+  ]
+}

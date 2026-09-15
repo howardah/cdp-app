@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "brktopi",
+  "title": "Convert pitch text to binary pitch",
+  "category": "utilities",
+  "summary": "CDP Convert pitch text to binary pitch operation.",
+  "description": "Run the documented CDP Release 8 Convert pitch text to binary pitch operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["brktopi", "conversion", "cdp-release-8"],
+  "identity": {
+    "executable": "brktopi"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["brktopi"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Convert pitch text to binary pitch",
+      "summary": "Run Convert pitch text to binary pitch.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Text data",
+          "description": "Source required by CDP Convert pitch text to binary pitch.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-converted"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "brktopi"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

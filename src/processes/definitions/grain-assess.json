@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-assess",
+  "title": "Grain assess",
+  "category": "time-domain",
+  "summary": "CDP Grain assess operation.",
+  "description": "Run the documented CDP Release 8 Grain assess operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "assess", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "assess"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "assess"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain assess",
+      "summary": "Run Grain assess.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain assess.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": { "kind": "stdoutReport" },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "assess"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

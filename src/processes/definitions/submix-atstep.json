@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-atstep",
+  "title": "Create Stepped Mixfile",
+  "category": "edit-and-mix",
+  "summary": "Place listed sounds into a mix at a fixed time interval.",
+  "description": "Create an editable CDP mixfile from an ordered sound list.",
+  "useCases": ["Lay out a regular sequence"],
+  "tags": ["mix", "sequence", "timing"],
+  "identity": { "executable": "submix", "operation": "atstep" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "ATSTEP",
+    "helpCommand": ["submix", "atstep"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "create",
+      "title": "Create stepped mix",
+      "summary": "Place each sound at a fixed interval.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Soundfiles in placement order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "step-seconds",
+          "label": "Time step",
+          "description": "Time between successive sound entries.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-stepped"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "atstep" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "step-seconds" }
+      ],
+      "constraints": []
+    }
+  ]
+}

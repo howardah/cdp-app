@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-dummy",
+  "title": "Create Basic Mixfile",
+  "category": "edit-and-mix",
+  "summary": "Turn a list of sounds into an editable mixfile.",
+  "description": "Create a basic CDP mixfile with a chosen initial arrangement.",
+  "useCases": ["Start editing a mix"],
+  "tags": ["mix", "create", "layout"],
+  "identity": { "executable": "submix", "operation": "dummy" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "DUMMY",
+    "helpCommand": ["submix", "dummy"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "simultaneous",
+      "cliMode": 1,
+      "title": "Start together",
+      "summary": "Start every sound at time zero.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Soundfiles in mix order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-mix"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "dummy" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "sequential",
+      "cliMode": 2,
+      "title": "Place sequentially",
+      "summary": "Start each sound when the preceding sound ends.",
+      "inputs": [
+        {
+          "id": "sources",
+          "label": "Soundfiles",
+          "description": "Soundfiles in mix order.",
+          "fileTypes": ["soundfile"],
+          "minItems": 2,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "mixfile",
+        "extension": "mix",
+        "nameSuffix": "-mix"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "dummy" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "sources" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

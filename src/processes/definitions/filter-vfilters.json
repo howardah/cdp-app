@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "filter-vfilters",
+  "title": "Create Fixed-Pitch Varibank Files",
+  "category": "utilities",
+  "summary": "Turn a pitch list into fixed-pitch Varibank filter data files.",
+  "description": "Generate one Varibank data file for each input line.",
+  "useCases": ["Prepare filter data from pitch values"],
+  "tags": ["filter", "varibank", "pitch"],
+  "identity": { "executable": "filter", "operation": "vfilters" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrofilt.htm",
+    "anchor": "VFILTERS",
+    "helpCommand": ["filter", "vfilters"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "create",
+      "title": "Create filter files",
+      "summary": "Generate fixed-pitch filter data from a text list.",
+      "inputs": [
+        {
+          "id": "pitches",
+          "label": "Pitch list",
+          "description": "Text file with MIDI notes or frequencies, one or more per line.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "genericRoot",
+        "fileType": "text-data",
+        "extension": "txt",
+        "nameSuffix": "-filters",
+        "discovery": { "prefixStyle": "root-number", "mayProduceRemnant": false }
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "vfilters" },
+        { "kind": "input", "inputId": "pitches" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

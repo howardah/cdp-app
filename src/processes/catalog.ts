@@ -120,6 +120,110 @@ import bounce from "./definitions/bounce.json";
 import freeze from "./definitions/extend-freeze.json";
 import iterate from "./definitions/extend-iterate.json";
 import loop from "./definitions/extend-loop.json";
+import envelBrktoenv from "./definitions/envel-brktoenv.json";
+import envelDbtoenv from "./definitions/envel-dbtoenv.json";
+import extendDoublets from "./definitions/extend-doublets.json";
+import focusStep from "./definitions/focus-step.json";
+import envelDbtogain from "./definitions/envel-dbtogain.json";
+import envelEnvtobrk from "./definitions/envel-envtobrk.json";
+import envelEnvtodb from "./definitions/envel-envtodb.json";
+import envelGaintodb from "./definitions/envel-gaintodb.json";
+import envelReshape from "./definitions/envel-reshape.json";
+import envelReplot from "./definitions/envel-replot.json";
+import envelScaled from "./definitions/envel-scaled.json";
+import envelTimegrid from "./definitions/envel-timegrid.json";
+import filterBankfrqs from "./definitions/filter-bankfrqs.json";
+import filterVfilters from "./definitions/filter-vfilters.json";
+import submixAtstep from "./definitions/submix-atstep.json";
+import submixAttenuate from "./definitions/submix-attenuate.json";
+import submixDummy from "./definitions/submix-dummy.json";
+import submixGetlevel from "./definitions/submix-getlevel.json";
+import submixModel from "./definitions/submix-model.json";
+import submixOngrid from "./definitions/submix-ongrid.json";
+import submixShuffle from "./definitions/submix-shuffle.json";
+import submixTest from "./definitions/submix-test.json";
+import combineMake from "./definitions/combine-make.json";
+import combineMake2 from "./definitions/combine-make2.json";
+import distortAverage from "./definitions/distort-average.json";
+import distortClip from "./definitions/distort-clip.json";
+import distortCyclecnt from "./definitions/distort-cyclecnt.json";
+import distortDelete from "./definitions/distort-delete.json";
+import distortDivide from "./definitions/distort-divide.json";
+import distortEnvel from "./definitions/distort-envel.json";
+import distortFilter from "./definitions/distort-filter.json";
+import distortFractal from "./definitions/distort-fractal.json";
+import distortHarmonic from "./definitions/distort-harmonic.json";
+import distortInteract from "./definitions/distort-interact.json";
+import distortInterpolate from "./definitions/distort-interpolate.json";
+import distortMultiply from "./definitions/distort-multiply.json";
+import distortOmit from "./definitions/distort-omit.json";
+import distortOverload from "./definitions/distort-overload.json";
+import distortPitch from "./definitions/distort-pitch.json";
+import distortPulsed from "./definitions/distort-pulsed.json";
+import distortReform from "./definitions/distort-reform.json";
+import distortRepeat from "./definitions/distort-repeat.json";
+import distortRepeat2 from "./definitions/distort-repeat2.json";
+import distortReplace from "./definitions/distort-replace.json";
+import distortReplim from "./definitions/distort-replim.json";
+import distortReverse from "./definitions/distort-reverse.json";
+import distortShuffle from "./definitions/distort-shuffle.json";
+import distortTelescope from "./definitions/distort-telescope.json";
+import grainAlign from "./definitions/grain-align.json";
+import grainAssess from "./definitions/grain-assess.json";
+import grainCount from "./definitions/grain-count.json";
+import grainDuplicate from "./definitions/grain-duplicate.json";
+import grainFind from "./definitions/grain-find.json";
+import grainGrev from "./definitions/grain-grev.json";
+import grainNoiseExtend from "./definitions/grain-noise-extend.json";
+import grainOmit from "./definitions/grain-omit.json";
+import grainRemotif from "./definitions/grain-remotif.json";
+import grainReorder from "./definitions/grain-reorder.json";
+import grainRepitch from "./definitions/grain-repitch.json";
+import grainReposition from "./definitions/grain-reposition.json";
+import grainRerhythm from "./definitions/grain-rerhythm.json";
+import grainReverse from "./definitions/grain-reverse.json";
+import grainRExtend from "./definitions/grain-r-extend.json";
+import grainTimewarp from "./definitions/grain-timewarp.json";
+import repitchAnalenv from "./definitions/repitch-analenv.json";
+import repitchApprox from "./definitions/repitch-approx.json";
+import repitchCombine from "./definitions/repitch-combine.json";
+import repitchCombineb from "./definitions/repitch-combineb.json";
+import repitchCut from "./definitions/repitch-cut.json";
+import repitchExag from "./definitions/repitch-exag.json";
+import repitchFix from "./definitions/repitch-fix.json";
+import repitchGenerate from "./definitions/repitch-generate.json";
+import repitchGetpitch from "./definitions/repitch-getpitch.json";
+import repitchInsertsil from "./definitions/repitch-insertsil.json";
+import repitchInsertzeros from "./definitions/repitch-insertzeros.json";
+import repitchInterp from "./definitions/repitch-interp.json";
+import repitchInvert from "./definitions/repitch-invert.json";
+import repitchNoisetosil from "./definitions/repitch-noisetosil.json";
+import repitchPchshift from "./definitions/repitch-pchshift.json";
+import repitchPchtotext from "./definitions/repitch-pchtotext.json";
+import repitchPitchtosil from "./definitions/repitch-pitchtosil.json";
+import repitchQuantise from "./definitions/repitch-quantise.json";
+import repitchRandomise from "./definitions/repitch-randomise.json";
+import repitchSmooth from "./definitions/repitch-smooth.json";
+import repitchSynth from "./definitions/repitch-synth.json";
+import repitchTranspose from "./definitions/repitch-transpose.json";
+import repitchTransposef from "./definitions/repitch-transposef.json";
+import repitchVibrato from "./definitions/repitch-vibrato.json";
+import repitchVowels from "./definitions/repitch-vowels.json";
+import sndinfoProps from "./definitions/sndinfo-props.json";
+import sndinfoLen from "./definitions/sndinfo-len.json";
+import sndinfoLens from "./definitions/sndinfo-lens.json";
+import sndinfoSumlen from "./definitions/sndinfo-sumlen.json";
+import sndinfoTimediff from "./definitions/sndinfo-timediff.json";
+import sndinfoSmptime from "./definitions/sndinfo-smptime.json";
+import sndinfoTimesmp from "./definitions/sndinfo-timesmp.json";
+import sndinfoMaxsamp from "./definitions/sndinfo-maxsamp.json";
+import sndinfoMaxsamp2 from "./definitions/sndinfo-maxsamp2.json";
+import sndinfoLoudchan from "./definitions/sndinfo-loudchan.json";
+import sndinfoFindhole from "./definitions/sndinfo-findhole.json";
+import sndinfoDiff from "./definitions/sndinfo-diff.json";
+import sndinfoChandiff from "./definitions/sndinfo-chandiff.json";
+import brktopi from "./definitions/brktopi.json";
+import ptobrkWithzeros from "./definitions/ptobrk-withzeros.json";
 
 export const processCatalog = [
   speed,
@@ -238,6 +342,110 @@ export const processCatalog = [
   freeze,
   iterate,
   loop,
+  envelBrktoenv,
+  envelDbtoenv,
+  extendDoublets,
+  focusStep,
+  envelDbtogain,
+  envelEnvtobrk,
+  envelEnvtodb,
+  envelGaintodb,
+  envelReshape,
+  envelReplot,
+  envelScaled,
+  envelTimegrid,
+  filterBankfrqs,
+  filterVfilters,
+  submixAtstep,
+  submixAttenuate,
+  submixDummy,
+  submixGetlevel,
+  submixModel,
+  submixOngrid,
+  submixShuffle,
+  submixTest,
+  combineMake,
+  combineMake2,
+  distortAverage,
+  distortClip,
+  distortCyclecnt,
+  distortDelete,
+  distortDivide,
+  distortEnvel,
+  distortFilter,
+  distortFractal,
+  distortHarmonic,
+  distortInteract,
+  distortInterpolate,
+  distortMultiply,
+  distortOmit,
+  distortOverload,
+  distortPitch,
+  distortPulsed,
+  distortReform,
+  distortRepeat,
+  distortRepeat2,
+  distortReplace,
+  distortReplim,
+  distortReverse,
+  distortShuffle,
+  distortTelescope,
+  grainAlign,
+  grainAssess,
+  grainCount,
+  grainDuplicate,
+  grainFind,
+  grainGrev,
+  grainNoiseExtend,
+  grainOmit,
+  grainRemotif,
+  grainReorder,
+  grainRepitch,
+  grainReposition,
+  grainRerhythm,
+  grainReverse,
+  grainRExtend,
+  grainTimewarp,
+  repitchAnalenv,
+  repitchApprox,
+  repitchCombine,
+  repitchCombineb,
+  repitchCut,
+  repitchExag,
+  repitchFix,
+  repitchGenerate,
+  repitchGetpitch,
+  repitchInsertsil,
+  repitchInsertzeros,
+  repitchInterp,
+  repitchInvert,
+  repitchNoisetosil,
+  repitchPchshift,
+  repitchPchtotext,
+  repitchPitchtosil,
+  repitchQuantise,
+  repitchRandomise,
+  repitchSmooth,
+  repitchSynth,
+  repitchTranspose,
+  repitchTransposef,
+  repitchVibrato,
+  repitchVowels,
+  sndinfoProps,
+  sndinfoLen,
+  sndinfoLens,
+  sndinfoSumlen,
+  sndinfoTimediff,
+  sndinfoSmptime,
+  sndinfoTimesmp,
+  sndinfoMaxsamp,
+  sndinfoMaxsamp2,
+  sndinfoLoudchan,
+  sndinfoFindhole,
+  sndinfoDiff,
+  sndinfoChandiff,
+  brktopi,
+  ptobrkWithzeros,
 ] as unknown as ProcessDefinition[];
 export const categories = ["time-domain", "spectral", "edit-and-mix", "utilities"] as const;
 
@@ -272,6 +480,22 @@ export function validateCatalog(catalog: readonly ProcessDefinition[]): void {
         mode.parameters.some((parameter) => !idPattern.test(parameter.id))
       )
         throw new Error(`invalid parameters in ${process.id}/${mode.id}`);
+      const outputComponentIds = new Set(
+        mode.output.kind === "composite"
+          ? mode.output.components.map((component) => component.id)
+          : [],
+      );
+      if (
+        mode.output.kind === "composite" &&
+        (outputComponentIds.size !== mode.output.components.length ||
+          mode.output.components.some((component) => !idPattern.test(component.id)) ||
+          new Set(
+            mode.output.components.map(
+              (component) => `${component.nameSuffix}.${component.extension}`,
+            ),
+          ).size !== mode.output.components.length)
+      )
+        throw new Error(`invalid output components in ${process.id}/${mode.id}`);
       for (const parameter of mode.parameters) {
         if (parameter.cli.kind !== "positional" && !safeFlag.test(parameter.cli.flag))
           throw new Error(`unsafe CLI flag in ${parameter.id}`);
@@ -294,6 +518,8 @@ export function validateCatalog(catalog: readonly ProcessDefinition[]): void {
           throw new Error(`unknown input reference: ${token.inputId}`);
         if (token.kind === "parameter" && !parameterIds.has(token.parameterId))
           throw new Error(`unknown parameter reference: ${token.parameterId}`);
+        if (token.kind === "outputComponent" && !outputComponentIds.has(token.componentId))
+          throw new Error(`unknown output component reference: ${token.componentId}`);
         if (token.kind === "literal" && token.value.includes("\0"))
           throw new Error("literal contains NUL");
       }

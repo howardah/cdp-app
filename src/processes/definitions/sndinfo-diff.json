@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-diff",
+  "title": "Sound information: diff",
+  "category": "utilities",
+  "summary": "CDP Sound information: diff operation.",
+  "description": "Run the documented CDP Release 8 Sound information: diff operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "diff", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "diff"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "diff"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: diff",
+      "summary": "Run Sound information: diff.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "First file",
+          "description": "First file to compare.",
+          "fileTypes": [
+            "soundfile",
+            "analysis-ana",
+            "binary-pitch",
+            "binary-envelope",
+            "binary-formant"
+          ],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "comparison",
+          "label": "Second file",
+          "description": "Second file to compare; it must have the same CDP file type as the first.",
+          "fileTypes": [
+            "soundfile",
+            "analysis-ana",
+            "binary-pitch",
+            "binary-envelope",
+            "binary-formant"
+          ],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "sameSampleRate", "inputId": "source" }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "threshold",
+          "label": "Difference threshold",
+          "description": "Maximum permitted data-value difference.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.000001
+        },
+        {
+          "id": "maximumDifferences",
+          "label": "Maximum differences",
+          "description": "Stop after this many differences.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-n", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "allowDifferentLengths",
+          "label": "Allow different lengths",
+          "description": "Continue even when files have different lengths.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-l" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "allowDifferentChannels",
+          "label": "Allow different channels",
+          "description": "Continue when soundfiles have different channel counts.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-c" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "diff"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "comparison"
+        },
+        { "kind": "parameter", "parameterId": "threshold" },
+        { "kind": "parameter", "parameterId": "maximumDifferences" },
+        { "kind": "parameter", "parameterId": "allowDifferentLengths" },
+        { "kind": "parameter", "parameterId": "allowDifferentChannels" }
+      ],
+      "constraints": []
+    }
+  ]
+}

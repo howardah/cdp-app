@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-find",
+  "title": "Grain find",
+  "category": "time-domain",
+  "summary": "CDP Grain find operation.",
+  "description": "Run the documented CDP Release 8 Grain find operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "find", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "find"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "find"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain find",
+      "summary": "Run Grain find.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain find.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "text-data",
+        "extension": "txt",
+        "nameSuffix": "-grain-onsets"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "find"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

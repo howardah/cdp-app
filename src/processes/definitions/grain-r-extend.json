@@ -1,0 +1,594 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-r-extend",
+  "title": "Extend iterative sound",
+  "category": "time-domain",
+  "summary": "Extend natural iterative sounds.",
+  "description": "Time-stretch iterative material such as rolled speech sounds.",
+  "useCases": ["Extend trills"],
+  "tags": ["grain", "iterate", "extend"],
+  "identity": { "executable": "grain", "operation": "r_extend" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "anchor": "R_EXTEND",
+    "helpCommand": ["grain", "r_extend"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "marked",
+      "cliMode": 1,
+      "title": "Extend marked iteration",
+      "summary": "Extend a marked iterative region.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Start time.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "end",
+          "label": "End",
+          "description": "End time.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0
+        },
+        {
+          "id": "timeExtend",
+          "label": "Extension",
+          "description": "Time extension.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.001
+        },
+        {
+          "id": "pitchRange",
+          "label": "Pitch range",
+          "description": "Pitch range in octaves.",
+          "required": true,
+          "advanced": false,
+          "unit": "octaves",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0
+        },
+        {
+          "id": "repetitions",
+          "label": "Repetitions",
+          "description": "Adjacent copies.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1
+        },
+        {
+          "id": "expected",
+          "label": "Expected iterations",
+          "description": "Expected iterations.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "max": 1000
+        },
+        {
+          "id": "amplitudeScatter",
+          "label": "Amplitude scatter",
+          "description": "Amplitude variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "id": "pitchScatter",
+          "label": "Pitch scatter",
+          "description": "Pitch variation.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 24
+        },
+        {
+          "id": "extensionOnly",
+          "label": "Extension only",
+          "description": "Keep only the extended iterative material.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-x" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-r-extend"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "r_extend" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "end" },
+        { "kind": "parameter", "parameterId": "timeExtend" },
+        { "kind": "parameter", "parameterId": "pitchRange" },
+        { "kind": "parameter", "parameterId": "repetitions" },
+        { "kind": "parameter", "parameterId": "expected" },
+        { "kind": "parameter", "parameterId": "amplitudeScatter" },
+        { "kind": "parameter", "parameterId": "pitchScatter" },
+        { "kind": "parameter", "parameterId": "extensionOnly" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "start" },
+          "right": { "source": "parameter", "id": "end" },
+          "message": "Start must precede end."
+        }
+      ]
+    },
+    {
+      "id": "detected",
+      "cliMode": 2,
+      "title": "Detect and extend iteration",
+      "summary": "Detect iterative material by envelope tracing and extend it.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gate",
+          "label": "Gate",
+          "description": "Minimum level for envelope tracing.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "id": "unitSize",
+          "label": "Unit size",
+          "description": "Searched unit size in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 15,
+          "min": 0.001
+        },
+        {
+          "id": "timeExtend",
+          "label": "Extension",
+          "description": "Time extension.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.001
+        },
+        {
+          "id": "pitchRange",
+          "label": "Pitch range",
+          "description": "Pitch range in octaves.",
+          "required": true,
+          "advanced": false,
+          "unit": "octaves",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 4
+        },
+        {
+          "id": "repetitions",
+          "label": "Repetitions",
+          "description": "Adjacent copies.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "max": 32767
+        },
+        {
+          "id": "expected",
+          "label": "Expected iterations",
+          "description": "Minimum expected iterations.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "max": 1000
+        },
+        {
+          "id": "amplitudeScatter",
+          "label": "Amplitude scatter",
+          "description": "Amplitude variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "id": "pitchScatter",
+          "label": "Pitch scatter",
+          "description": "Pitch variation.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 24
+        },
+        {
+          "id": "skip",
+          "label": "Units to skip",
+          "description": "Detected units skipped before processing.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "ritardStart",
+          "label": "Ritard start",
+          "description": "Time at which iterative slowing begins.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "eventSeparation",
+          "label": "Event separation",
+          "description": "Target event separation after slowing.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "unit": "s"
+        },
+        {
+          "id": "ritardDuration",
+          "label": "Ritard duration",
+          "description": "Time taken to reach the target separation; zero disables ritard.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "unit": "s"
+        },
+        {
+          "id": "keepStart",
+          "label": "Keep source start",
+          "description": "Keep sound before the extended material.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "keepEnd",
+          "label": "Keep source end",
+          "description": "Keep sound after the extended material.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-r-extend"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "r_extend" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "gate" },
+        { "kind": "parameter", "parameterId": "unitSize" },
+        { "kind": "parameter", "parameterId": "timeExtend" },
+        { "kind": "parameter", "parameterId": "pitchRange" },
+        { "kind": "parameter", "parameterId": "repetitions" },
+        { "kind": "parameter", "parameterId": "expected" },
+        { "kind": "parameter", "parameterId": "amplitudeScatter" },
+        { "kind": "parameter", "parameterId": "pitchScatter" },
+        { "kind": "parameter", "parameterId": "skip" },
+        { "kind": "parameter", "parameterId": "ritardStart" },
+        { "kind": "parameter", "parameterId": "eventSeparation" },
+        { "kind": "parameter", "parameterId": "ritardDuration" },
+        { "kind": "parameter", "parameterId": "keepStart" },
+        { "kind": "parameter", "parameterId": "keepEnd" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "detected-alternate",
+      "cliMode": 3,
+      "title": "Detect and extend alternate",
+      "summary": "Detect iterative material using the alternate Release 8 mode.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "gate",
+          "label": "Gate",
+          "description": "Minimum level for envelope tracing.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "id": "unitSize",
+          "label": "Unit size",
+          "description": "Searched unit size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 15,
+          "min": 0.001
+        },
+        {
+          "id": "timeExtend",
+          "label": "Extension",
+          "description": "Time extension.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 2,
+          "min": 0.001
+        },
+        {
+          "id": "pitchRange",
+          "label": "Pitch range",
+          "description": "Pitch range in octaves.",
+          "required": true,
+          "advanced": false,
+          "unit": "octaves",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 4
+        },
+        {
+          "id": "repetitions",
+          "label": "Repetitions",
+          "description": "Adjacent copies.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "max": 32767
+        },
+        {
+          "id": "expected",
+          "label": "Expected iterations",
+          "description": "Minimum expected iterations.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "max": 1000
+        },
+        {
+          "id": "amplitudeScatter",
+          "label": "Amplitude scatter",
+          "description": "Amplitude variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "id": "pitchScatter",
+          "label": "Pitch scatter",
+          "description": "Pitch variation.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 24
+        },
+        {
+          "id": "skip",
+          "label": "Units to skip",
+          "description": "Detected units skipped before processing.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "ritardStart",
+          "label": "Ritard start",
+          "description": "Time at which slowing begins.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "eventSeparation",
+          "label": "Event separation",
+          "description": "Target event separation.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0
+        },
+        {
+          "id": "ritardDuration",
+          "label": "Ritard duration",
+          "description": "Time taken to reach target separation.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0
+        },
+        {
+          "id": "keepStart",
+          "label": "Keep source start",
+          "description": "Keep sound before the extended material.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "keepEnd",
+          "label": "Keep source end",
+          "description": "Keep sound after the extended material.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-r-extend"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "r_extend" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "gate" },
+        { "kind": "parameter", "parameterId": "unitSize" },
+        { "kind": "parameter", "parameterId": "timeExtend" },
+        { "kind": "parameter", "parameterId": "pitchRange" },
+        { "kind": "parameter", "parameterId": "repetitions" },
+        { "kind": "parameter", "parameterId": "expected" },
+        { "kind": "parameter", "parameterId": "amplitudeScatter" },
+        { "kind": "parameter", "parameterId": "pitchScatter" },
+        { "kind": "parameter", "parameterId": "skip" },
+        { "kind": "parameter", "parameterId": "ritardStart" },
+        { "kind": "parameter", "parameterId": "eventSeparation" },
+        { "kind": "parameter", "parameterId": "ritardDuration" },
+        { "kind": "parameter", "parameterId": "keepStart" },
+        { "kind": "parameter", "parameterId": "keepEnd" }
+      ],
+      "constraints": []
+    }
+  ]
+}

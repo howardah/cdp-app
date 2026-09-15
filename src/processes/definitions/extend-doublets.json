@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "extend-doublets",
+  "title": "Extend Doublets",
+  "category": "time-domain",
+  "summary": "Extend Doublets",
+  "description": "Extend Doublets. infile outfile segdur repets",
+  "useCases": ["Process audio with CDP Release 8"],
+  "tags": ["extend"],
+  "identity": {
+    "executable": "extend",
+    "operation": "doublets"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroextd.htm",
+    "anchor": "DOUBLETS",
+    "helpCommand": ["extend", "doublets"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "default",
+      "title": "Default",
+      "summary": "infile outfile segdur repets",
+      "inputs": [
+        {
+          "id": "infile",
+          "label": "infile",
+          "description": "infile input documented by CDP.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "segdur",
+          "label": "segdur",
+          "description": "segdur parameter documented by CDP.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0
+        },
+        {
+          "id": "repets",
+          "label": "repets",
+          "description": "repets parameter documented by CDP.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 0
+        },
+        {
+          "id": "synchronise",
+          "label": "Stay synchronised",
+          "description": "Try to keep the output synchronised with the input.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-processed"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "doublets"
+        },
+        {
+          "kind": "input",
+          "inputId": "infile"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "segdur"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "repets"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "synchronise"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-replace",
+  "title": "Distort replace",
+  "category": "time-domain",
+  "summary": "CDP Distort replace operation.",
+  "description": "Run the documented CDP Release 8 Distort replace operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "replace", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "replace"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "replace"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort replace",
+      "summary": "Run Distort replace.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort replace.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "cycleCount",
+          "label": "Cycles",
+          "description": "Number of wavecycles used by the replacement process.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-replace"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "replace"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "cycleCount" }
+      ],
+      "constraints": []
+    }
+  ]
+}

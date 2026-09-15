@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-quantise",
+  "title": "Repitch quantise",
+  "category": "spectral",
+  "summary": "CDP Repitch quantise operation.",
+  "description": "Run the documented CDP Release 8 Repitch quantise operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "quantise", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "quantise"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "quantise"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch quantise",
+      "summary": "Run Repitch quantise.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch quantise.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "quantisationSet",
+          "label": "Quantisation set",
+          "description": "Text file of allowed MIDI pitch values.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "repeatOctaves",
+          "label": "Repeat across octaves",
+          "description": "Duplicate the quantisation set in every octave.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "booleanFlag", "flag": "-o" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-quantise"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "quantise"
+        },
+        { "kind": "literal", "value": "1" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "input", "inputId": "quantisationSet" },
+        { "kind": "parameter", "parameterId": "repeatOctaves" }
+      ],
+      "constraints": []
+    }
+  ]
+}

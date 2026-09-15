@@ -5,6 +5,7 @@ import {
   findMode,
   findProcess,
   processCatalog,
+  validateCatalog,
   searchCatalog,
   validateRequest,
 } from "./index";
@@ -20,8 +21,31 @@ describe("process catalog", () => {
     ).toBe(true);
   });
 
-  it("contains the ten newly shipped process entries", () => {
-    expect(processCatalog).toHaveLength(116);
+  it("rejects composite outputs whose named components would share a path", () => {
+    const getPitch = findProcess("repitch-getpitch")!;
+    const mode = getPitch.modes[0]!;
+    const output = mode.output;
+    if (output.kind !== "composite") throw new Error("expected composite getpitch output");
+    expect(() =>
+      validateCatalog([
+        {
+          ...getPitch,
+          modes: [
+            {
+              ...mode,
+              output: {
+                ...output,
+                components: [...output.components, { ...output.components[0]!, id: "duplicate" }],
+              },
+            },
+          ],
+        },
+      ]),
+    ).toThrow("invalid output components");
+  });
+
+  it("contains the newly shipped process entries", () => {
+    expect(processCatalog).toHaveLength(220);
     expect(searchCatalog("mask").map((process) => process.id)).toContain("sfedit-masks");
     expect(searchCatalog("echo").map((process) => process.id)).toContain("modify-revecho");
     expect(searchCatalog("narrow").map((process) => process.id)).toContain("modify-space");
@@ -101,6 +125,70 @@ describe("process catalog", () => {
     ]);
     const synthesize = findMode(findProcess("pvoc-synthesize")!, "synthesize")!;
     expect(synthesize.argumentOrder[0]).toEqual({ kind: "literal", value: "synth" });
+    const getPitch = findProcess("repitch-getpitch")!.modes[0]!;
+    expect(getPitch.output).toMatchObject({
+      kind: "composite",
+      components: [
+        { id: "tone", fileType: "analysis-ana", extension: "ana" },
+        { id: "pitch", fileType: "binary-pitch", extension: "frq" },
+      ],
+    });
+    expect(getPitch.argumentOrder.slice(-2)).toEqual([
+      { kind: "outputComponent", componentId: "tone" },
+      { kind: "outputComponent", componentId: "pitch" },
+    ]);
+  });
+
+  it("keeps exact pulsed and filter command vectors per mode", () => {
+    const vector = (processId: string, modeId: string) =>
+      findMode(findProcess(processId)!, modeId)!.argumentOrder.map((token) =>
+        token.kind === "literal"
+          ? token.value
+          : token.kind === "parameter"
+            ? token.parameterId
+            : token.kind,
+      );
+    expect(vector("distort-filter", "below-frequency")).toEqual([
+      "filter",
+      "mode",
+      "input",
+      "output",
+      "frequency",
+      "skipCycles",
+    ]);
+    expect(vector("distort-filter", "above-frequency")).toEqual([
+      "filter",
+      "mode",
+      "input",
+      "output",
+      "frequency",
+      "skipCycles",
+    ]);
+    expect(vector("distort-filter", "outside-band")).toEqual([
+      "filter",
+      "mode",
+      "input",
+      "output",
+      "lowFrequency",
+      "highFrequency",
+      "skipCycles",
+    ]);
+    expect(vector("distort-pulsed", "impulse-train").slice(0, 12)).toEqual([
+      "pulsed",
+      "mode",
+      "input",
+      "output",
+      "start",
+      "duration",
+      "frequency",
+      "frequencyRandomness",
+      "timingRandomness",
+      "amplitudeRandomness",
+      "transposition",
+      "transpositionRandomness",
+    ]);
+    expect(vector("distort-pulsed", "loop-seconds").slice(0, 13)).toContain("cycleTime");
+    expect(vector("distort-pulsed", "loop-cycles").slice(0, 13)).toContain("cycleCount");
   });
 
   it("returns defaults and file compatibility from a mode", () => {

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-timediff",
+  "title": "Sound information: timediff",
+  "category": "utilities",
+  "summary": "CDP Sound information: timediff operation.",
+  "description": "Run the documented CDP Release 8 Sound information: timediff operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "timediff", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "timediff"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "timediff"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: timediff",
+      "summary": "Run Sound information: timediff.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: timediff.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "comparison",
+          "label": "Comparison soundfile",
+          "description": "Second soundfile whose duration is compared with the source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "timediff"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "input",
+          "inputId": "comparison"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

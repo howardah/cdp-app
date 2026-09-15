@@ -1,6 +1,6 @@
 # CDP Release 8 process implementation status
 
-Last audited: 2026-09-12
+Last audited: 2026-09-14
 
 This document compares the processes exposed by the CDP Release 8 distribution in `cdpr8` with the process definitions currently exposed in the Composers Desktop GUI.
 
@@ -15,13 +15,13 @@ This document compares the processes exposed by the CDP Release 8 distribution i
 
 | Measure | Count |
 | --- | ---: |
-| GUI process definitions | 116 |
+| GUI process definitions | 220 |
 | CDP executable files in the bundled Release 8 folder | 230 |
 | Available entries in the grouped CDP process index | 539 |
-| Indexed rows matched to GUI definitions | 116 |
-| Distinct GUI definitions found in the CDP index | 116 |
+| Indexed rows matched to GUI definitions | 223 |
+| Distinct GUI definitions found in the CDP index | 220 |
 
-The index count is not a unique-process denominator. CDP repeats some cross-references in multiple groups and lists some modes as separate rows (for example RETIME and SPECFNU). The withdrawn `(ALIAS)` entry is excluded. The authoritative GUI count is the 116 manifest files.
+The index count is not a unique-process denominator. CDP repeats some cross-references in multiple groups and lists some modes as separate rows (for example RETIME and SPECFNU). The withdrawn `(ALIAS)` entry is excluded. The authoritative GUI count is the 220 manifest files.
 
 ## Implemented GUI catalog
 
@@ -45,9 +45,11 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `combine-mean` | Spectral Mean | `combine mean` | Mean |
 | `combine-sum` | Sum Spectra | `combine sum` | Sum |
 | `envel-attack` | Envel Attack | `envel attack` | attack |
+| `envel-brktoenv` | Envelope Breakpoint to Binary Envelope | `envel brktoenv` | brktoenv |
 | `envel-create` | Envel Create | `envel create` | binary |
 | `envel-curtail` | Envel Curtail | `envel curtail` | fade |
 | `envel-cyclic` | Envel Cyclic | `envel cyclic` | rising |
+| `envel-dbtoenv` | Envelope dB Breakpoint to Binary Envelope | `envel dbtoenv` | dbtoenv |
 | `envel-dovetail` | Envel Dovetail | `envel dovetail` | fade |
 | `envel-extract` | Envel Extract | `envel extract` | binary |
 | `envel-impose` | Envel Impose | `envel impose` | binary |
@@ -59,6 +61,7 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `envnu-expdecay` | Envnu Exponential Decay | `envnu expdecay` | decay |
 | `envnu-peakchop` | Envnu Peak Chop | `envnu peakchop` | envelope |
 | `extend-baktobak` | Extend Back-to-Back | `extend baktobak` | baktobak |
+| `extend-doublets` | Extend Doublets | `extend doublets` | Default |
 | `extend-drunk` | Drunken Time Walk | `extend drunk` | Drunken walk |
 | `extend-freeze` | Extend Freeze | `extend freeze` | duration |
 | `extend-iterate` | Extend Iterate | `extend iterate` | duration |
@@ -83,6 +86,7 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `focus-fold` | Fold Spectrum | `focus fold` | Fold |
 | `focus-freeze` | Freeze Spectral Characteristics | `focus freeze` | Freeze amplitudes |
 | `focus-hold` | Hold Spectrum | `focus hold` | Hold |
+| `focus-step` | Focus Step | `focus step` | Default |
 | `hover` | Hover | `hover hover` | Hover |
 | `hover2` | Inverted Hover | `hover2 hover2` | Inverted hover |
 | `isolate` | Isolate | `isolate` | One segment per output; Grouped segments; Level threshold; Slice file; Dovetail slices |
@@ -143,6 +147,26 @@ The index count is not a unique-process denominator. CDP repeats some cross-refe
 | `submix-sync` | Synchronize Mix | `submix sync` | Synchronize |
 | `submix-syncattack` | Synchronize Attacks | `submix syncattack` | Synchronize attacks |
 | `submix-timewarp` | Warp Mix Timing | `submix timewarp` | Time warp |
+| `combine-make` | Build Spectrum from Pitch and Formants | `combine make` | Build analysis |
+| `combine-make2` | Build Spectrum with Envelope | `combine make2` | Build analysis |
+| `envel-dbtogain` | Convert Envelope dB to Gain | `envel dbtogain` | Convert to gain |
+| `envel-envtobrk` | Convert Binary Envelope to Breakpoints | `envel envtobrk` | Export breakpoints |
+| `envel-envtodb` | Convert Binary Envelope to dB Breakpoints | `envel envtodb` | Export dB breakpoints |
+| `envel-gaintodb` | Convert Envelope Gain to dB | `envel gaintodb` | Convert to dB |
+| `envel-reshape` | Normalise Binary Envelope | `envel reshape` | Normalise |
+| `envel-replot` | Normalise Breakpoint Envelope | `envel replot` | Normalise |
+| `envel-scaled` | Impose Scaled Breakpoint Envelope | `envel scaled` | Apply envelope |
+| `envel-timegrid` | Partition Sound into Time Grids | `envel timegrid` | Create grids |
+| `filter-bankfrqs` | Generate Harmonic Filter Frequencies | `filter bankfrqs` | Harmonic series |
+| `filter-vfilters` | Create Fixed-Pitch Varibank Files | `filter vfilters` | Create filter files |
+| `submix-atstep` | Create Stepped Mixfile | `submix atstep` | Create stepped mix |
+| `submix-attenuate` | Adjust Mixfile Level | `submix attenuate` | Adjust level |
+| `submix-dummy` | Create Basic Mixfile | `submix dummy` | Start together; Place sequentially |
+| `submix-getlevel` | Check Mix Peak Level | `submix getlevel` | Report peak |
+| `submix-model` | Replace Mixfile Sources | `submix model` | Replace sources |
+| `submix-ongrid` | Create Grid Mixfile | `submix ongrid` | Create grid mix |
+| `submix-shuffle` | Duplicate Mix Entries | `submix shuffle` | Duplicate entries |
+| `submix-test` | Validate Mixfile | `submix test` | Validate syntax |
 
 ## Full CDP process index
 
@@ -154,15 +178,15 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### COMBINE (11)
 
-✅ COMBINE CROSS · ✅ COMBINE DIFF · ✅ COMBINE INTERLEAVE · ⬜ COMBINE MAKE · ⬜ COMBINE MAKE2 · ✅ COMBINE MAX · ✅ COMBINE MEAN · ⬜ SPECROSS · ⬜ SPECSPHINX · ⬜ SPECTWIN · ✅ COMBINE SUM
+✅ COMBINE CROSS · ✅ COMBINE DIFF · ✅ COMBINE INTERLEAVE · ✅ COMBINE MAKE · ✅ COMBINE MAKE2 · ✅ COMBINE MAX · ✅ COMBINE MEAN · ⬜ SPECROSS · ⬜ SPECSPHINX · ⬜ SPECTWIN · ✅ COMBINE SUM
 
 ### DISTORT (38)
 
-⬜ DISTORT AVERAGE · ⬜ CLIP · ⬜ DISTORT CYCLECNT · ⬜ DISTORT DELETE · ⬜ DISTCUT · ⬜ DISTMARK · ⬜ DISTMORE BRIGHT · ⬜ DISTMORE DOUBLE · ⬜ DISTMORE SEGSBKWD · ⬜ DISTMORE SEGZIG · ⬜ DISTORTT · ⬜ DISTREP · ⬜ DISTSHIFT · ⬜ DISTWARP · ⬜ DISTORT DIVIDE · ⬜ DISTORT ENVEL · ⬜ DISTORT FILTER · ⬜ DISTORT FRACTAL · ⬜ FRACTAL WAVE · ⬜ DISTORT HARMONIC · ⬜ DISTORT INTERACT · ⬜ DISTORT INTERPOLATE · ⬜ DISTORT MULTIPLY · ⬜ DISTORT OMIT · ⬜ DISTORT OVERLOAD · ⬜ DISTORT PITCH · ⬜ DISTORT PULSED · ⬜ QUIRK · ⬜ DISTORT REFORM · ⬜ DISTORT REPEAT · ⬜ DISTORT REPEAT2 · ⬜ DISTORT REPLACE · ⬜ DISTORT REPLIM · ⬜ DISTORT REVERSE · ⬜ SCRAMBLE · ⬜ DISTORT SHUFFLE · ⬜ SPLINTER · ⬜ DISTORT TELESCOPE
+✅ DISTORT AVERAGE · ✅ CLIP · ✅ DISTORT CYCLECNT · ✅ DISTORT DELETE · ⬜ DISTCUT · ⬜ DISTMARK · ⬜ DISTMORE BRIGHT · ⬜ DISTMORE DOUBLE · ⬜ DISTMORE SEGSBKWD · ⬜ DISTMORE SEGZIG · ⬜ DISTORTT · ⬜ DISTREP · ⬜ DISTSHIFT · ⬜ DISTWARP · ✅ DISTORT DIVIDE · ✅ DISTORT ENVEL · ✅ DISTORT FILTER · ✅ DISTORT FRACTAL · ⬜ FRACTAL WAVE · ✅ DISTORT HARMONIC · ✅ DISTORT INTERACT · ✅ DISTORT INTERPOLATE · ✅ DISTORT MULTIPLY · ✅ DISTORT OMIT · ✅ DISTORT OVERLOAD · ✅ DISTORT PITCH · ✅ DISTORT PULSED · ⬜ QUIRK · ✅ DISTORT REFORM · ✅ DISTORT REPEAT · ✅ DISTORT REPEAT2 · ✅ DISTORT REPLACE · ✅ DISTORT REPLIM · ✅ DISTORT REVERSE · ⬜ SCRAMBLE · ✅ DISTORT SHUFFLE · ⬜ SPLINTER · ✅ DISTORT TELESCOPE
 
 ### ENVEL (27)
 
-✅ ENVEL ATTACK · ⬜ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ⬜ ENVEL DBTOENV · ⬜ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ⬜ ENVEL ENVTOBRK · ⬜ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ⬜ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ⬜ ENVEL RESHAPE · ⬜ ENVEL REPLOT · ⬜ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ⬜ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
+✅ ENVEL ATTACK · ✅ ENVEL BRKTOENV · ✅ ENVEL CREATE · ✅ ENVEL CURTAIL · ✅ ENVEL CYCLIC · ✅ ENVEL DBTOENV · ✅ ENVEL DBTOGAIN · ✅ ENVEL DOVETAIL · ✅ ENVEL ENVTOBRK · ✅ ENVEL ENVTODB · ✅ ENVEL EXTRACT · ✅ FLATTEN · ✅ ENVEL GAINTODB · ✅ ENVEL IMPOSE · ✅ ENVEL PLUCK · ✅ ENVEL REPLACE · ✅ ENVEL RESHAPE · ✅ ENVEL REPLOT · ✅ ENVEL SCALED · ⬜ SPIKE · ✅ ENVEL SWELL · ✅ ENVEL TIMEGRID · ⬜ TOPANTAIL2 · ⬜ TREMENV · ✅ ENVEL TREMOLO · ⬜ TREMOLO · ✅ ENVEL WARP
 
 ### ENVNU (2)
 
@@ -170,15 +194,15 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### EXTEND (31)
 
-✅ EXTEND BAKTOBAK · ✅ BOUNCE · ⬜ CERACU · ⬜ EXTEND DOUBLETS · ✅ EXTEND DRUNK · ⬜ DVDWIND · ✅ SFECHO ECHO · ⬜ ENVSPEAK · ✅ EXTEND FREEZE · ✅ HOVER · ✅ HOVER2 · ✅ EXTEND ITERATE · ✅ ITERLINE · ✅ ITERLINEF · ✅ EXTEND LOOP · ⬜ MADRID · ⬜ MOTOR · ⬜ PULSER · ⬜ PULSER MULTI · ⬜ REPEATER · ✅ EXTEND REPETITIONS · ⬜ ROTOR · ✅ EXTEND SCRAMBLE · ✅ EXTEND SEQUENCE · ⬜ EXTEND SEQUENCE2 · ⬜ SHIFTER · ⬜ SHRINK · ⬜ SORTER · ⬜ STUTTER · ⬜ TESSELATE · ✅ EXTEND ZIGZAG
+✅ EXTEND BAKTOBAK · ✅ BOUNCE · ⬜ CERACU · ✅ EXTEND DOUBLETS · ✅ EXTEND DRUNK · ⬜ DVDWIND · ✅ SFECHO ECHO · ⬜ ENVSPEAK · ✅ EXTEND FREEZE · ✅ HOVER · ✅ HOVER2 · ✅ EXTEND ITERATE · ✅ ITERLINE · ✅ ITERLINEF · ✅ EXTEND LOOP · ⬜ MADRID · ⬜ MOTOR · ⬜ PULSER · ⬜ PULSER MULTI · ⬜ REPEATER · ✅ EXTEND REPETITIONS · ⬜ ROTOR · ✅ EXTEND SCRAMBLE · ✅ EXTEND SEQUENCE · ⬜ EXTEND SEQUENCE2 · ⬜ SHIFTER · ⬜ SHRINK · ⬜ SORTER · ⬜ STUTTER · ⬜ TESSELATE · ✅ EXTEND ZIGZAG
 
 ### FILTER (13)
 
-✅ FILTER BANK · ⬜ FILTER BANKFRQS · ⬜ FILTRAGE · ✅ FILTER FIXED · ✅ FILTER ITERATED · ✅ FILTER LOHI · ✅ FILTER PHASING · ✅ PHASOR · ✅ FILTER SWEEPING · ✅ FILTER USERBANK · ✅ FILTER VARIABLE · ✅ FILTER VARIBANK/2 · ⬜ FILTER VFILTERS
+✅ FILTER BANK · ✅ FILTER BANKFRQS · ⬜ FILTRAGE · ✅ FILTER FIXED · ✅ FILTER ITERATED · ✅ FILTER LOHI · ✅ FILTER PHASING · ✅ PHASOR · ✅ FILTER SWEEPING · ✅ FILTER USERBANK · ✅ FILTER VARIABLE · ✅ FILTER VARIBANK/2 · ✅ FILTER VFILTERS
 
 ### FOCUS (9)
 
-✅ FOCUS ACCU · ✅ FOCUS EXAG · ✅ FOCUS FOCUS · ✅ FOCUS FOLD · ✅ FOCUS FREEZE · ✅ FOCUS HOLD · ⬜ SPECFOLD · ⬜ FOCUS STEP · ⬜ SUPERACCU
+✅ FOCUS ACCU · ✅ FOCUS EXAG · ✅ FOCUS FOCUS · ✅ FOCUS FOLD · ✅ FOCUS FREEZE · ✅ FOCUS HOLD · ⬜ SPECFOLD · ✅ FOCUS STEP · ⬜ SUPERACCU
 
 ### FORMANTS (8)
 
@@ -186,7 +210,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### GRAIN (18)
 
-⬜ GRAIN ALIGN · ⬜ GRAIN ASSESS · ⬜ GRAIN COUNT · ⬜ GRAIN DUPLICATE · ⬜ GRAINEX · ⬜ GRAIN GREV · ⬜ NEWTEX · ⬜ GRAIN NOISE_EXTEND · ⬜ GRAIN FIND · ⬜ GRAIN OMIT · ⬜ GRAIN REMOTIF · ⬜ GRAIN REORDER · ⬜ GRAIN REPITCH · ⬜ GRAIN REPOSITION · ⬜ GRAIN RERHYTHM · ⬜ GRAIN REVERSE · ⬜ GRAIN R_EXTEND · ⬜ GRAIN TIMEWARP
+✅ GRAIN ALIGN · ✅ GRAIN ASSESS · ✅ GRAIN COUNT · ✅ GRAIN DUPLICATE · ⬜ GRAINEX · ✅ GRAIN GREV · ⬜ NEWTEX · ✅ GRAIN NOISE_EXTEND · ✅ GRAIN FIND · ✅ GRAIN OMIT · ✅ GRAIN REMOTIF · ✅ GRAIN REORDER · ✅ GRAIN REPITCH · ✅ GRAIN REPOSITION · ✅ GRAIN RERHYTHM · ✅ GRAIN REVERSE · ✅ GRAIN R_EXTEND · ✅ GRAIN TIMEWARP
 
 ### HILITE (9)
 
@@ -226,7 +250,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### PSOW (23)
 
-⬜ PSOW CHOP · ⬜ PSOW CUTATGRAIN · ⬜ PSOW DELETE · ⬜ PSOW DUPL · ⬜ PSOW FEATURES · ⬜ FOFEX EXTRACT · ⬜ FOFEX CONSTRUCT · ⬜ PSOW GRAB · ⬜ PSOW IMPOSE · ⬜ PSOW INTERLEAVE · ⬜ PSOW INTERP · ⬜ PSOW LOCATE · ⬜ PTOBRK · ⬜ PSOW REINFORCE · ⬜ PSOW REPLACE · ⬜ PSOW SPACE · ⬜ PSOW SPLIT · ⬜ PSOW STRETCH · ⬜ PSOW STRTRANS · ⬜ PSOW SUSTAIN · ⬜ PSOW SUSTAIN2 · ⬜ PSOW SYNTH · ⬜ TWEET
+⬜ PSOW CHOP · ⬜ PSOW CUTATGRAIN · ⬜ PSOW DELETE · ⬜ PSOW DUPL · ⬜ PSOW FEATURES · ⬜ FOFEX EXTRACT · ⬜ FOFEX CONSTRUCT · ⬜ PSOW GRAB · ⬜ PSOW IMPOSE · ⬜ PSOW INTERLEAVE · ⬜ PSOW INTERP · ⬜ PSOW LOCATE · ✅ PTOBRK · ⬜ PSOW REINFORCE · ⬜ PSOW REPLACE · ⬜ PSOW SPACE · ⬜ PSOW SPLIT · ⬜ PSOW STRETCH · ⬜ PSOW STRTRANS · ⬜ PSOW SUSTAIN · ⬜ PSOW SUSTAIN2 · ⬜ PSOW SYNTH · ⬜ TWEET
 
 ### PVOC (8)
 
@@ -234,7 +258,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### REPITCH (29)
 
-⬜ REPITCH ANALENV · ⬜ REPITCH APPROX · ⬜ BRKTOPI · ⬜ REPITCH COMBINE · ⬜ REPITCH COMBINEB · ⬜ REPITCH CUT · ⬜ REPITCH EXAG · ⬜ REPITCH FIX · ⬜ REPITCH GENERATE · ⬜ REPITCH GETPITCH · ⬜ REPITCH INSERTSIL · ⬜ REPITCH INSERTZEROS · ⬜ REPITCH INTERP · ⬜ REPITCH INVERT · ⬜ REPITCH NOISETOSIL · ⬜ REPITCH PCHSHIFT · ⬜ REPITCH PCHTOTEXT · ⬜ REPITCH PITCHTOSIL · ⬜ REPITCH QUANTISE · ⬜ REPITCH RANDOMISE · ⬜ REPITCH SMOOTH · ⬜ REPITCH SYNTH · ⬜ REPITCH TRANSPOSE · ⬜ REPITCH TRANSPOSEF · ⬜ REPITCH VIBRATO · ⬜ REPITCH VOWELS · ⬜ COMBINE MAKE · ⬜ COMBINE MAKE2 · ⬜ PTOBRK
+✅ REPITCH ANALENV · ✅ REPITCH APPROX · ✅ BRKTOPI · ✅ REPITCH COMBINE · ✅ REPITCH COMBINEB · ✅ REPITCH CUT · ✅ REPITCH EXAG · ✅ REPITCH FIX · ✅ REPITCH GENERATE · ✅ REPITCH GETPITCH · ✅ REPITCH INSERTSIL · ✅ REPITCH INSERTZEROS · ✅ REPITCH INTERP · ✅ REPITCH INVERT · ✅ REPITCH NOISETOSIL · ✅ REPITCH PCHSHIFT · ✅ REPITCH PCHTOTEXT · ✅ REPITCH PITCHTOSIL · ✅ REPITCH QUANTISE · ✅ REPITCH RANDOMISE · ✅ REPITCH SMOOTH · ✅ REPITCH SYNTH · ✅ REPITCH TRANSPOSE · ✅ REPITCH TRANSPOSEF · ✅ REPITCH VIBRATO · ✅ REPITCH VOWELS · ✅ COMBINE MAKE · ✅ COMBINE MAKE2 · ✅ PTOBRK
 
 ### RETIME (14)
 
@@ -250,7 +274,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### INFO (22)
 
-⬜ SNDINFO CHANDIFF · ⬜ SNDINFO DIFF · ⬜ SNDINFO FINDHOLE · ⬜ SNDINFO LEN · ⬜ SNDINFO LENS · ⬜ SNDINFO LOUDCHAN · ⬜ SNDINFO MAXI · ⬜ SNDINFO MAXSAMP · ⬜ SNDINFO MAXSAMP2 · ⬜ ONSET · ⬜ SNDINFO PEAKFIND · ⬜ SNDINFO PRNTSND · ⬜ SNDINFO PROPS · ⬜ SEARCH SIGSTART · ⬜ SNDINFO SMPTIME · ⬜ SNDINFO SUMLEN · ⬜ SNDINFO TIMEDIFF · ⬜ SNDINFO TIMESMP · ⬜ SNDINFO UNITS · ⬜ SNDINFO ZCROSS · ⬜ RETIME Mode 12 · ⬜ SFPROPS
+✅ SNDINFO CHANDIFF · ✅ SNDINFO DIFF · ✅ SNDINFO FINDHOLE · ✅ SNDINFO LEN · ✅ SNDINFO LENS · ✅ SNDINFO LOUDCHAN · ⬜ SNDINFO MAXI · ✅ SNDINFO MAXSAMP · ✅ SNDINFO MAXSAMP2 · ⬜ ONSET · ⬜ SNDINFO PEAKFIND · ⬜ SNDINFO PRNTSND · ✅ SNDINFO PROPS · ⬜ SEARCH SIGSTART · ✅ SNDINFO SMPTIME · ✅ SNDINFO SUMLEN · ✅ SNDINFO TIMEDIFF · ✅ SNDINFO TIMESMP · ⬜ SNDINFO UNITS · ⬜ SNDINFO ZCROSS · ⬜ RETIME Mode 12 · ⬜ SFPROPS
 
 ### SPEC (8)
 
@@ -278,7 +302,7 @@ The labels below preserve the terminology used by CDP's bundled documentation. A
 
 ### SUBMIX (24)
 
-✅ SUBMIX ADDTOMIX · ⬜ SUBMIX ATSTEP · ⬜ SUBMIX ATTENUATE · ✅ SUBMIX BALANCE · ✅ SUBMIX CROSSFADE · ⬜ SUBMIX DUMMY · ✅ SUBMIX FADERS · ⬜ SUBMIX FILEFORMAT · ⬜ SUBMIX GETLEVEL · ✅ SUBMIX INBETWEEN · ✅ SUBMIX INBETWEEN2 · ✅ SUBMIX INTERLEAVE · ✅ SUBMIX MERGE · ✅ SUBMIX MERGEMANY · ✅ SUBMIX MIX · ⬜ SUBMIX MODEL · ⬜ SUBMIX ONGRID · ✅ SUBMIX PAN · ⬜ SUBMIX SHUFFLE · ✅ SUBMIX SPACEWARP · ✅ SUBMIX SYNC · ✅ SUBMIX SYNCATTACK · ⬜ SUBMIX TEST · ✅ SUBMIX TIMEWARP
+✅ SUBMIX ADDTOMIX · ✅ SUBMIX ATSTEP · ✅ SUBMIX ATTENUATE · ✅ SUBMIX BALANCE · ✅ SUBMIX CROSSFADE · ✅ SUBMIX DUMMY · ✅ SUBMIX FADERS · ⬜ SUBMIX FILEFORMAT · ✅ SUBMIX GETLEVEL · ✅ SUBMIX INBETWEEN · ✅ SUBMIX INBETWEEN2 · ✅ SUBMIX INTERLEAVE · ✅ SUBMIX MERGE · ✅ SUBMIX MERGEMANY · ✅ SUBMIX MIX · ✅ SUBMIX MODEL · ✅ SUBMIX ONGRID · ✅ SUBMIX PAN · ✅ SUBMIX SHUFFLE · ✅ SUBMIX SPACEWARP · ✅ SUBMIX SYNC · ✅ SUBMIX SYNCATTACK · ✅ SUBMIX TEST · ✅ SUBMIX TIMEWARP
 
 ### SYNTH (18)
 

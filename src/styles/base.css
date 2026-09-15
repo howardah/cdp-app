@@ -43,6 +43,11 @@ input:focus-visible,
   --teal: #2eb6a6;
   --amber: #dfa14a;
 }
+.app-shell.process-window {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 .app-content {
   min-height: 0;
   overflow: hidden;

@@ -56,6 +56,30 @@ fn open_process_window(
     Ok(label)
 }
 
+#[tauri::command]
+fn return_to_navigator(app: tauri::AppHandle, window: tauri::WebviewWindow) -> Result<(), String> {
+    if !window.label().starts_with("process-") {
+        return Err("only a process window can return to the navigator".into());
+    }
+
+    let navigator = match app.get_webview_window("main") {
+        Some(window) => window,
+        None => open_navigator_window(&app)?,
+    };
+
+    window.close().map_err(|error| error.to_string())?;
+    navigator.set_focus().map_err(|error| error.to_string())
+}
+
+fn open_navigator_window(app: &tauri::AppHandle) -> Result<tauri::WebviewWindow, String> {
+    tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
+        .title("Composers' Desktop Application")
+        .inner_size(1180.0, 760.0)
+        .min_inner_size(820.0, 600.0)
+        .build()
+        .map_err(|error| error.to_string())
+}
+
 fn process_window_url(
     catalog: &[catalog::types::ProcessDefinition],
     process_id: &str,
@@ -408,6 +432,7 @@ pub fn run() {
             get_process_catalog,
             preview_process,
             open_process_window,
+            return_to_navigator,
             list_runs,
             get_run,
             cancel_process,

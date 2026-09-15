@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-gaintodb",
+  "title": "Convert Envelope Gain to dB",
+  "category": "utilities",
+  "summary": "Convert linear gain values in a breakpoint envelope to dB.",
+  "description": "Prepare a linear gain breakpoint envelope for dB-based editing.",
+  "useCases": ["Inspect a gain envelope in decibels"],
+  "tags": ["envelope", "gain", "decibels"],
+  "identity": { "executable": "envel", "operation": "gaintodb" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "GAINTODB",
+    "helpCommand": ["envel", "gaintodb"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "convert",
+      "title": "Convert to dB",
+      "summary": "Convert each breakpoint value from gain to dB.",
+      "inputs": [
+        {
+          "id": "envelope",
+          "label": "Gain breakpoint file",
+          "description": "A time/value breakpoint file containing linear gain.",
+          "fileTypes": ["breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "breakpoint",
+        "extension": "brk",
+        "nameSuffix": "-db"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "gaintodb" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

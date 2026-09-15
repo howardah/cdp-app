@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-smptime",
+  "title": "Sound information: smptime",
+  "category": "utilities",
+  "summary": "CDP Sound information: smptime operation.",
+  "description": "Run the documented CDP Release 8 Sound information: smptime operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "smptime", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "smptime"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "smptime"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: smptime",
+      "summary": "Run Sound information: smptime.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: smptime.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "sampleCount",
+          "label": "Sample count",
+          "description": "Number of samples to convert to seconds.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "groupedSamples",
+          "label": "Grouped samples",
+          "description": "Treat a stereo pair or multichannel frame as one sample group.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "booleanFlag", "flag": "-g" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "smptime"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "sampleCount"
+        },
+        { "kind": "parameter", "parameterId": "groupedSamples" }
+      ],
+      "constraints": []
+    }
+  ]
+}

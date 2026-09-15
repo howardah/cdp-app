@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-delete",
+  "title": "Distort delete",
+  "category": "time-domain",
+  "summary": "CDP Distort delete operation.",
+  "description": "Run the documented CDP Release 8 Distort delete operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "delete", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "delete"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "delete"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "cliMode": 1,
+      "title": "Distort delete",
+      "summary": "Run Distort delete.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort delete.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "cycleCount",
+          "label": "Cycles per group",
+          "description": "CDP CYCLECNT: one cycle in each group is retained or deleted according to the selected mode.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-delete"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "delete"
+        },
+        { "kind": "mode" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "cycleCount" }
+      ],
+      "constraints": []
+    }
+  ]
+}

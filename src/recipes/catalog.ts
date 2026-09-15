@@ -106,6 +106,149 @@ export const recipeCatalog: RecipeDefinition[] = [
       },
     ],
   },
+  {
+    id: "carve-and-emphasize",
+    title: "Carve and emphasize",
+    summary: "Cut or boost a fixed frequency area, reinforce the attack, then set a final level.",
+    outcome: "A more focused sound with a clearer onset and a controlled peak level.",
+    sourceGuidance:
+      "Use a recording whose tonal area and transient both need a little definition; leave headroom before emphasizing the attack.",
+    tags: ["filter", "attack", "finishing"],
+    cautions: [
+      "Attack gain and a positive filter boost can create clipping; normalize last and retain mix headroom.",
+    ],
+    steps: [
+      {
+        processId: "filter-fixed",
+        modeId: "fixed",
+        instruction:
+          "Start with a modest cut or boost around the frequency you want to de-emphasize or bring forward.",
+        handoff: "Use the filtered soundfile as the source for attack shaping.",
+      },
+      {
+        processId: "envel-attack",
+        modeId: "attack",
+        instruction:
+          "Use a restrained gain and short onset so the transient becomes clearer without sounding detached.",
+        handoff: "Use the attack-shaped soundfile for the final level pass.",
+      },
+      {
+        processId: "modify-loudness",
+        modeId: "normalise",
+        instruction:
+          "Normalize conservatively, lowering the target when the sound needs room alongside other material.",
+        handoff: "The normalized soundfile is the finished result.",
+      },
+    ],
+  },
+  {
+    id: "loop-then-pan",
+    title: "Loop, then pan",
+    summary: "Turn a mono fragment into a repeating gesture and position it in stereo.",
+    outcome:
+      "A looping stereo gesture with its repetitions placed at a deliberate lateral position.",
+    sourceGuidance:
+      "Start with a mono source that contains a useful region to repeat; choose a loop boundary that can tolerate a short splice.",
+    tags: ["loop", "repeat", "stereo"],
+    cautions: [
+      "Pan mono accepts mono input only; use a short splice and audition for clicks at the loop boundary.",
+    ],
+    steps: [
+      {
+        processId: "extend-loop",
+        modeId: "advance",
+        instruction:
+          "Set the loop start, length, and step around the fragment you want to repeat; begin with a short splice.",
+        handoff: "Use the looped mono soundfile as the source for stereo placement.",
+      },
+      {
+        processId: "modify-space",
+        modeId: "pan",
+        instruction:
+          "Choose a pan position and keep the default prescale unless a louder source needs more attenuation.",
+        handoff: "The panned stereo soundfile is the finished gesture.",
+      },
+    ],
+  },
+  {
+    id: "smooth-and-exaggerate-spectrum",
+    title: "Smooth and exaggerate spectrum",
+    summary:
+      "Analyze a mono sound, smooth adjacent spectral channels, then emphasize its contour before rendering.",
+    outcome:
+      "A resynthesized sound with softened local detail and a more pronounced spectral shape.",
+    sourceGuidance:
+      "Use a mono sound with evolving timbre; material with clearly changing harmonics makes both spectral stages easier to hear.",
+    tags: ["spectral", "blur", "contour"],
+    cautions: [
+      "Both middle stages work on .ana analysis data; retain it if you want to revisit the spectral decisions later.",
+    ],
+    steps: [
+      {
+        processId: "pvoc-analyze",
+        modeId: "analyze",
+        instruction:
+          "Begin with the default analysis size and overlap to make an analysis file from the source.",
+        handoff: "Use the resulting .ana file for spectral smoothing.",
+      },
+      {
+        processId: "blur-avrg",
+        modeId: "average",
+        instruction:
+          "Use a small odd channel count first so neighboring spectral energy is smoothed without losing all definition.",
+        handoff: "Use the averaged .ana file to shape the broader spectral contour.",
+      },
+      {
+        processId: "focus-exag",
+        modeId: "exaggerate",
+        instruction:
+          "Increase the amount gradually; positive values widen troughs and negative values widen peaks.",
+        handoff: "Use the contour-shaped .ana file as the synthesis input.",
+      },
+      {
+        processId: "pvoc-synthesize",
+        modeId: "synthesize",
+        instruction:
+          "Render the analysis file back to audio and compare it with the original source.",
+        handoff: "The rendered mono soundfile is the finished result.",
+      },
+    ],
+  },
+  {
+    id: "step-pan-render",
+    title: "Step, pan, render",
+    summary:
+      "Lay out several sounds at a fixed interval, pan the arrangement, and render the mixfile.",
+    outcome:
+      "A rendered sequence whose timing and global spatial position remain editable until the final step.",
+    sourceGuidance:
+      "Prepare two or more soundfiles in playback order and choose an interval that leaves the desired amount of overlap or silence.",
+    tags: ["mix", "sequence", "pan"],
+    cautions: [
+      "The first two steps create mixfiles, not audio; keep the source soundfiles available when reopening the arrangement.",
+    ],
+    steps: [
+      {
+        processId: "submix-atstep",
+        modeId: "create",
+        instruction: "Add the source files in order and set the fixed time step for their entries.",
+        handoff: "Use the stepped .mix file to adjust the arrangement's pan position.",
+      },
+      {
+        processId: "submix-pan",
+        modeId: "pan",
+        instruction:
+          "Choose a global pan value for the mixfile, then retain the panned mixfile for rendering.",
+        handoff: "Use the panned .mix file as the render input.",
+      },
+      {
+        processId: "submix-mix",
+        modeId: "render",
+        instruction: "Render the mixfile once the timing and spatial position are satisfactory.",
+        handoff: "The rendered soundfile is the finished sequence.",
+      },
+    ],
+  },
 ];
 
 const idPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;

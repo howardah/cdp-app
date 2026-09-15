@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-repitch",
+  "title": "Grain repitch",
+  "category": "time-domain",
+  "summary": "CDP Grain repitch operation.",
+  "description": "Run the documented CDP Release 8 Grain repitch operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "repitch", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "repitch"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "repitch"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain repitch",
+      "summary": "Run Grain repitch.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain repitch.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "mode",
+          "label": "Repitch mode",
+          "description": "CDP grain-repitch mode.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "transpositions",
+          "label": "Transposition data",
+          "description": "Text data file containing grain transpositions.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["text-data"]
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-repitch"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "repitch"
+        },
+        { "kind": "parameter", "parameterId": "mode" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "transpositions" }
+      ],
+      "constraints": []
+    }
+  ]
+}

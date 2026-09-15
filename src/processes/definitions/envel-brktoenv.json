@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-brktoenv",
+  "title": "Envelope Breakpoint to Binary Envelope",
+  "category": "utilities",
+  "summary": "Envelope Breakpoint to Binary Envelope",
+  "description": "Envelope Breakpoint to Binary Envelope, as documented in the bundled CDP Release 8 reference.",
+  "useCases": ["Envelope Breakpoint to Binary Envelope"],
+  "tags": ["envel", "brktoenv"],
+  "identity": {
+    "executable": "envel",
+    "operation": "brktoenv"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "BRKTOENV",
+    "helpCommand": ["envel", "brktoenv"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "brktoenv",
+      "title": "Envelope Breakpoint to Binary Envelope",
+      "summary": "Envelope Breakpoint to Binary Envelope",
+      "inputs": [
+        {
+          "id": "inbrkfile",
+          "label": "inbrkfile",
+          "description": "CDP inbrkfile input.",
+          "fileTypes": ["breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "wsize",
+          "label": "wsize",
+          "description": "Required CDP wsize value.",
+          "required": true,
+          "advanced": false,
+          "cli": {
+            "kind": "positional"
+          },
+          "kind": "number",
+          "default": 5,
+          "min": 5
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-envelope",
+        "extension": "evl",
+        "nameSuffix": "-envel-brktoenv"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "brktoenv"
+        },
+        {
+          "kind": "input",
+          "inputId": "inbrkfile"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "wsize"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

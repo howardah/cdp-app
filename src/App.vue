@@ -25,7 +25,11 @@ const {
 </script>
 <template>
   <UApp>
-    <main class="app-shell" :data-theme="theme">
+    <main
+      class="app-shell"
+      :class="{ 'process-window': route.name === 'process' }"
+      :data-theme="theme"
+    >
       <ProcessView v-if="route.name === 'process'" :process-id="currentProcessId" />
       <template v-else>
         <AppHeader

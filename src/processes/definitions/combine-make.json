@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-make",
+  "title": "Build Spectrum from Pitch and Formants",
+  "category": "spectral",
+  "summary": "Create analysis data from binary pitch and formant files.",
+  "description": "Reconstruct a CDP analysis file from compatible pitch and spectral-envelope data.",
+  "useCases": ["Resynthesise edited pitch data"],
+  "tags": ["spectral", "pitch", "formants", "resynthesis"],
+  "identity": { "executable": "combine", "operation": "make" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/ccombine.htm",
+    "anchor": "MAKE",
+    "helpCommand": ["combine", "make"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "build",
+      "title": "Build analysis",
+      "summary": "Combine pitch and formant data into an analysis file.",
+      "inputs": [
+        {
+          "id": "pitch",
+          "label": "Binary pitch file",
+          "description": "CDP binary pitch data (.frq).",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "formants",
+          "label": "Binary formant file",
+          "description": "CDP binary formant data (.for).",
+          "fileTypes": ["binary-formant"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "analysis-ana",
+        "extension": "ana",
+        "nameSuffix": "-spectrum"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "make" },
+        { "kind": "input", "inputId": "pitch" },
+        { "kind": "input", "inputId": "formants" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

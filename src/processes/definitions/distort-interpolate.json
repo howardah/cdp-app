@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-interpolate",
+  "title": "Distort interpolate",
+  "category": "time-domain",
+  "summary": "CDP Distort interpolate operation.",
+  "description": "Run the documented CDP Release 8 Distort interpolate operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "interpolate", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "interpolate"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "interpolate"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort interpolate",
+      "summary": "Run Distort interpolate.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort interpolate.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "multiplier",
+          "label": "Interpolation multiplier",
+          "description": "Number of interpolated wavesets per source waveset.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-interpolate"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "interpolate"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "multiplier"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

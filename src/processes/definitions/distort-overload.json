@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "distort-overload",
+  "title": "Distort overload",
+  "category": "time-domain",
+  "summary": "CDP Distort overload operation.",
+  "description": "Run the documented CDP Release 8 Distort overload operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["distort", "overload", "cdp-release-8"],
+  "identity": {
+    "executable": "distort",
+    "operation": "overload"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cdistort.htm",
+    "helpCommand": ["distort", "overload"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Distort overload",
+      "summary": "Run Distort overload.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Distort overload.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "clipLevel",
+          "label": "Clip level",
+          "description": "Level at which CDP overload clips the waveform.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.8,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "depth",
+          "label": "Depth",
+          "description": "Depth of the overload treatment.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-overload"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "overload"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "clipLevel" },
+        { "kind": "parameter", "parameterId": "depth" }
+      ],
+      "constraints": []
+    }
+  ]
+}

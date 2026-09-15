@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-interp",
+  "title": "Repitch interp",
+  "category": "spectral",
+  "summary": "CDP Repitch interp operation.",
+  "description": "Run the documented CDP Release 8 Repitch interp operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "interp", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "interp"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "interp"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "glide",
+      "cliMode": 1,
+      "title": "Glide between pitches",
+      "summary": "Interpolate from each valid pitch to the next.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch interp.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-interp"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "interp"
+        },
+        { "kind": "mode" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "sustain",
+      "cliMode": 2,
+      "title": "Sustain previous pitch",
+      "summary": "Hold each valid pitch until the next one appears.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Pitch data to interpolate.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-interp"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "interp" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

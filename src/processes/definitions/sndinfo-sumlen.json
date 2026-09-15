@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-sumlen",
+  "title": "Sound information: sumlen",
+  "category": "utilities",
+  "summary": "CDP Sound information: sumlen operation.",
+  "description": "Run the documented CDP Release 8 Sound information: sumlen operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "sumlen", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "sumlen"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "sumlen"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: sumlen",
+      "summary": "Run Sound information: sumlen.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: sumlen.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Subtract this splice length at each join when calculating the total.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "sumlen"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        { "kind": "parameter", "parameterId": "spliceMs" }
+      ],
+      "constraints": []
+    }
+  ]
+}

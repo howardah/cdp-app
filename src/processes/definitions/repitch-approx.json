@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-approx",
+  "title": "Repitch approx",
+  "category": "spectral",
+  "summary": "CDP Repitch approx operation.",
+  "description": "Run the documented CDP Release 8 Repitch approx operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "approx", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "approx"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "approx"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch approx",
+      "summary": "Run Repitch approx.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch approx.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "mode",
+          "label": "Output type",
+          "description": "Create pitch or transposition data.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "choice",
+          "default": "pitch",
+          "choices": [
+            { "value": "pitch", "label": "Pitch data", "cliValue": "1" },
+            { "value": "transposition", "label": "Transposition data", "cliValue": "2" }
+          ]
+        },
+        {
+          "id": "pitchRange",
+          "label": "Pitch range",
+          "description": "Random pitch deviation in semitones.",
+          "required": false,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "option", "flag": "-p", "join": "concatenated" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "timeRange",
+          "label": "Time range",
+          "description": "Turning-point time variation in milliseconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 10,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "scanRange",
+          "label": "Scan range",
+          "description": "Pitch-contour scan time in milliseconds.",
+          "required": false,
+          "advanced": true,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 100,
+          "min": 0.001,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-approx"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "approx"
+        },
+        { "kind": "parameter", "parameterId": "mode" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "pitchRange" },
+        { "kind": "parameter", "parameterId": "timeRange" },
+        { "kind": "parameter", "parameterId": "scanRange" }
+      ],
+      "constraints": []
+    }
+  ]
+}

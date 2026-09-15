@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "submix-getlevel",
+  "title": "Check Mix Peak Level",
+  "category": "utilities",
+  "summary": "Report the maximum level of a mixfile.",
+  "description": "Inspect a mix for its peak level before rendering.",
+  "useCases": ["Check a mix for overload"],
+  "tags": ["mix", "level", "report"],
+  "identity": { "executable": "submix", "operation": "getlevel" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgromixr.htm",
+    "anchor": "GETLEVEL",
+    "helpCommand": ["submix", "getlevel"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "peak",
+      "cliMode": 1,
+      "title": "Report peak",
+      "summary": "Report the maximum level and suggested gain.",
+      "inputs": [
+        {
+          "id": "mixfile",
+          "label": "Mixfile",
+          "description": "CDP mixfile to inspect.",
+          "fileTypes": ["mixfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": { "kind": "stdoutReport" },
+      "argumentOrder": [
+        { "kind": "literal", "value": "getlevel" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "mixfile" }
+      ],
+      "constraints": []
+    }
+  ]
+}

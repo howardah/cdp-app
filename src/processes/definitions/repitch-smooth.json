@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "id": "repitch-smooth",
+  "title": "Repitch smooth",
+  "category": "spectral",
+  "summary": "CDP Repitch smooth operation.",
+  "description": "Run the documented CDP Release 8 Repitch smooth operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["repitch", "smooth", "cdp-release-8"],
+  "identity": {
+    "executable": "repitch",
+    "operation": "smooth"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/crepitch.htm",
+    "helpCommand": ["repitch", "smooth"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Repitch smooth",
+      "summary": "Run Repitch smooth.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Source required by CDP Repitch smooth.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "timeframe",
+          "label": "Smoothing timeframe",
+          "description": "Interpolation window in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 100,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "holdLast",
+          "label": "Hold last pitch",
+          "description": "Hold the final interpolated pitch instead of returning to the source value.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-h" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-smooth"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "smooth"
+        },
+        { "kind": "literal", "value": "1" },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "timeframe" },
+        { "kind": "parameter", "parameterId": "holdLast" }
+      ],
+      "constraints": []
+    }
+  ]
+}

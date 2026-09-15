@@ -21,6 +21,11 @@ export async function openProcessWindow(processId: string, modeId?: string): Pro
   await invoke("open_process_window", { processId, modeId });
   return true;
 }
+export async function returnToNavigator(): Promise<boolean> {
+  if (!desktop()) return false;
+  await invoke("return_to_navigator");
+  return true;
+}
 export async function enqueueProcess(request: RunProcessRequest): Promise<RunAccepted | null> {
   if (!desktop()) return null;
   return invoke<RunAccepted>("enqueue_process", { request });

@@ -1,4 +1,4 @@
-use super::compiler::validate_output_path;
+use super::compiler::{component_output_path, validate_output_path};
 use super::*;
 use crate::catalog::types::*;
 use std::collections::HashMap;
@@ -55,6 +55,115 @@ fn paths_remain_single_arguments() {
     };
     let (cmd, _) = compile_request(&[p], &req, "modify".into()).unwrap();
     assert_eq!(cmd.args.len(), 1);
+}
+
+#[test]
+fn composite_outputs_compile_to_distinct_named_paths() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path().join("result.frq");
+    let components = vec![
+        OutputComponent {
+            id: "tone".into(),
+            file_type: CdpFileType::AnalysisAna,
+            extension: "ana".into(),
+            name_suffix: "-tone".into(),
+        },
+        OutputComponent {
+            id: "pitch".into(),
+            file_type: CdpFileType::BinaryPitch,
+            extension: "frq".into(),
+            name_suffix: "-pitch".into(),
+        },
+    ];
+    let mode = ModeDefinition {
+        id: "m".into(),
+        cli_mode: None,
+        title: "m".into(),
+        summary: "m".into(),
+        inputs: vec![InputDefinition {
+            id: "analysis".into(),
+            label: "analysis".into(),
+            description: "".into(),
+            file_types: vec![CdpFileType::AnalysisAna],
+            min_items: 1,
+            max_items: Some(1),
+            ordered: false,
+            constraints: vec![],
+        }],
+        parameters: vec![],
+        output: OutputDefinition::Composite {
+            extension: "frq".into(),
+            name_suffix: "-getpitch".into(),
+            components: components.clone(),
+        },
+        argument_order: vec![
+            ArgumentToken::Literal {
+                value: "getpitch".into(),
+            },
+            ArgumentToken::Input {
+                input_id: "analysis".into(),
+            },
+            ArgumentToken::OutputComponent {
+                component_id: "tone".into(),
+            },
+            ArgumentToken::OutputComponent {
+                component_id: "pitch".into(),
+            },
+        ],
+        constraints: vec![],
+    };
+    let process = ProcessDefinition {
+        schema_version: 1,
+        id: "x".into(),
+        title: "x".into(),
+        category: ProcessCategory::Spectral,
+        summary: "x".into(),
+        description: "x".into(),
+        use_cases: vec![],
+        tags: vec![],
+        identity: Identity {
+            executable: BinaryId::Repitch,
+            operation: None,
+        },
+        documentation: Documentation {
+            local_path: "x".into(),
+            anchor: None,
+            help_command: vec![],
+            verified_with_version: "x".into(),
+        },
+        modes: vec![mode],
+    };
+    let request = RunProcessRequest {
+        process_id: "x".into(),
+        mode_id: "m".into(),
+        inputs: HashMap::from([("analysis".into(), vec!["source.ana".into()])]),
+        parameters: HashMap::new(),
+        output_path: Some(root.to_string_lossy().into_owned()),
+    };
+    let (command, preview) = compile_request(&[process], &request, "repitch".into()).unwrap();
+    let tone = component_output_path(&root, &components[0]).unwrap();
+    let pitch = component_output_path(&root, &components[1]).unwrap();
+    assert_eq!(tone, dir.path().join("result-tone.ana"));
+    assert_eq!(pitch, dir.path().join("result-pitch.frq"));
+    assert_eq!(
+        preview.tokens,
+        vec![
+            "getpitch",
+            "source.ana",
+            tone.to_str().unwrap(),
+            pitch.to_str().unwrap()
+        ]
+    );
+    assert_eq!(command.output, Some(root));
+
+    std::fs::write(&tone, b"existing").unwrap();
+    let composite = OutputDefinition::Composite {
+        extension: "frq".into(),
+        name_suffix: "-getpitch".into(),
+        components,
+    };
+    assert!(validate_output_path(&dir.path().join("another.frq"), &composite).is_ok());
+    assert!(validate_output_path(&dir.path().join("result.frq"), &composite).is_err());
 }
 
 #[test]

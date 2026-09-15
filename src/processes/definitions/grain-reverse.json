@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "grain-reverse",
+  "title": "Grain reverse",
+  "category": "time-domain",
+  "summary": "CDP Grain reverse operation.",
+  "description": "Run the documented CDP Release 8 Grain reverse operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["grain", "reverse", "cdp-release-8"],
+  "identity": {
+    "executable": "grain",
+    "operation": "reverse"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "helpCommand": ["grain", "reverse"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Grain reverse",
+      "summary": "Run Grain reverse.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Grain reverse.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-reverse"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "reverse"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "output"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

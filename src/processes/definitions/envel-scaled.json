@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-scaled",
+  "title": "Impose Scaled Breakpoint Envelope",
+  "category": "time-domain",
+  "summary": "Apply a breakpoint envelope across the duration of a sound.",
+  "description": "Scale an editable breakpoint envelope to the source duration and apply it.",
+  "useCases": ["Apply a custom amplitude contour"],
+  "tags": ["envelope", "amplitude", "shape"],
+  "identity": { "executable": "envel", "operation": "scaled" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "SCALED",
+    "helpCommand": ["envel", "scaled"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "apply",
+      "title": "Apply envelope",
+      "summary": "Scale and apply a breakpoint envelope.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Sound to shape.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "envelope",
+          "label": "Breakpoint envelope",
+          "description": "Envelope with at least two time/value pairs.",
+          "fileTypes": ["breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-enveloped"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "scaled" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

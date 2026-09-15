@@ -27,6 +27,13 @@ pub enum BinaryId {
     Spectstr,
     Stretch,
     Submix,
+    Distort,
+    Grain,
+    Repitch,
+    Sndinfo,
+    Brktopi,
+    Ptobrk,
+    Clip,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -42,6 +49,8 @@ pub enum CdpFileType {
     Soundfile,
     AnalysisAna,
     AnalysisPvx,
+    BinaryPitch,
+    BinaryFormant,
     Breakpoint,
     CutsData,
     SliceData,
@@ -180,6 +189,7 @@ pub struct OutputDiscoveryRule {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OutputComponent {
+    pub id: String,
     pub file_type: CdpFileType,
     pub extension: String,
     pub name_suffix: String,
@@ -195,6 +205,7 @@ pub enum ArgumentToken {
     Mode,
     Input { input_id: String },
     Output,
+    OutputComponent { component_id: String },
     Parameter { parameter_id: String },
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]

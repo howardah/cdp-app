@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-maxsamp2",
+  "title": "Sound information: maxsamp2",
+  "category": "utilities",
+  "summary": "CDP Sound information: maxsamp2 operation.",
+  "description": "Run the documented CDP Release 8 Sound information: maxsamp2 operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "maxsamp2", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "maxsamp2"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "maxsamp2"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: maxsamp2",
+      "summary": "Run Sound information: maxsamp2.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: maxsamp2.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "startTime",
+          "label": "Start time",
+          "description": "Start of the search interval in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "endTime",
+          "label": "End time",
+          "description": "End of the search interval in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "maxsamp2"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "startTime"
+        },
+        {
+          "kind": "parameter",
+          "parameterId": "endTime"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "startTime" },
+          "right": { "source": "parameter", "id": "endTime" },
+          "message": "The start time must be before the end time."
+        }
+      ]
+    }
+  ]
+}

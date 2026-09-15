@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-envtobrk",
+  "title": "Convert Binary Envelope to Breakpoints",
+  "category": "utilities",
+  "summary": "Export a binary envelope as editable time/value breakpoints.",
+  "description": "Turn a CDP binary envelope into a text breakpoint file.",
+  "useCases": ["Edit an extracted envelope"],
+  "tags": ["envelope", "breakpoints", "convert"],
+  "identity": { "executable": "envel", "operation": "envtobrk" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "ENVTOBRK",
+    "helpCommand": ["envel", "envtobrk"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "convert",
+      "title": "Export breakpoints",
+      "summary": "Write the envelope as a breakpoint file.",
+      "inputs": [
+        {
+          "id": "envelope",
+          "label": "Binary envelope",
+          "description": "A CDP binary envelope.",
+          "fileTypes": ["binary-envelope"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "breakpoint",
+        "extension": "brk",
+        "nameSuffix": "-points"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "envtobrk" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

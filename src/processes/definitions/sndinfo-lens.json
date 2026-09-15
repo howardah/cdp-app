@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "sndinfo-lens",
+  "title": "Sound information: lens",
+  "category": "utilities",
+  "summary": "CDP Sound information: lens operation.",
+  "description": "Run the documented CDP Release 8 Sound information: lens operation through the desktop process runner.",
+  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
+  "tags": ["sndinfo", "lens", "cdp-release-8"],
+  "identity": {
+    "executable": "sndinfo",
+    "operation": "lens"
+  },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroinfo.htm",
+    "helpCommand": ["sndinfo", "lens"],
+    "verifiedWithVersion": "CDP Release 8"
+  },
+  "modes": [
+    {
+      "id": "process",
+      "title": "Sound information: lens",
+      "summary": "Run Sound information: lens.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source required by CDP Sound information: lens.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": null,
+          "ordered": true,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "stdoutReport"
+      },
+      "argumentOrder": [
+        {
+          "kind": "literal",
+          "value": "lens"
+        },
+        {
+          "kind": "input",
+          "inputId": "source"
+        }
+      ],
+      "constraints": []
+    }
+  ]
+}

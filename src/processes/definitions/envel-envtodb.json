@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "envel-envtodb",
+  "title": "Convert Binary Envelope to dB Breakpoints",
+  "category": "utilities",
+  "summary": "Export a binary envelope as dB-valued breakpoints.",
+  "description": "Turn a CDP binary envelope into a text breakpoint file expressed in decibels.",
+  "useCases": ["Edit an envelope in decibels"],
+  "tags": ["envelope", "breakpoints", "decibels"],
+  "identity": { "executable": "envel", "operation": "envtodb" },
+  "documentation": {
+    "localPath": "cdpr8/docs/html/cgroenvl.htm",
+    "anchor": "ENVTODB",
+    "helpCommand": ["envel", "envtodb"],
+    "verifiedWithVersion": "CDP Release 7.1"
+  },
+  "modes": [
+    {
+      "id": "convert",
+      "title": "Export dB breakpoints",
+      "summary": "Write the envelope as dB breakpoint values.",
+      "inputs": [
+        {
+          "id": "envelope",
+          "label": "Binary envelope",
+          "description": "A CDP binary envelope.",
+          "fileTypes": ["binary-envelope"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "breakpoint",
+        "extension": "brk",
+        "nameSuffix": "-db"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "envtodb" },
+        { "kind": "input", "inputId": "envelope" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    }
+  ]
+}

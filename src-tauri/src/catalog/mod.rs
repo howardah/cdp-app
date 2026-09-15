@@ -95,6 +95,10 @@ pub fn bundled_catalog() -> Result<Vec<ProcessDefinition>, String> {
         include_str!("../../../src/processes/definitions/extend-freeze.json"),
         include_str!("../../../src/processes/definitions/extend-iterate.json"),
         include_str!("../../../src/processes/definitions/extend-loop.json"),
+        include_str!("../../../src/processes/definitions/envel-brktoenv.json"),
+        include_str!("../../../src/processes/definitions/envel-dbtoenv.json"),
+        include_str!("../../../src/processes/definitions/extend-doublets.json"),
+        include_str!("../../../src/processes/definitions/focus-step.json"),
         include_str!("../../../src/processes/definitions/submix-mergemany.json"),
         include_str!("../../../src/processes/definitions/submix-crossfade.json"),
         include_str!("../../../src/processes/definitions/submix-mix.json"),
@@ -125,6 +129,106 @@ pub fn bundled_catalog() -> Result<Vec<ProcessDefinition>, String> {
         include_str!("../../../src/processes/definitions/focus-fold.json"),
         include_str!("../../../src/processes/definitions/focus-freeze.json"),
         include_str!("../../../src/processes/definitions/focus-hold.json"),
+        include_str!("../../../src/processes/definitions/envel-dbtogain.json"),
+        include_str!("../../../src/processes/definitions/envel-envtobrk.json"),
+        include_str!("../../../src/processes/definitions/envel-envtodb.json"),
+        include_str!("../../../src/processes/definitions/envel-gaintodb.json"),
+        include_str!("../../../src/processes/definitions/envel-reshape.json"),
+        include_str!("../../../src/processes/definitions/envel-replot.json"),
+        include_str!("../../../src/processes/definitions/envel-scaled.json"),
+        include_str!("../../../src/processes/definitions/envel-timegrid.json"),
+        include_str!("../../../src/processes/definitions/filter-bankfrqs.json"),
+        include_str!("../../../src/processes/definitions/filter-vfilters.json"),
+        include_str!("../../../src/processes/definitions/submix-atstep.json"),
+        include_str!("../../../src/processes/definitions/submix-attenuate.json"),
+        include_str!("../../../src/processes/definitions/submix-dummy.json"),
+        include_str!("../../../src/processes/definitions/submix-getlevel.json"),
+        include_str!("../../../src/processes/definitions/submix-model.json"),
+        include_str!("../../../src/processes/definitions/submix-ongrid.json"),
+        include_str!("../../../src/processes/definitions/submix-shuffle.json"),
+        include_str!("../../../src/processes/definitions/submix-test.json"),
+        include_str!("../../../src/processes/definitions/combine-make.json"),
+        include_str!("../../../src/processes/definitions/combine-make2.json"),
+        include_str!("../../../src/processes/definitions/distort-average.json"),
+        include_str!("../../../src/processes/definitions/distort-clip.json"),
+        include_str!("../../../src/processes/definitions/distort-cyclecnt.json"),
+        include_str!("../../../src/processes/definitions/distort-delete.json"),
+        include_str!("../../../src/processes/definitions/distort-divide.json"),
+        include_str!("../../../src/processes/definitions/distort-envel.json"),
+        include_str!("../../../src/processes/definitions/distort-filter.json"),
+        include_str!("../../../src/processes/definitions/distort-fractal.json"),
+        include_str!("../../../src/processes/definitions/distort-harmonic.json"),
+        include_str!("../../../src/processes/definitions/distort-interact.json"),
+        include_str!("../../../src/processes/definitions/distort-interpolate.json"),
+        include_str!("../../../src/processes/definitions/distort-multiply.json"),
+        include_str!("../../../src/processes/definitions/distort-omit.json"),
+        include_str!("../../../src/processes/definitions/distort-overload.json"),
+        include_str!("../../../src/processes/definitions/distort-pitch.json"),
+        include_str!("../../../src/processes/definitions/distort-pulsed.json"),
+        include_str!("../../../src/processes/definitions/distort-reform.json"),
+        include_str!("../../../src/processes/definitions/distort-repeat.json"),
+        include_str!("../../../src/processes/definitions/distort-repeat2.json"),
+        include_str!("../../../src/processes/definitions/distort-replace.json"),
+        include_str!("../../../src/processes/definitions/distort-replim.json"),
+        include_str!("../../../src/processes/definitions/distort-reverse.json"),
+        include_str!("../../../src/processes/definitions/distort-shuffle.json"),
+        include_str!("../../../src/processes/definitions/distort-telescope.json"),
+        include_str!("../../../src/processes/definitions/grain-align.json"),
+        include_str!("../../../src/processes/definitions/grain-assess.json"),
+        include_str!("../../../src/processes/definitions/grain-count.json"),
+        include_str!("../../../src/processes/definitions/grain-duplicate.json"),
+        include_str!("../../../src/processes/definitions/grain-find.json"),
+        include_str!("../../../src/processes/definitions/grain-grev.json"),
+        include_str!("../../../src/processes/definitions/grain-noise-extend.json"),
+        include_str!("../../../src/processes/definitions/grain-omit.json"),
+        include_str!("../../../src/processes/definitions/grain-remotif.json"),
+        include_str!("../../../src/processes/definitions/grain-reorder.json"),
+        include_str!("../../../src/processes/definitions/grain-repitch.json"),
+        include_str!("../../../src/processes/definitions/grain-reposition.json"),
+        include_str!("../../../src/processes/definitions/grain-rerhythm.json"),
+        include_str!("../../../src/processes/definitions/grain-reverse.json"),
+        include_str!("../../../src/processes/definitions/grain-r-extend.json"),
+        include_str!("../../../src/processes/definitions/grain-timewarp.json"),
+        include_str!("../../../src/processes/definitions/repitch-analenv.json"),
+        include_str!("../../../src/processes/definitions/repitch-approx.json"),
+        include_str!("../../../src/processes/definitions/repitch-combine.json"),
+        include_str!("../../../src/processes/definitions/repitch-combineb.json"),
+        include_str!("../../../src/processes/definitions/repitch-cut.json"),
+        include_str!("../../../src/processes/definitions/repitch-exag.json"),
+        include_str!("../../../src/processes/definitions/repitch-fix.json"),
+        include_str!("../../../src/processes/definitions/repitch-generate.json"),
+        include_str!("../../../src/processes/definitions/repitch-getpitch.json"),
+        include_str!("../../../src/processes/definitions/repitch-insertsil.json"),
+        include_str!("../../../src/processes/definitions/repitch-insertzeros.json"),
+        include_str!("../../../src/processes/definitions/repitch-interp.json"),
+        include_str!("../../../src/processes/definitions/repitch-invert.json"),
+        include_str!("../../../src/processes/definitions/repitch-noisetosil.json"),
+        include_str!("../../../src/processes/definitions/repitch-pchshift.json"),
+        include_str!("../../../src/processes/definitions/repitch-pchtotext.json"),
+        include_str!("../../../src/processes/definitions/repitch-pitchtosil.json"),
+        include_str!("../../../src/processes/definitions/repitch-quantise.json"),
+        include_str!("../../../src/processes/definitions/repitch-randomise.json"),
+        include_str!("../../../src/processes/definitions/repitch-smooth.json"),
+        include_str!("../../../src/processes/definitions/repitch-synth.json"),
+        include_str!("../../../src/processes/definitions/repitch-transpose.json"),
+        include_str!("../../../src/processes/definitions/repitch-transposef.json"),
+        include_str!("../../../src/processes/definitions/repitch-vibrato.json"),
+        include_str!("../../../src/processes/definitions/repitch-vowels.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-props.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-len.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-lens.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-sumlen.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-timediff.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-smptime.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-timesmp.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-maxsamp.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-maxsamp2.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-loudchan.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-findhole.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-diff.json"),
+        include_str!("../../../src/processes/definitions/sndinfo-chandiff.json"),
+        include_str!("../../../src/processes/definitions/brktopi.json"),
+        include_str!("../../../src/processes/definitions/ptobrk-withzeros.json"),
     ])
 }
 
@@ -218,6 +322,25 @@ fn validate_definition(definition: &ProcessDefinition) -> Result<(), String> {
                 validate_default(parameter, default)?;
             }
         }
+        let component_ids = match &mode.output {
+            types::OutputDefinition::Composite { components, .. } => {
+                let mut ids = HashSet::new();
+                let mut paths = HashSet::new();
+                for component in components {
+                    if !valid_id(&component.id)
+                        || !ids.insert(component.id.as_str())
+                        || !paths.insert((&component.name_suffix, &component.extension))
+                    {
+                        return Err(format!(
+                            "invalid or duplicate output component id in {}",
+                            mode.id
+                        ));
+                    }
+                }
+                ids
+            }
+            _ => HashSet::new(),
+        };
         for token in &mode.argument_order {
             match token {
                 types::ArgumentToken::Input { input_id } if !inputs.contains(input_id) => {
@@ -227,6 +350,13 @@ fn validate_definition(definition: &ProcessDefinition) -> Result<(), String> {
                     if !params.contains(parameter_id) =>
                 {
                     return Err(format!("unknown parameter reference: {parameter_id}"))
+                }
+                types::ArgumentToken::OutputComponent { component_id }
+                    if !component_ids.contains(component_id.as_str()) =>
+                {
+                    return Err(format!(
+                        "unknown output component reference: {component_id}"
+                    ))
                 }
                 types::ArgumentToken::Literal { value } if value.contains('\0') => {
                     return Err("literal contains NUL".into())

@@ -1,6 +1,6 @@
 # Composers' Desktop Application
 
-Composers' Desktop Application is an experimental desktop interface for the [Composers' Desktop Project (CDP)](https://www.composersdesktop.com/). It makes a reviewed subset of CDP's command-line audio processes accessible through searchable descriptions, generated forms, safe defaults, command previews, and native processing windows.
+Composers' Desktop Application is an experimental GUI wrapper for the [Composers' Desktop Project (CDP)](https://www.composersdesktop.com/). It makes a reviewed subset of CDP's command-line audio processes accessible through searchable descriptions, generated forms, safe defaults, command previews, and native processing windows.
 
 ![The Composers' Desktop Application process catalog](screenshots/Screenshot-2026-09-11.png)
 

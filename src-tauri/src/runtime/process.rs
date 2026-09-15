@@ -1,6 +1,6 @@
-use super::paths::discover_generic_outputs;
 use super::registry::SharedRunRegistry;
 use super::types::{CompiledCommand, OutputArtifact, RunSnapshot, RunStatus};
+use super::{compiler::component_output_path, paths::discover_generic_outputs};
 use crate::catalog::types::{CdpFileType, OutputDefinition};
 use std::{
     io::Read,
@@ -69,6 +69,18 @@ impl RunningProcess for ChildProcess {
                 let paths = discover_generic_outputs(path, extension, &self.generic_before)?;
                 if paths.is_empty() {
                     return Err("CDP process completed without producing outputs".into());
+                }
+                return Ok(Some(paths.into_iter().map(artifact_for_path).collect()));
+            }
+            if let OutputDefinition::Composite { components, .. } = &self.output_definition {
+                let paths = components
+                    .iter()
+                    .map(|component| component_output_path(path, component))
+                    .collect::<Result<Vec<_>, _>>()?;
+                if paths.iter().any(|component| !component.exists()) {
+                    return Err(
+                        "CDP process completed without producing all required outputs".into(),
+                    );
                 }
                 return Ok(Some(paths.into_iter().map(artifact_for_path).collect()));
             }
@@ -163,6 +175,8 @@ pub fn file_type_for_path(path: &Path) -> Option<CdpFileType> {
         "wav" | "aif" | "aiff" => Some(CdpFileType::Soundfile),
         "ana" => Some(CdpFileType::AnalysisAna),
         "pvx" => Some(CdpFileType::AnalysisPvx),
+        "frq" => Some(CdpFileType::BinaryPitch),
+        "for" => Some(CdpFileType::BinaryFormant),
         "brk" | "bpf" => Some(CdpFileType::Breakpoint),
         "env" | "evl" => Some(CdpFileType::BinaryEnvelope),
         "mix" => Some(CdpFileType::Mixfile),
