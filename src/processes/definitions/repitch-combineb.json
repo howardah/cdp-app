@@ -31,13 +31,23 @@
           "maxItems": 1,
           "ordered": false,
           "constraints": []
+        },
+        {
+          "id": "transposition",
+          "label": "Transposition data",
+          "description": "Binary transposition data or time/ratio breakpoint data.",
+          "fileTypes": ["binary-pitch", "breakpoint"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
         }
       ],
       "parameters": [],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "breakpoint",
+        "extension": "brk",
         "nameSuffix": "-combineb"
       },
       "argumentOrder": [
@@ -45,10 +55,12 @@
           "kind": "literal",
           "value": "combineb"
         },
+        { "kind": "literal", "value": "2" },
         {
           "kind": "input",
           "inputId": "source"
         },
+        { "kind": "input", "inputId": "transposition" },
         {
           "kind": "output"
         }

@@ -33,7 +33,34 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "startTime",
+          "label": "Start time",
+          "description": "Start of the retained range.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "endTime",
+          "label": "End time",
+          "description": "End of the retained range.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -45,15 +72,25 @@
           "kind": "literal",
           "value": "cut"
         },
+        { "kind": "literal", "value": "3" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "startTime" },
+        { "kind": "parameter", "parameterId": "endTime" }
       ],
-      "constraints": []
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "startTime" },
+          "right": { "source": "parameter", "id": "endTime" },
+          "message": "The start time must be before the end time."
+        }
+      ]
     }
   ]
 }

@@ -33,7 +33,32 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "keep",
+          "label": "Grains to keep",
+          "description": "Number of grains retained in each pattern.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "pattern",
+          "label": "Pattern length",
+          "description": "Total grains in the keep/omit pattern.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +76,9 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "keep" },
+        { "kind": "parameter", "parameterId": "pattern" }
       ],
       "constraints": []
     }

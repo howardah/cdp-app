@@ -30,10 +30,35 @@
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 2, "max": 2 }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "threshold",
+          "label": "Difference threshold",
+          "description": "Maximum permitted sample difference.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.000001
+        },
+        {
+          "id": "maximumDifferences",
+          "label": "Maximum differences",
+          "description": "Stop after this many differences.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-n", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "stdoutReport"
       },
@@ -45,7 +70,9 @@
         {
           "kind": "input",
           "inputId": "source"
-        }
+        },
+        { "kind": "parameter", "parameterId": "threshold" },
+        { "kind": "parameter", "parameterId": "maximumDifferences" }
       ],
       "constraints": []
     }

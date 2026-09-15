@@ -31,13 +31,23 @@
           "maxItems": 1,
           "ordered": false,
           "constraints": []
+        },
+        {
+          "id": "harmonics",
+          "label": "Harmonics data",
+          "description": "Text file listing harmonic amplitudes from the first harmonic upward.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
         }
       ],
       "parameters": [],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "analysis-ana",
+        "extension": "ana",
         "nameSuffix": "-synth"
       },
       "argumentOrder": [
@@ -51,6 +61,10 @@
         },
         {
           "kind": "output"
+        },
+        {
+          "kind": "input",
+          "inputId": "harmonics"
         }
       ],
       "constraints": []

@@ -17,9 +17,10 @@
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Distort clip",
-      "summary": "Run Distort clip.",
+      "id": "level",
+      "cliMode": 1,
+      "title": "Clip at a level",
+      "summary": "Clip the signal at the specified level.",
       "inputs": [
         {
           "id": "source",
@@ -32,7 +33,21 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "level",
+          "label": "Clip level",
+          "description": "Signal level at which CDP clips the waveform.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.8,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -50,7 +65,54 @@
         },
         {
           "kind": "output"
+        },
+        { "kind": "parameter", "parameterId": "level" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "half-waveforms",
+      "cliMode": 2,
+      "title": "Clip half-waveforms",
+      "summary": "Clip half-waveforms at the specified fractional level.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Mono soundfile to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
+      ],
+      "parameters": [
+        {
+          "id": "fraction",
+          "label": "Clip fraction",
+          "description": "Fraction of each half-waveform retained before clipping.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-half-clipped"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "clip" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "fraction" }
       ],
       "constraints": []
     }

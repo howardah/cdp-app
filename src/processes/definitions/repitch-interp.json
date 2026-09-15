@@ -33,7 +33,22 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "mode",
+          "label": "Interpolation",
+          "description": "Glide between valid pitches or sustain the preceding pitch.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "choice",
+          "default": "glide",
+          "choices": [
+            { "value": "glide", "label": "Glide", "cliValue": "1" },
+            { "value": "sustain", "label": "Sustain", "cliValue": "2" }
+          ]
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -45,6 +60,7 @@
           "kind": "literal",
           "value": "interp"
         },
+        { "kind": "parameter", "parameterId": "mode" },
         {
           "kind": "input",
           "inputId": "source"

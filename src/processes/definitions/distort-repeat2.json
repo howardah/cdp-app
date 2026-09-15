@@ -33,7 +33,20 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "multiplier",
+          "label": "Repeat multiplier",
+          "description": "Number of times each waveset group repeats without stretching the output duration.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +64,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "multiplier" }
       ],
       "constraints": []
     }

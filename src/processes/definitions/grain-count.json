@@ -34,12 +34,7 @@
         }
       ],
       "parameters": [],
-      "output": {
-        "kind": "singleFile",
-        "fileType": "soundfile",
-        "extension": "wav",
-        "nameSuffix": "-count"
-      },
+      "output": { "kind": "stdoutReport" },
       "argumentOrder": [
         {
           "kind": "literal",
@@ -48,9 +43,6 @@
         {
           "kind": "input",
           "inputId": "source"
-        },
-        {
-          "kind": "output"
         }
       ],
       "constraints": []

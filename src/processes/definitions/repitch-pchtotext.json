@@ -36,8 +36,8 @@
       "parameters": [],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "text-data",
+        "extension": "txt",
         "nameSuffix": "-pchtotext"
       },
       "argumentOrder": [

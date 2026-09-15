@@ -46,6 +46,16 @@
           "default": 0,
           "min": 0,
           "step": 0.001
+        },
+        {
+          "id": "groupedSamples",
+          "label": "Grouped samples",
+          "description": "Return a stereo pair or multichannel frame as one sample group.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "booleanFlag", "flag": "-g" },
+          "kind": "flag",
+          "default": false
         }
       ],
       "output": {
@@ -63,7 +73,8 @@
         {
           "kind": "parameter",
           "parameterId": "time"
-        }
+        },
+        { "kind": "parameter", "parameterId": "groupedSamples" }
       ],
       "constraints": []
     }

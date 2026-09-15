@@ -31,6 +31,16 @@
           "maxItems": 1,
           "ordered": false,
           "constraints": []
+        },
+        {
+          "id": "zerosData",
+          "label": "Unpitched data",
+          "description": "Text file of paired start and end times for unpitched markers.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
         }
       ],
       "parameters": [],
@@ -45,13 +55,15 @@
           "kind": "literal",
           "value": "insertzeros"
         },
+        { "kind": "literal", "value": "1" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "input", "inputId": "zerosData" }
       ],
       "constraints": []
     }

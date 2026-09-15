@@ -19,6 +19,7 @@
   "modes": [
     {
       "id": "process",
+      "cliMode": 1,
       "title": "Distort delete",
       "summary": "Run Distort delete.",
       "inputs": [
@@ -30,10 +31,23 @@
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "cycleCount",
+          "label": "Cycles per group",
+          "description": "CDP CYCLECNT: one cycle in each group is retained or deleted according to the selected mode.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +65,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "cycleCount" }
       ],
       "constraints": []
     }

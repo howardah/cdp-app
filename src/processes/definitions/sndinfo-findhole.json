@@ -33,7 +33,21 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "threshold",
+          "label": "Hole threshold",
+          "description": "Only report a hole whose level stays below this threshold.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.000001
+        }
+      ],
       "output": {
         "kind": "stdoutReport"
       },
@@ -45,7 +59,8 @@
         {
           "kind": "input",
           "inputId": "source"
-        }
+        },
+        { "kind": "parameter", "parameterId": "threshold" }
       ],
       "constraints": []
     }

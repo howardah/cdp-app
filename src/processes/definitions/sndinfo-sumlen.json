@@ -33,7 +33,21 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "spliceMs",
+          "label": "Splice length",
+          "description": "Subtract this splice length at each join when calculating the total.",
+          "required": false,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "number",
+          "default": 15,
+          "min": 0,
+          "step": 0.001
+        }
+      ],
       "output": {
         "kind": "stdoutReport"
       },
@@ -45,7 +59,8 @@
         {
           "kind": "input",
           "inputId": "source"
-        }
+        },
+        { "kind": "parameter", "parameterId": "spliceMs" }
       ],
       "constraints": []
     }

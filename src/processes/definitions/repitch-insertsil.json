@@ -31,6 +31,16 @@
           "maxItems": 1,
           "ordered": false,
           "constraints": []
+        },
+        {
+          "id": "silenceData",
+          "label": "Silence data",
+          "description": "Text file of paired start and end times for silence markers.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
         }
       ],
       "parameters": [],
@@ -45,13 +55,15 @@
           "kind": "literal",
           "value": "insertsil"
         },
+        { "kind": "literal", "value": "1" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "input", "inputId": "silenceData" }
       ],
       "constraints": []
     }

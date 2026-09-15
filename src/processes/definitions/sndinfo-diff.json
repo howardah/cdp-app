@@ -55,7 +55,52 @@
           "constraints": [{ "kind": "sameSampleRate", "inputId": "source" }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "threshold",
+          "label": "Difference threshold",
+          "description": "Maximum permitted data-value difference.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-t", "join": "concatenated" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.000001
+        },
+        {
+          "id": "maximumDifferences",
+          "label": "Maximum differences",
+          "description": "Stop after this many differences.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-n", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "allowDifferentLengths",
+          "label": "Allow different lengths",
+          "description": "Continue even when files have different lengths.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-l" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "allowDifferentChannels",
+          "label": "Allow different channels",
+          "description": "Continue when soundfiles have different channel counts.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-c" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
       "output": {
         "kind": "stdoutReport"
       },
@@ -71,7 +116,11 @@
         {
           "kind": "input",
           "inputId": "comparison"
-        }
+        },
+        { "kind": "parameter", "parameterId": "threshold" },
+        { "kind": "parameter", "parameterId": "maximumDifferences" },
+        { "kind": "parameter", "parameterId": "allowDifferentLengths" },
+        { "kind": "parameter", "parameterId": "allowDifferentChannels" }
       ],
       "constraints": []
     }

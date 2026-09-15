@@ -33,7 +33,20 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "smoothCount",
+          "label": "Smoothing passes",
+          "description": "Number of passes to smooth onset errors and pitch glitches.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -51,7 +64,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "smoothCount" }
       ],
       "constraints": []
     }

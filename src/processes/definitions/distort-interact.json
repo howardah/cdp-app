@@ -31,9 +31,36 @@
           "maxItems": 1,
           "ordered": false,
           "constraints": []
+        },
+        {
+          "id": "second",
+          "label": "Second mono soundfile",
+          "description": "Second source for wavecycle interaction.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [
+            { "kind": "channels", "min": 1, "max": 1 },
+            { "kind": "sameSampleRate", "inputId": "source" }
+          ]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "mode",
+          "label": "Interaction mode",
+          "description": "1 interleaves wavecycles; 2 imposes source wavecycle lengths on the second sound.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "max": 2,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -45,10 +72,12 @@
           "kind": "literal",
           "value": "interact"
         },
+        { "kind": "parameter", "parameterId": "mode" },
         {
           "kind": "input",
           "inputId": "source"
         },
+        { "kind": "input", "inputId": "second" },
         {
           "kind": "output"
         }

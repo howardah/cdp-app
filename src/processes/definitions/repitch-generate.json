@@ -24,16 +24,56 @@
       "inputs": [
         {
           "id": "source",
-          "label": "Binary pitch file",
-          "description": "Source required by CDP Repitch generate.",
-          "fileTypes": ["binary-pitch"],
+          "label": "MIDI pitch data",
+          "description": "Text file of increasing time and MIDI-pitch pairs.",
+          "fileTypes": ["text-data"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "sampleRate",
+          "label": "Sample rate",
+          "description": "Sample rate for analysis timing in the generated pitch file.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 44100,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "points",
+          "label": "Analysis points",
+          "description": "Analysis point count; a power of two from 2 to 32768.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
+          "kind": "integer",
+          "default": 1024,
+          "min": 2,
+          "max": 32768,
+          "step": 1
+        },
+        {
+          "id": "overlap",
+          "label": "Overlap",
+          "description": "Analysis overlap factor.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-o", "join": "concatenated" },
+          "kind": "integer",
+          "default": 3,
+          "min": 1,
+          "max": 4,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -51,9 +91,18 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "sampleRate" },
+        { "kind": "parameter", "parameterId": "points" },
+        { "kind": "parameter", "parameterId": "overlap" }
       ],
-      "constraints": []
+      "constraints": [
+        {
+          "kind": "powerOfTwo",
+          "value": { "source": "parameter", "id": "points" },
+          "message": "Analysis points must be a power of two between 2 and 32768."
+        }
+      ]
     }
   ]
 }

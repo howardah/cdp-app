@@ -33,7 +33,18 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "harmonics",
+          "label": "Harmonics data",
+          "description": "Text file of harmonic-number/amplitude pairs, as documented by CDP.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["text-data"]
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +62,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "harmonics" }
       ],
       "constraints": []
     }

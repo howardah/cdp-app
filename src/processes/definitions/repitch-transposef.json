@@ -24,20 +24,45 @@
       "inputs": [
         {
           "id": "source",
-          "label": "Binary pitch file",
-          "description": "Source required by CDP Repitch transposef.",
-          "fileTypes": ["binary-pitch"],
+          "label": "Analysis file",
+          "description": "Analysis file whose original spectral envelope will be retained.",
+          "fileTypes": ["analysis-ana"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "formantPoints",
+          "label": "Formant points",
+          "description": "One formant-envelope point per N equally spaced frequency channels.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "option", "flag": "-f", "join": "concatenated" },
+          "kind": "integer",
+          "default": 4,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "semitones",
+          "label": "Transposition",
+          "description": "Transposition in semitones.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "step": 0.01
+        }
+      ],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "analysis-ana",
+        "extension": "ana",
         "nameSuffix": "-transposef"
       },
       "argumentOrder": [
@@ -45,13 +70,16 @@
           "kind": "literal",
           "value": "transposef"
         },
+        { "kind": "literal", "value": "3" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "formantPoints" },
+        { "kind": "parameter", "parameterId": "semitones" }
       ],
       "constraints": []
     }

@@ -33,7 +33,31 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "timeframe",
+          "label": "Smoothing timeframe",
+          "description": "Interpolation window in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 100,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "holdLast",
+          "label": "Hold last pitch",
+          "description": "Hold the final interpolated pitch instead of returning to the source value.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-h" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -45,13 +69,16 @@
           "kind": "literal",
           "value": "smooth"
         },
+        { "kind": "literal", "value": "1" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "timeframe" },
+        { "kind": "parameter", "parameterId": "holdLast" }
       ],
       "constraints": []
     }

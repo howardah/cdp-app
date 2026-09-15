@@ -33,7 +33,18 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "forceScan",
+          "label": "Force scan",
+          "description": "Ignore header peak information and scan the complete file.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "booleanFlag", "flag": "-f" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
       "output": {
         "kind": "stdoutReport"
       },
@@ -45,7 +56,8 @@
         {
           "kind": "input",
           "inputId": "source"
-        }
+        },
+        { "kind": "parameter", "parameterId": "forceScan" }
       ],
       "constraints": []
     }

@@ -24,9 +24,9 @@
       "inputs": [
         {
           "id": "source",
-          "label": "Binary pitch file",
-          "description": "Source required by CDP Repitch analenv.",
-          "fileTypes": ["binary-pitch"],
+          "label": "Analysis file",
+          "description": "Analysis file from which to extract the window-loudness envelope.",
+          "fileTypes": ["analysis-ana"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
@@ -36,8 +36,8 @@
       "parameters": [],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "binary-envelope",
+        "extension": "env",
         "nameSuffix": "-analenv"
       },
       "argumentOrder": [

@@ -24,20 +24,33 @@
       "inputs": [
         {
           "id": "source",
-          "label": "Binary pitch file",
-          "description": "Source required by CDP Repitch transpose.",
-          "fileTypes": ["binary-pitch"],
+          "label": "Analysis file",
+          "description": "Analysis file whose spectral envelope will move with the transposition.",
+          "fileTypes": ["analysis-ana"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "semitones",
+          "label": "Transposition",
+          "description": "Transposition in semitones.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "step": 0.01
+        }
+      ],
       "output": {
         "kind": "singleFile",
-        "fileType": "binary-pitch",
-        "extension": "frq",
+        "fileType": "analysis-ana",
+        "extension": "ana",
         "nameSuffix": "-transpose"
       },
       "argumentOrder": [
@@ -45,13 +58,15 @@
           "kind": "literal",
           "value": "transpose"
         },
+        { "kind": "literal", "value": "3" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "semitones" }
       ],
       "constraints": []
     }

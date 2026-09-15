@@ -36,9 +36,9 @@
       "parameters": [],
       "output": {
         "kind": "singleFile",
-        "fileType": "soundfile",
-        "extension": "wav",
-        "nameSuffix": "-find"
+        "fileType": "text-data",
+        "extension": "txt",
+        "nameSuffix": "-grain-onsets"
       },
       "argumentOrder": [
         {

@@ -45,6 +45,16 @@
           "default": 1,
           "min": 0,
           "step": 1
+        },
+        {
+          "id": "groupedSamples",
+          "label": "Grouped samples",
+          "description": "Treat a stereo pair or multichannel frame as one sample group.",
+          "required": false,
+          "advanced": false,
+          "cli": { "kind": "booleanFlag", "flag": "-g" },
+          "kind": "flag",
+          "default": false
         }
       ],
       "output": {
@@ -62,7 +72,8 @@
         {
           "kind": "parameter",
           "parameterId": "sampleCount"
-        }
+        },
+        { "kind": "parameter", "parameterId": "groupedSamples" }
       ],
       "constraints": []
     }

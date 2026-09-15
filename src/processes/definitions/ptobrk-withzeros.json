@@ -33,7 +33,22 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "minimumPitchDuration",
+          "label": "Minimum pitch duration",
+          "description": "Minimum valid pitch span in milliseconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 1,
+          "max": 1000,
+          "step": 0.001
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "breakpoint",
@@ -51,7 +66,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "minimumPitchDuration" }
       ],
       "constraints": []
     }

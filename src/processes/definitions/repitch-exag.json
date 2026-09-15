@@ -33,7 +33,46 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "meanPitch",
+          "label": "Mean pitch",
+          "description": "MIDI pitch around which to exaggerate intervals.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 60,
+          "min": 0,
+          "max": 127,
+          "step": 0.01
+        },
+        {
+          "id": "range",
+          "label": "Range exaggeration",
+          "description": "Multiplier for pitch-range intervals.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "contour",
+          "label": "Contour exaggeration",
+          "description": "Pitch-contour exaggeration from 0 to 1.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.001
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -45,13 +84,17 @@
           "kind": "literal",
           "value": "exag"
         },
+        { "kind": "literal", "value": "5" },
         {
           "kind": "input",
           "inputId": "source"
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "meanPitch" },
+        { "kind": "parameter", "parameterId": "range" },
+        { "kind": "parameter", "parameterId": "contour" }
       ],
       "constraints": []
     }

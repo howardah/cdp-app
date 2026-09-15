@@ -30,10 +30,25 @@
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "octaveVariation",
+          "label": "Octave variation",
+          "description": "Maximum random transposition up or down in octaves (greater than zero, up to eight).",
+          "required": true,
+          "advanced": false,
+          "unit": "octaves",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "max": 8,
+          "step": 0.01
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +66,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "octaveVariation" }
       ],
       "constraints": []
     }
