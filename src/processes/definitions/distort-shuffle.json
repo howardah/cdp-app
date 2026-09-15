@@ -33,7 +33,18 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "mapping",
+          "label": "Domain-image mapping",
+          "description": "Letters describing the source wavecycle domain and its reordered image, separated by a dash.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["domain-image"]
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +62,8 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "mapping" }
       ],
       "constraints": []
     }

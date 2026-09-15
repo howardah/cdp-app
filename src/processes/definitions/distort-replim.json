@@ -33,7 +33,33 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "multiplier",
+          "label": "Repeat multiplier",
+          "description": "Number of repetitions for each eligible wavecycle group.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "frequencyLimit",
+          "label": "Frequency limit",
+          "description": "Only wavecycles below this frequency in Hz are repeated.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "option", "flag": "-f", "join": "concatenated" },
+          "kind": "number",
+          "default": 1000,
+          "min": 0.001,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -51,7 +77,9 @@
         },
         {
           "kind": "output"
-        }
+        },
+        { "kind": "parameter", "parameterId": "multiplier" },
+        { "kind": "parameter", "parameterId": "frequencyLimit" }
       ],
       "constraints": []
     }

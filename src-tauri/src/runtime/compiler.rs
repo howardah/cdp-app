@@ -96,6 +96,20 @@ pub fn compile_request(
                     args.push(OsString::from(path));
                 }
             }
+            ArgumentToken::OutputComponent { component_id } => {
+                let root = request
+                    .output_path
+                    .as_deref()
+                    .ok_or("output path required")?;
+                let component = match &mode.output {
+                    OutputDefinition::Composite { components, .. } => components
+                        .iter()
+                        .find(|component| component.id == *component_id)
+                        .ok_or("unknown output component")?,
+                    _ => return Err("output component requires a composite output".into()),
+                };
+                args.push(component_output_path(Path::new(root), component)?.into_os_string());
+            }
             ArgumentToken::Parameter { parameter_id } => {
                 if let Some(value) = request.parameters.get(parameter_id) {
                     let definition = mode
@@ -355,7 +369,34 @@ pub(super) fn validate_output_path(path: &Path, output: &OutputDefinition) -> Re
             }
         }
     }
+    if let OutputDefinition::Composite { components, .. } = output {
+        for component in components {
+            let component_path = component_output_path(path, component)?;
+            if component_path.exists() {
+                return Err(format!(
+                    "output component already exists: {}",
+                    component_path.display()
+                ));
+            }
+        }
+    }
     Ok(())
+}
+
+pub(crate) fn component_output_path(
+    root: &Path,
+    component: &OutputComponent,
+) -> Result<PathBuf, String> {
+    let stem = root
+        .file_stem()
+        .and_then(|value| value.to_str())
+        .ok_or("output path is invalid")?;
+    if stem.is_empty() {
+        return Err("output path is invalid".into());
+    }
+    Ok(root
+        .with_file_name(format!("{stem}{}", component.name_suffix))
+        .with_extension(&component.extension))
 }
 fn parameter_id(p: &ParameterDefinition) -> &str {
     match p {

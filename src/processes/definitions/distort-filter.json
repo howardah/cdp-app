@@ -3,57 +3,226 @@
   "id": "distort-filter",
   "title": "Distort filter",
   "category": "time-domain",
-  "summary": "CDP Distort filter operation.",
-  "description": "Run the documented CDP Release 8 Distort filter operation through the desktop process runner.",
-  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
-  "tags": ["distort", "filter", "cdp-release-8"],
-  "identity": {
-    "executable": "distort",
-    "operation": "filter"
-  },
+  "summary": "Remove wavecycles by frequency.",
+  "description": "Time-contract a mono sound by omitting wavecycles outside the selected frequency rule.",
+  "useCases": ["Shorten a sound", "Remove low or high cycles"],
+  "tags": ["distort", "filter", "wavecycle"],
+  "identity": { "executable": "distort", "operation": "filter" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cdistort.htm",
+    "anchor": "FILTER",
     "helpCommand": ["distort", "filter"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Distort filter",
-      "summary": "Run Distort filter.",
+      "id": "below-frequency",
+      "cliMode": 1,
+      "title": "Omit cycles below a frequency",
+      "summary": "Remove wavecycles below one frequency.",
       "inputs": [
         {
           "id": "source",
-          "label": "Soundfile",
-          "description": "Source required by CDP Distort filter.",
+          "label": "Mono soundfile",
+          "description": "Mono source to process.",
           "fileTypes": ["soundfile"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Cycles below this frequency are omitted.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1000 },
+          "min": 10,
+          "max": 22050,
+          "step": 0.01,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "skipCycles",
+          "label": "Skip cycles",
+          "description": "Cycles to leave unchanged at the source start.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
         "extension": "wav",
-        "nameSuffix": "-filter"
+        "nameSuffix": "-filter-below"
       },
       "argumentOrder": [
-        {
-          "kind": "literal",
-          "value": "filter"
-        },
-        {
-          "kind": "input",
-          "inputId": "source"
-        },
-        {
-          "kind": "output"
-        }
+        { "kind": "literal", "value": "filter" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "skipCycles" }
       ],
       "constraints": []
+    },
+    {
+      "id": "above-frequency",
+      "cliMode": 2,
+      "title": "Omit cycles above a frequency",
+      "summary": "Remove wavecycles above one frequency.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Cycles above this frequency are omitted.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1000 },
+          "min": 10,
+          "max": 22050,
+          "step": 0.01,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "skipCycles",
+          "label": "Skip cycles",
+          "description": "Cycles to leave unchanged at the source start.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-filter-above"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "filter" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "skipCycles" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "outside-band",
+      "cliMode": 3,
+      "title": "Omit cycles outside a band",
+      "summary": "Remove wavecycles below the low edge and above the high edge.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source to process.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "lowFrequency",
+          "label": "Low frequency",
+          "description": "Lower edge of the retained band.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 500 },
+          "min": 10,
+          "max": 22050,
+          "step": 0.01,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "highFrequency",
+          "label": "High frequency",
+          "description": "Upper edge of the retained band.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 2000 },
+          "min": 10,
+          "max": 22050,
+          "step": 0.01,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "skipCycles",
+          "label": "Skip cycles",
+          "description": "Cycles to leave unchanged at the source start.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "option", "flag": "-s", "join": "concatenated" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-filter-band"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "filter" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "lowFrequency" },
+        { "kind": "parameter", "parameterId": "highFrequency" },
+        { "kind": "parameter", "parameterId": "skipCycles" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThan",
+          "left": { "source": "parameter", "id": "lowFrequency" },
+          "right": { "source": "parameter", "id": "highFrequency" },
+          "message": "The low frequency must be below the high frequency."
+        }
+      ]
     }
   ]
 }

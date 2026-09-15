@@ -3,29 +3,28 @@
   "id": "grain-grev",
   "title": "Grain grev",
   "category": "time-domain",
-  "summary": "CDP Grain grev operation.",
-  "description": "Run the documented CDP Release 8 Grain grev operation through the desktop process runner.",
-  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
-  "tags": ["grain", "grev", "cdp-release-8"],
-  "identity": {
-    "executable": "grain",
-    "operation": "grev"
-  },
+  "summary": "Find and manipulate grains from envelope troughs.",
+  "description": "Locate grains using envelope troughs and zero crossings.",
+  "useCases": ["Speech grain editing"],
+  "tags": ["grain", "trough", "zero-crossing"],
+  "identity": { "executable": "grain", "operation": "grev" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cgrogrns.htm",
+    "anchor": "GREV",
     "helpCommand": ["grain", "grev"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Grain grev",
-      "summary": "Run Grain grev.",
+      "id": "reverse",
+      "cliMode": 1,
+      "title": "Reverse grain groups",
+      "summary": "Reverse units of grains.",
       "inputs": [
         {
           "id": "source",
           "label": "Soundfile",
-          "description": "Source required by CDP Grain grev.",
+          "description": "Source.",
           "fileTypes": ["soundfile"],
           "minItems": 1,
           "maxItems": 1,
@@ -33,25 +32,597 @@
           "constraints": []
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Grain window size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999,
+          "step": 0.001
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains in each unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
         "extension": "wav",
-        "nameSuffix": "-grev"
+        "nameSuffix": "-grev-reverse"
       },
       "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "repeat",
+      "cliMode": 2,
+      "title": "Repeat grain groups",
+      "summary": "Repeat each grain unit.",
+      "inputs": [
         {
-          "kind": "literal",
-          "value": "grev"
-        },
-        {
-          "kind": "input",
-          "inputId": "source"
-        },
-        {
-          "kind": "output"
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
         }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Grain window size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999,
+          "step": 0.001
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains in each unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "repetitions",
+          "label": "Repetitions",
+          "description": "Repeats per unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 2 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev-repeat"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" },
+        { "kind": "parameter", "parameterId": "repetitions" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "delete",
+      "cliMode": 3,
+      "title": "Delete grain units",
+      "summary": "Delete units by keep/out-of pattern.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Grain window size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999,
+          "step": 0.001
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains in each unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "keep",
+          "label": "Keep",
+          "description": "Units to keep.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "outOf",
+          "label": "Out of",
+          "description": "Pattern size.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev-delete"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" },
+        { "kind": "parameter", "parameterId": "keep" },
+        { "kind": "parameter", "parameterId": "outOf" }
+      ],
+      "constraints": [
+        {
+          "kind": "lessThanOrEqual",
+          "left": { "source": "parameter", "id": "keep" },
+          "right": { "source": "parameter", "id": "outOf" },
+          "message": "Keep cannot exceed out of."
+        }
+      ]
+    },
+    {
+      "id": "omit",
+      "cliMode": 4,
+      "title": "Omit grain units",
+      "summary": "Replace selected units with silence.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Window size in ms.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains per unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "keep",
+          "label": "Keep",
+          "description": "Units to retain.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "outOf",
+          "label": "Out of",
+          "description": "Pattern length.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 2,
+          "min": 2
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev-omit"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" },
+        { "kind": "parameter", "parameterId": "keep" },
+        { "kind": "parameter", "parameterId": "outOf" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "timestretch",
+      "cliMode": 5,
+      "title": "Time-stretch grain units",
+      "summary": "Stretch timing without stretching grains.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Window size in ms.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains per unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "breakpointType": "time-value-pairs"
+        },
+        {
+          "id": "stretch",
+          "label": "Stretch",
+          "description": "Time stretch ratio.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 0.01,
+          "max": 100,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev-stretch"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" },
+        { "kind": "parameter", "parameterId": "stretch" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "get-times",
+      "cliMode": 6,
+      "title": "Get grain times",
+      "summary": "Write grain positions to text.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Grain window size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains in each unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "text-data",
+        "extension": "txt",
+        "nameSuffix": "-grev-times"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "put-times",
+      "cliMode": 7,
+      "title": "Put grains at times",
+      "summary": "Place grains using a times file.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Soundfile",
+          "description": "Source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        },
+        {
+          "id": "times",
+          "label": "Times file",
+          "description": "Text grain positions.",
+          "fileTypes": ["text-data"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [
+        {
+          "id": "windowMs",
+          "label": "Window",
+          "description": "Grain window size.",
+          "required": true,
+          "advanced": false,
+          "unit": "ms",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 20,
+          "min": 0.001
+        },
+        {
+          "id": "trough",
+          "label": "Trough",
+          "description": "Acceptable trough height.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.5,
+          "min": 0.001,
+          "max": 0.999
+        },
+        {
+          "id": "groupCount",
+          "label": "Grains per unit",
+          "description": "Grains in each unit.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 1,
+          "step": 1,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-grev-put"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "grev" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "input", "inputId": "times" },
+        { "kind": "parameter", "parameterId": "windowMs" },
+        { "kind": "parameter", "parameterId": "trough" },
+        { "kind": "parameter", "parameterId": "groupCount" }
       ],
       "constraints": []
     }

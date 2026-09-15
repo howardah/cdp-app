@@ -59,6 +59,7 @@
           "kind": "literal",
           "value": "delete"
         },
+        { "kind": "mode" },
         {
           "kind": "input",
           "inputId": "source"

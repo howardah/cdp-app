@@ -3,34 +3,33 @@
   "id": "distort-reform",
   "title": "Distort reform",
   "category": "time-domain",
-  "summary": "CDP Distort reform operation.",
-  "description": "Run the documented CDP Release 8 Distort reform operation through the desktop process runner.",
-  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
-  "tags": ["distort", "reform", "cdp-release-8"],
-  "identity": {
-    "executable": "distort",
-    "operation": "reform"
-  },
+  "summary": "Modify wavecycle shapes.",
+  "description": "Convert mono wavecycles to fixed shapes or exaggerate their contour.",
+  "useCases": ["Waveform design"],
+  "tags": ["distort", "reform", "wavecycle"],
+  "identity": { "executable": "distort", "operation": "reform" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cdistort.htm",
+    "anchor": "REFORM",
     "helpCommand": ["distort", "reform"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Distort reform",
-      "summary": "Run Distort reform.",
+      "id": "fixed-square",
+      "cliMode": 1,
+      "title": "Fixed square wave",
+      "summary": "Convert to a fixed-level square wave.",
       "inputs": [
         {
           "id": "source",
-          "label": "Soundfile",
-          "description": "Source required by CDP Distort reform.",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
           "fileTypes": ["soundfile"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
       ],
       "parameters": [],
@@ -38,20 +37,253 @@
         "kind": "singleFile",
         "fileType": "soundfile",
         "extension": "wav",
-        "nameSuffix": "-reform"
+        "nameSuffix": "-fixed-square"
       },
       "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "square",
+      "cliMode": 2,
+      "title": "Square wave",
+      "summary": "Convert to a square wave.",
+      "inputs": [
         {
-          "kind": "literal",
-          "value": "reform"
-        },
-        {
-          "kind": "input",
-          "inputId": "source"
-        },
-        {
-          "kind": "output"
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-square"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "fixed-triangle",
+      "cliMode": 3,
+      "title": "Fixed triangle wave",
+      "summary": "Convert to a fixed-level triangular wave.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-fixed-triangle"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "triangle",
+      "cliMode": 4,
+      "title": "Triangle wave",
+      "summary": "Convert to a triangular wave.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-triangle"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "inverted-half-cycles",
+      "cliMode": 5,
+      "title": "Inverted half cycles",
+      "summary": "Convert to inverted half cycles.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-inverted"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "click-stream",
+      "cliMode": 6,
+      "title": "Click stream",
+      "summary": "Convert to a click stream.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-clicks"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "sinusoid",
+      "cliMode": 7,
+      "title": "Sinusoid",
+      "summary": "Convert to a sinusoid.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-sinusoid"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "exaggerate",
+      "cliMode": 8,
+      "title": "Exaggerate contour",
+      "summary": "Exaggerate waveform contour.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Mono source.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "exaggeration",
+          "label": "Exaggeration",
+          "description": "Contour exaggeration.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "numberOrBreakpoint",
+          "default": { "kind": "number", "value": 1 },
+          "min": 0.000002,
+          "max": 40,
+          "step": 0.000001,
+          "breakpointType": "time-value-pairs"
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-exaggerated"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "reform" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "exaggeration" }
       ],
       "constraints": []
     }

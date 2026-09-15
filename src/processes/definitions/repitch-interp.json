@@ -18,9 +18,10 @@
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Repitch interp",
-      "summary": "Run Repitch interp.",
+      "id": "glide",
+      "cliMode": 1,
+      "title": "Glide between pitches",
+      "summary": "Interpolate from each valid pitch to the next.",
       "inputs": [
         {
           "id": "source",
@@ -33,22 +34,7 @@
           "constraints": []
         }
       ],
-      "parameters": [
-        {
-          "id": "mode",
-          "label": "Interpolation",
-          "description": "Glide between valid pitches or sustain the preceding pitch.",
-          "required": true,
-          "advanced": false,
-          "cli": { "kind": "positional" },
-          "kind": "choice",
-          "default": "glide",
-          "choices": [
-            { "value": "glide", "label": "Glide", "cliValue": "1" },
-            { "value": "sustain", "label": "Sustain", "cliValue": "2" }
-          ]
-        }
-      ],
+      "parameters": [],
       "output": {
         "kind": "singleFile",
         "fileType": "binary-pitch",
@@ -60,7 +46,7 @@
           "kind": "literal",
           "value": "interp"
         },
-        { "kind": "parameter", "parameterId": "mode" },
+        { "kind": "mode" },
         {
           "kind": "input",
           "inputId": "source"
@@ -68,6 +54,38 @@
         {
           "kind": "output"
         }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "sustain",
+      "cliMode": 2,
+      "title": "Sustain previous pitch",
+      "summary": "Hold each valid pitch until the next one appears.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Binary pitch file",
+          "description": "Pitch data to interpolate.",
+          "fileTypes": ["binary-pitch"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": []
+        }
+      ],
+      "parameters": [],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "binary-pitch",
+        "extension": "frq",
+        "nameSuffix": "-interp"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "interp" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" }
       ],
       "constraints": []
     }

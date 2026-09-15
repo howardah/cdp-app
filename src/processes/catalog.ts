@@ -480,6 +480,22 @@ export function validateCatalog(catalog: readonly ProcessDefinition[]): void {
         mode.parameters.some((parameter) => !idPattern.test(parameter.id))
       )
         throw new Error(`invalid parameters in ${process.id}/${mode.id}`);
+      const outputComponentIds = new Set(
+        mode.output.kind === "composite"
+          ? mode.output.components.map((component) => component.id)
+          : [],
+      );
+      if (
+        mode.output.kind === "composite" &&
+        (outputComponentIds.size !== mode.output.components.length ||
+          mode.output.components.some((component) => !idPattern.test(component.id)) ||
+          new Set(
+            mode.output.components.map(
+              (component) => `${component.nameSuffix}.${component.extension}`,
+            ),
+          ).size !== mode.output.components.length)
+      )
+        throw new Error(`invalid output components in ${process.id}/${mode.id}`);
       for (const parameter of mode.parameters) {
         if (parameter.cli.kind !== "positional" && !safeFlag.test(parameter.cli.flag))
           throw new Error(`unsafe CLI flag in ${parameter.id}`);
@@ -502,6 +518,8 @@ export function validateCatalog(catalog: readonly ProcessDefinition[]): void {
           throw new Error(`unknown input reference: ${token.inputId}`);
         if (token.kind === "parameter" && !parameterIds.has(token.parameterId))
           throw new Error(`unknown parameter reference: ${token.parameterId}`);
+        if (token.kind === "outputComponent" && !outputComponentIds.has(token.componentId))
+          throw new Error(`unknown output component reference: ${token.componentId}`);
         if (token.kind === "literal" && token.value.includes("\0"))
           throw new Error("literal contains NUL");
       }

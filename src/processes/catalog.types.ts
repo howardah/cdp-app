@@ -123,6 +123,7 @@ export type ArgumentToken =
   | { kind: "mode" }
   | { kind: "input"; inputId: string }
   | { kind: "output" }
+  | { kind: "outputComponent"; componentId: string }
   | { kind: "parameter"; parameterId: string };
 export type OutputDefinition =
   | { kind: "singleFile"; fileType: CdpFileType; extension: string; nameSuffix: string }
@@ -144,7 +145,12 @@ export type OutputDefinition =
       kind: "composite";
       extension: string;
       nameSuffix: string;
-      components: { fileType: CdpFileType; extension: string; nameSuffix: string }[];
+      components: {
+        id: string;
+        fileType: CdpFileType;
+        extension: string;
+        nameSuffix: string;
+      }[];
     }
   | { kind: "stdoutReport" }
   | { kind: "none" };

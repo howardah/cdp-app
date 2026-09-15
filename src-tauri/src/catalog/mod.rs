@@ -322,6 +322,25 @@ fn validate_definition(definition: &ProcessDefinition) -> Result<(), String> {
                 validate_default(parameter, default)?;
             }
         }
+        let component_ids = match &mode.output {
+            types::OutputDefinition::Composite { components, .. } => {
+                let mut ids = HashSet::new();
+                let mut paths = HashSet::new();
+                for component in components {
+                    if !valid_id(&component.id)
+                        || !ids.insert(component.id.as_str())
+                        || !paths.insert((&component.name_suffix, &component.extension))
+                    {
+                        return Err(format!(
+                            "invalid or duplicate output component id in {}",
+                            mode.id
+                        ));
+                    }
+                }
+                ids
+            }
+            _ => HashSet::new(),
+        };
         for token in &mode.argument_order {
             match token {
                 types::ArgumentToken::Input { input_id } if !inputs.contains(input_id) => {
@@ -331,6 +350,13 @@ fn validate_definition(definition: &ProcessDefinition) -> Result<(), String> {
                     if !params.contains(parameter_id) =>
                 {
                     return Err(format!("unknown parameter reference: {parameter_id}"))
+                }
+                types::ArgumentToken::OutputComponent { component_id }
+                    if !component_ids.contains(component_id.as_str()) =>
+                {
+                    return Err(format!(
+                        "unknown output component reference: {component_id}"
+                    ))
                 }
                 types::ArgumentToken::Literal { value } if value.contains('\0') => {
                     return Err("literal contains NUL".into())

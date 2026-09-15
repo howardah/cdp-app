@@ -189,6 +189,7 @@ pub struct OutputDiscoveryRule {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OutputComponent {
+    pub id: String,
     pub file_type: CdpFileType,
     pub extension: String,
     pub name_suffix: String,
@@ -204,6 +205,7 @@ pub enum ArgumentToken {
     Mode,
     Input { input_id: String },
     Output,
+    OutputComponent { component_id: String },
     Parameter { parameter_id: String },
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]

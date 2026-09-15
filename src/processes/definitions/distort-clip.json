@@ -59,6 +59,7 @@
           "kind": "literal",
           "value": "clip"
         },
+        { "kind": "mode" },
         {
           "kind": "input",
           "inputId": "source"
@@ -110,6 +111,7 @@
       },
       "argumentOrder": [
         { "kind": "literal", "value": "clip" },
+        { "kind": "mode" },
         { "kind": "input", "inputId": "source" },
         { "kind": "output" },
         { "kind": "parameter", "parameterId": "fraction" }

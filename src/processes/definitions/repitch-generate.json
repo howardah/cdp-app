@@ -46,32 +46,6 @@
           "default": 44100,
           "min": 1,
           "step": 1
-        },
-        {
-          "id": "points",
-          "label": "Analysis points",
-          "description": "Analysis point count; a power of two from 2 to 32768.",
-          "required": false,
-          "advanced": true,
-          "cli": { "kind": "option", "flag": "-c", "join": "concatenated" },
-          "kind": "integer",
-          "default": 1024,
-          "min": 2,
-          "max": 32768,
-          "step": 1
-        },
-        {
-          "id": "overlap",
-          "label": "Overlap",
-          "description": "Analysis overlap factor.",
-          "required": false,
-          "advanced": true,
-          "cli": { "kind": "option", "flag": "-o", "join": "concatenated" },
-          "kind": "integer",
-          "default": 3,
-          "min": 1,
-          "max": 4,
-          "step": 1
         }
       ],
       "output": {
@@ -86,23 +60,15 @@
           "value": "generate"
         },
         {
+          "kind": "output"
+        },
+        {
           "kind": "input",
           "inputId": "source"
         },
-        {
-          "kind": "output"
-        },
-        { "kind": "parameter", "parameterId": "sampleRate" },
-        { "kind": "parameter", "parameterId": "points" },
-        { "kind": "parameter", "parameterId": "overlap" }
+        { "kind": "parameter", "parameterId": "sampleRate" }
       ],
-      "constraints": [
-        {
-          "kind": "powerOfTwo",
-          "value": { "source": "parameter", "id": "points" },
-          "message": "Analysis points must be a power of two between 2 and 32768."
-        }
-      ]
+      "constraints": []
     }
   ]
 }

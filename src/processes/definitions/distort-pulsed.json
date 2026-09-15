@@ -3,37 +3,160 @@
   "id": "distort-pulsed",
   "title": "Distort pulsed",
   "category": "time-domain",
-  "summary": "CDP Distort pulsed operation.",
-  "description": "Run the documented CDP Release 8 Distort pulsed operation through the desktop process runner.",
-  "useCases": ["Explore a CDP process", "Build an audio-processing workflow"],
-  "tags": ["distort", "pulsed", "cdp-release-8"],
-  "identity": {
-    "executable": "distort",
-    "operation": "pulsed"
-  },
+  "summary": "Create an impulse train from a mono source.",
+  "description": "Impose or synthesize a pulsed impulse train from mono source material.",
+  "useCases": ["Impulse-train sound design"],
+  "tags": ["distort", "pulsed", "impulse"],
+  "identity": { "executable": "distort", "operation": "pulsed" },
   "documentation": {
     "localPath": "cdpr8/docs/html/cdistort.htm",
+    "anchor": "PULSED",
     "helpCommand": ["distort", "pulsed"],
     "verifiedWithVersion": "CDP Release 8"
   },
   "modes": [
     {
-      "id": "process",
-      "title": "Distort pulsed",
-      "summary": "Run Distort pulsed.",
+      "id": "impulse-train",
+      "cliMode": 1,
+      "title": "Impose impulse train",
+      "summary": "Impose impulses on a mono source.",
       "inputs": [
         {
           "id": "source",
-          "label": "Soundfile",
-          "description": "Source required by CDP Distort pulsed.",
+          "label": "Mono soundfile",
+          "description": "Source sound.",
           "fileTypes": ["soundfile"],
           "minItems": 1,
           "maxItems": 1,
           "ordered": false,
-          "constraints": []
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
       ],
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Impulse start in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "duration",
+          "label": "Duration",
+          "description": "Impulse duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Impulse frequency.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 5,
+          "min": 0.1,
+          "max": 50,
+          "step": 0.01
+        },
+        {
+          "id": "frequencyRandomness",
+          "label": "Frequency randomness",
+          "description": "Frequency variation in semitones.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 12,
+          "step": 0.01
+        },
+        {
+          "id": "timingRandomness",
+          "label": "Timing randomness",
+          "description": "Peak and trough timing variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "amplitudeRandomness",
+          "label": "Amplitude randomness",
+          "description": "Impulse-shape variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "transposition",
+          "label": "Transposition contour",
+          "description": "Breakpoint file of time/semitone-shift pairs.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["breakpoint"]
+        },
+        {
+          "id": "transpositionRandomness",
+          "label": "Transposition randomness",
+          "description": "Contour variation between impulses.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "keepStart",
+          "label": "Keep source start",
+          "description": "Keep source material before the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "keepEnd",
+          "label": "Keep source end",
+          "description": "Keep source material after the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
       "output": {
         "kind": "singleFile",
         "fileType": "soundfile",
@@ -41,17 +164,380 @@
         "nameSuffix": "-pulsed"
       },
       "argumentOrder": [
+        { "kind": "literal", "value": "pulsed" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "frequencyRandomness" },
+        { "kind": "parameter", "parameterId": "timingRandomness" },
+        { "kind": "parameter", "parameterId": "amplitudeRandomness" },
+        { "kind": "parameter", "parameterId": "transposition" },
+        { "kind": "parameter", "parameterId": "transpositionRandomness" },
+        { "kind": "parameter", "parameterId": "keepStart" },
+        { "kind": "parameter", "parameterId": "keepEnd" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "loop-seconds",
+      "cliMode": 2,
+      "title": "Loop source segment by time",
+      "summary": "Use a time-sized source segment inside impulses.",
+      "inputs": [
         {
-          "kind": "literal",
-          "value": "pulsed"
-        },
-        {
-          "kind": "input",
-          "inputId": "source"
-        },
-        {
-          "kind": "output"
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Source sound.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
         }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start",
+          "description": "Source start in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "id": "duration",
+          "label": "Duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Impulse frequency.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 5,
+          "min": 0.1,
+          "max": 50,
+          "step": 0.01
+        },
+        {
+          "id": "frequencyRandomness",
+          "label": "Frequency randomness",
+          "description": "Frequency variation in semitones.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 12,
+          "step": 0.01
+        },
+        {
+          "id": "timingRandomness",
+          "label": "Timing randomness",
+          "description": "Peak and trough timing variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "amplitudeRandomness",
+          "label": "Amplitude randomness",
+          "description": "Impulse-shape variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "cycleTime",
+          "label": "Cycle time",
+          "description": "Source segment duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0.1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "transposition",
+          "label": "Transposition contour",
+          "description": "Breakpoint file of time/semitone-shift pairs.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["breakpoint"]
+        },
+        {
+          "id": "transpositionRandomness",
+          "label": "Transposition randomness",
+          "description": "Contour variation between impulses.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "keepStart",
+          "label": "Keep source start",
+          "description": "Keep source material before the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "keepEnd",
+          "label": "Keep source end",
+          "description": "Keep source material after the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-pulsed-loop"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "pulsed" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "frequencyRandomness" },
+        { "kind": "parameter", "parameterId": "timingRandomness" },
+        { "kind": "parameter", "parameterId": "amplitudeRandomness" },
+        { "kind": "parameter", "parameterId": "cycleTime" },
+        { "kind": "parameter", "parameterId": "transposition" },
+        { "kind": "parameter", "parameterId": "transpositionRandomness" },
+        { "kind": "parameter", "parameterId": "keepStart" },
+        { "kind": "parameter", "parameterId": "keepEnd" }
+      ],
+      "constraints": []
+    },
+    {
+      "id": "loop-cycles",
+      "cliMode": 3,
+      "title": "Loop source segment by cycles",
+      "summary": "Use a wavecycle-counted source segment inside impulses.",
+      "inputs": [
+        {
+          "id": "source",
+          "label": "Mono soundfile",
+          "description": "Source sound.",
+          "fileTypes": ["soundfile"],
+          "minItems": 1,
+          "maxItems": 1,
+          "ordered": false,
+          "constraints": [{ "kind": "channels", "min": 1, "max": 1 }]
+        }
+      ],
+      "parameters": [
+        {
+          "id": "start",
+          "label": "Start sample count",
+          "description": "Source start as grouped sample count.",
+          "required": true,
+          "advanced": false,
+          "unit": "samples",
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 0,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "id": "duration",
+          "label": "Duration",
+          "description": "Output duration in seconds.",
+          "required": true,
+          "advanced": false,
+          "unit": "s",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 1,
+          "min": 0.001,
+          "step": 0.001
+        },
+        {
+          "id": "frequency",
+          "label": "Frequency",
+          "description": "Impulse frequency.",
+          "required": true,
+          "advanced": false,
+          "unit": "Hz",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 5,
+          "min": 0.1,
+          "max": 50,
+          "step": 0.01
+        },
+        {
+          "id": "frequencyRandomness",
+          "label": "Frequency randomness",
+          "description": "Frequency variation in semitones.",
+          "required": true,
+          "advanced": false,
+          "unit": "semitones",
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 12,
+          "step": 0.01
+        },
+        {
+          "id": "timingRandomness",
+          "label": "Timing randomness",
+          "description": "Peak and trough timing variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "amplitudeRandomness",
+          "label": "Amplitude randomness",
+          "description": "Impulse-shape variation.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "cycleCount",
+          "label": "Cycle count",
+          "description": "Wavecycles to use inside each impulse.",
+          "required": true,
+          "advanced": false,
+          "unit": "cycles",
+          "cli": { "kind": "positional" },
+          "kind": "integer",
+          "default": 1,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "id": "transposition",
+          "label": "Transposition contour",
+          "description": "Breakpoint file of time/semitone-shift pairs.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "file",
+          "fileTypes": ["breakpoint"]
+        },
+        {
+          "id": "transpositionRandomness",
+          "label": "Transposition randomness",
+          "description": "Contour variation between impulses.",
+          "required": true,
+          "advanced": false,
+          "cli": { "kind": "positional" },
+          "kind": "number",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        {
+          "id": "keepStart",
+          "label": "Keep source start",
+          "description": "Keep source material before the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-s" },
+          "kind": "flag",
+          "default": false
+        },
+        {
+          "id": "keepEnd",
+          "label": "Keep source end",
+          "description": "Keep source material after the impulses.",
+          "required": false,
+          "advanced": true,
+          "cli": { "kind": "booleanFlag", "flag": "-e" },
+          "kind": "flag",
+          "default": false
+        }
+      ],
+      "output": {
+        "kind": "singleFile",
+        "fileType": "soundfile",
+        "extension": "wav",
+        "nameSuffix": "-pulsed-cycles"
+      },
+      "argumentOrder": [
+        { "kind": "literal", "value": "pulsed" },
+        { "kind": "mode" },
+        { "kind": "input", "inputId": "source" },
+        { "kind": "output" },
+        { "kind": "parameter", "parameterId": "start" },
+        { "kind": "parameter", "parameterId": "duration" },
+        { "kind": "parameter", "parameterId": "frequency" },
+        { "kind": "parameter", "parameterId": "frequencyRandomness" },
+        { "kind": "parameter", "parameterId": "timingRandomness" },
+        { "kind": "parameter", "parameterId": "amplitudeRandomness" },
+        { "kind": "parameter", "parameterId": "cycleCount" },
+        { "kind": "parameter", "parameterId": "transposition" },
+        { "kind": "parameter", "parameterId": "transpositionRandomness" },
+        { "kind": "parameter", "parameterId": "keepStart" },
+        { "kind": "parameter", "parameterId": "keepEnd" }
       ],
       "constraints": []
     }
