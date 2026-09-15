@@ -1,6 +1,6 @@
 [package]
 name = "composers-desktop-application"
-version = "0.0.4"
+version = "0.0.5"
 description = "Alpha desktop interface for exploring and running reviewed Composers' Desktop Project audio processes."
 authors = ["Adam Thomas Howard"]
 edition = "2021"
