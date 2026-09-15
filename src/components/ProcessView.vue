@@ -12,6 +12,7 @@ import {
   enqueueProcess,
   getRunSnapshot,
   revealArtifact,
+  returnToNavigator,
   suggestOutputPath,
   type RunStatus,
 } from "../services/runtime";
@@ -321,12 +322,20 @@ function reuseArtifact(artifact: { path: string; fileType?: string }) {
     query: { reusePath: artifact.path, reuseType: artifact.fileType ?? "soundfile" },
   });
 }
+async function navigateToNavigator() {
+  try {
+    if (await returnToNavigator()) return;
+  } catch {
+    // Browser preview has no native windows.
+  }
+  await router.push({ name: "navigator" });
+}
 </script>
 
 <template>
   <main v-if="process && mode" class="process-shell">
     <header class="process-header">
-      <button class="back-button" @click="router.push({ name: 'navigator' })">← Navigator</button>
+      <button class="back-button" @click="navigateToNavigator">← Navigator</button>
       <div>
         <p class="eyebrow">
           {{ process.identity.executable
